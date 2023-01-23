@@ -92,8 +92,8 @@ It should look like this.
 
 ## Custom cards detail
 
-You may find detail of custom cards in **[wiki]**(https://github.com/banyspy/EdoproCustomCards/wiki).
+You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
 
 ## Progress
-Incomplete for now. More card and fix to existing card to come.
+Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
 There is also more archetype but I don't push it until I test it enough.

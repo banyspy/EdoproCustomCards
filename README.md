@@ -92,7 +92,7 @@ It should look like this.
 
 ## Custom cards detail
 
-You may find detail of custom cards in wiki.
+You may find detail of custom cards in **[wiki]**(https://github.com/banyspy/EdoproCustomCards/wiki).
 
 ## Progress
 Incomplete for now. More card and fix to existing card to come.

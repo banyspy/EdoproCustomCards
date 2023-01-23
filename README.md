@@ -42,7 +42,7 @@ The file location should be as shown below.
 ``` .../ProjectIgnis/config/user_configs.json ```
 
 ### If you dont have user_configs.json yet
-because never created before, then create the file with the described name in directory and add the following description below to your file.
+because never created before, then download file [**here**](https://downgit.github.io/#/home?url=https://github.com/banyspy/EdoproCustomCards/blob/assets/user_configs.json), or manually create the file with the described name in directory and add the following description below to your file.
 ```json
 {
    "repos": [

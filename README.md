@@ -72,7 +72,7 @@ It should look like this.
 	]
 }
 ```
-The benefit of this method is that the files that got pull from this repository will be **update every time game launch.** So the custom card in your client will be **update automatically** and **no need to come here to download again.**<br />
+The benefit of this method is that the files that got pull from this repository will be **update every time game launch.** So the custom card in your client will be **update automatically** and **no need to come here to download again in case author update this repository.**<br />
 However, if you can't do this method, for whatever the problem, you may try next method instead.
 </p>
 </details>

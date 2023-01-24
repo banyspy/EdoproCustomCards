@@ -2,10 +2,10 @@
 --Scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
-	-- Search 1 "Nethersea" card, then tribute 1 "Nethersea" card from hand or field
+	-- Tribute 1 "Nethersea" card from hand or field except this card, and if you do, destroy 1 card on the field or 1 "Nethersea" monster from your deck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_RELEASE+CATEGORY_DESTROY)
+	e1:SetCategory(CATEGORY_RELEASE+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)

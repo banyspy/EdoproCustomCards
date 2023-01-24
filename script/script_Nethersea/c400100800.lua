@@ -22,6 +22,12 @@ function s.initial_effect(c)
 	local e1d=e1b:Clone()
 	e1d:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e1d)
+	--summon cannot be negated
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetCode(EFFECT_CANNOT_DISABLE_SPSUMMON)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	c:RegisterEffect(e2)
 end
 function s.tokentributecheck(c)
 	return c:IsSetCard(0x259) and c:IsMonster() and c:IsType(TYPE_TOKEN) and c:IsReleasable()

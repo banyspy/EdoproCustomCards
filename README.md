@@ -84,6 +84,8 @@ However, if you can't do this method, for whatever the problem, you may try next
 </summary>
 <p>
 
+![DownloadZipPic](https://github.com/banyspy/EdoproCustomCards/blob/assets/DownloadZipStepEdited.png)
+
  You can click on the green "code" button on the repository page then click **download zip** option.<br />
 After download finish, you go to expansion folder in ProjectIgnis and then extract the downloaded zip file there.<br />
 The expansion location should be as shown below (Depend on device/OS).
@@ -107,10 +109,14 @@ Then be hopeful that they are compatible with each other.
 After you successfully got necessary files into directory, you can launch EDOPro to test the card.<br />
 If you open the game before the installing process, close the game and open again, game only read database and repository at launch.<br />
 
+![ShowRepositoryProgress](https://github.com/banyspy/EdoproCustomCards/blob/assets/RepositoryLoadingEdited.png)
+
 *If you download zip to expansion, you can skip this and go to deck editor*<br />
 After enter the game if you install by link with author github (user_configs.json), you can check at **Repository** button at top left and see if progress bar of **"Banyspy Custom Card"** is 100%.<br />
 If it is 100% then it is good to go, you can check in deck editor.<br />
 If it stay unfinished, may be checked if there is something wrong with user_configs.json file content or its location if you do it right like install guide, or any other factor that might affect.<br />
+
+![ShowCustomCardFormat](https://github.com/banyspy/EdoproCustomCards/blob/assets/ShowCustomCardFormatEdited.png)
 
 In deck editor, click at checkbox that is on the left of **"Alternative Formats"** to allow custom card in search filter and be able to use them in your deck and play test it.<br />
 This is because custom cards are stored as **Custom format** card, as oppose to usual TCG or OCG, it is for the sake of organized.<br />

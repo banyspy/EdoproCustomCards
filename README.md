@@ -9,7 +9,7 @@ You have 2 options to choose from.
 <details open>
 <summary>
 
-### Method 1: Connect to author github
+### Method 1: Link to author github
 </summary>
 <p>
 
@@ -41,8 +41,15 @@ because never created before, then download file [**here**](https://downgit.gith
 	]
 }
 ```
+And that's finish for this step. If you do everything correctly.
 
-### If you already have user_configs.json
+<details>
+<summary>
+
+### Only if you already have user_configs.json before installing
+</summary>
+<p>
+
 maybe because you download custom card from other people too, then add the following description below to your file, inside the **repos** bracket.
 ```json
   {
@@ -72,6 +79,9 @@ It should look like this.
 	]
 }
 ```
+</p>
+</details>
+
 The benefit of this method is that the files that got pull from this repository will be **update every time game launch.** So the custom card in your client will be **update automatically** and **no need to come here to download again in case author update this repository.**<br />
 However, if you can't do this method, for whatever the problem, you may try next method instead.
 </p>
@@ -128,3 +138,19 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 ## Progress
 Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
 There is also more archetype but I don't push it until I test it enough.
+
+## Other people who also make custom cards
+
+If you come here due to interest in using custom card, then you may interest to checkout other's custom card as well.<br />
+So shout out to fellow scripted custom card make!<br />
+Here is who I found:
+
+* [**Satellaa**](https://github.com/Satellaa/Custom-Cards)<br />
+* [**Henrique-Izidio**](https://github.com/Henrique-Izidio/EDOPro-RMS)<br />
+* [**KServantes**](https://github.com/KServantes/Customs)<br />
+* [**scarletkc**](https://github.com/scarletkc/FogMoeYGO-Card-Database)<br />
+* [**supr3meofficial**](https://github.com/supr3meofficial/supremeygo)<br />
+* [**NiiMiyo**](https://github.com/NiiMiyo/EDOPro-JJBA-Cards)<br />
+* [**gabrielfandrade**](https://github.com/gabrielfandrade/Customs)<br />
+* [**OmegaArmadillo**](https://github.com/OmegaArmadillo/EDOPro-Custom-Cards)<br />
+* [**Rising Phoenix**](https://custom-ygo-rp.jimdofree.com/downloads/) **(Originally created for ygopro, beware of incompatibility issue)**<br />

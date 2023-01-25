@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
 	e0:SetTargetRange(LOCATION_HAND+LOCATION_SZONE,0)
-	e0:SetTarget(aux.AND(aux.TargetBoolFunction(Card.IsSetCard,0x259),aux.NOT(aux.TargetBoolFunction(Card.IsCode,id))))
+	e0:SetTarget(aux.AND(aux.TargetBoolFunction(Card.IsSetCard,SET_NETHERSEA),aux.NOT(aux.TargetBoolFunction(Card.IsCode,id))))
 	e0:SetValue(POS_FACEUP)
 	c:RegisterEffect(e0)
 	--summon

@@ -1,6 +1,7 @@
 --The Endspeaker
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
 	--Copy
 	local e1=Effect.CreateEffect(c)

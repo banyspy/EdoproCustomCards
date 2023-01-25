@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
 	e0:SetTargetRange(LOCATION_HAND+LOCATION_SZONE,0)
-	e0:SetTarget(aux.AND(aux.TargetBoolFunction(Card.IsSetCard,0x259),aux.NOT(aux.TargetBoolFunction(Card.IsCode,id))))
+	e0:SetTarget(aux.AND(aux.TargetBoolFunction(Card.IsSetCard,SET_NETHERSEA),aux.NOT(aux.TargetBoolFunction(Card.IsCode,id))))
 	e0:SetValue(POS_FACEUP)
 	c:RegisterEffect(e0)
 	--summon
@@ -76,7 +76,7 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.chainop(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if rc:IsSetCard(0x259) and (rc:IsControler(tp)) then
+	if rc:IsSetCard(SET_NETHERSEA) and (rc:IsControler(tp)) then
 		Duel.SetChainLimit(s.chainlm)
 	end
 end
@@ -86,8 +86,8 @@ end
 function s.chainfilter(e,ct)
 	local p=e:GetHandlerPlayer()
 	local te,tp=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
-	return p==tp and te:GetHandler():IsSetCard(0x259)
+	return p==tp and te:GetHandler():IsSetCard(SET_NETHERSEA)
 end
 function s.distarget(e,c)
-	return c:IsSetCard(0x259)
+	return c:IsSetCard(SET_NETHERSEA)
 end

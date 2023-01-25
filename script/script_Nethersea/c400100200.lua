@@ -18,14 +18,14 @@ function s.initial_effect(c)
 	Nethersea.GenerateToken(c)
 end
 function s.handeffspfilter(c,e,tp)
-	return c:IsSetCard(0x259) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.tributechecktarget(c,e,tp)
-	return c:IsSetCard(0x259) and c:IsReleasableByEffect() and not c:IsCode(id)
+	return c:IsSetCard(SET_NETHERSEA) and c:IsReleasableByEffect() and not c:IsCode(id)
 	and Duel.IsExistingMatchingCard(s.handeffspfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,c,e,tp)
 end
 function s.tributecheckoperation(c)
-	return c:IsSetCard(0x259) and c:IsReleasableByEffect() and not c:IsCode(id)
+	return c:IsSetCard(SET_NETHERSEA) and c:IsReleasableByEffect() and not c:IsCode(id)
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.tributechecktarget,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler(),e,tp) 
@@ -38,7 +38,7 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 and Duel.Release(g,REASON_EFFECT)>0 then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sp=Duel.SelectMatchingCard(tp,s.handeffspfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,g,e,tp)
+		local sp=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.handeffspfilter),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,g,e,tp)
 		if #sp>0 then Duel.SpecialSummon(sp,0,tp,tp,false,false,POS_FACEUP) end
 	end
 end

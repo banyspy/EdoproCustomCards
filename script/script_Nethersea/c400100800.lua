@@ -1,6 +1,7 @@
 --The Endspeaker, Will of We Many
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--special summon
@@ -51,19 +52,8 @@ end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
     Duel.AdjustInstantly(c)
-    if(Duel.GetFlagEffect(0,id)>0) then 
-		if(Duel.GetFlagEffect(0,id) ==  Duel.GetMatchingGroupCount(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) - 1)then
-			Duel.ResetFlagEffect(0,id)
-		else
-			Duel.RegisterFlagEffect(0,id,0,0,1) 
-		end
-		return 
-	end
-	Duel.RegisterFlagEffect(0,id,0,0,1) 
-	
-	if(Duel.GetMatchingGroupCount(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) == 1) then
-		Duel.ResetFlagEffect(0,id)
-	end
+    
+	if not Nethersea.WeManyDontAskMoreThanOnce(tp,e,s.summonfilter) then return end
 	
 	if Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) and Duel.GetFlagEffect(1,id)==0 and 
 	c:IsCanBeSpecialSummoned(e,0,tp,false,true) then
@@ -102,8 +92,4 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 			end
         end
 	end
-end
-function s.resetflag(e,tp,eg,ep,ev,re,r,rp)
-	Duel.RegisterFlagEffect(0,id,0,0,0) 
-	return
 end

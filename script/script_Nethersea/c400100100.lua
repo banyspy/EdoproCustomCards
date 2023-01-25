@@ -18,10 +18,10 @@ function s.initial_effect(c)
 	Nethersea.GenerateToken(c)
 end
 function s.tributecheck(c)
-	return c:IsSetCard(0x259) and c:IsReleasableByEffect()
+	return c:IsSetCard(SET_NETHERSEA) and c:IsReleasableByEffect()
 end
 function s.thfilter(c)
-	return c:IsSetCard(0x259) and c:IsAbleToHand() and not c:IsCode(id)
+	return c:IsSetCard(SET_NETHERSEA) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) 

@@ -42,8 +42,16 @@ function s.initial_effect(c)
 	
 	Nethersea.GenerateToken(c)
 end
+function s.workaroundcheck(c)
+	return c:IsMonster() and c:IsReleasableByEffect()
+end
 function s.tributecheck(c)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsReleasableByEffect() and not c:IsCode(id)
+	--This workaround is because apparently IsReleasable() and IsReleasableByEffect() always return false for spell/trap in hand
+	--So the clostest checking is if it's spell/trap in hand, and if the monster that activated in hand can be tributed
+	--If monster that also in hand can be tributed, spell/trap in hand also likely can be tributed too
+	--It isn't perfect but it's what can be do, for now
+	or (c:IsSpellTrap() and c:IsLocation(LOCATION_HAND) and Duel.IsExistingMatchingCard(s.workaroundcheck,tp,LOCATION_HAND,0,1))
 end
 function s.thfilter(c)
 	return (c:IsLocation(LOCATION_ONFIELD)) or ( c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsLocation(LOCATION_DECK))
@@ -56,8 +64,18 @@ function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.SelectReleaseGroupEx(tp,s.tributecheck,1,1,c)
-	if #g>0 and Duel.Release(g,REASON_EFFECT)>0 then
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+	local g=Duel.SelectMatchingCard(tp,s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,c)
+	if #g>0 then
+		--Same workaround as the above
+		--Since they can't be tribute for some reason due to game said so, we need to workaround by give REASON_RULE to force it
+		local tc = g:GetFirst()
+		if tc:IsSpellTrap() and tc:IsLocation(LOCATION_HAND) then
+			if not (Duel.Release(g,REASON_RULE+REASON_EFFECT)>0) then return end
+		else
+			if not (Duel.Release(g,REASON_EFFECT)>0) then return end
+		end
+
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 		local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_ONFIELD+LOCATION_DECK,LOCATION_ONFIELD,1,1,nil)

@@ -42,30 +42,23 @@ function s.initial_effect(c)
 	
 	Nethersea.GenerateToken(c)
 end
-function s.workaroundcheck(c)
-	return c:IsMonster() and c:IsReleasableByEffect()
+function s.tributecheck(c,tp)
+	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) and
+	 (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
-function s.tributecheck(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsReleasableByEffect() and not c:IsCode(id)
-	--This workaround is because apparently IsReleasable() and IsReleasableByEffect() always return false for spell/trap in hand
-	--So the clostest checking is if it's spell/trap in hand, and if the monster that activated in hand can be tributed
-	--If monster that also in hand can be tributed, spell/trap in hand also likely can be tributed too
-	--It isn't perfect but it's what can be do, for now
-	or (c:IsSpellTrap() and c:IsLocation(LOCATION_HAND) and Duel.IsExistingMatchingCard(s.workaroundcheck,tp,LOCATION_HAND,0,1))
-end
-function s.thfilter(c)
+function s.desfilter(c)
 	return (c:IsLocation(LOCATION_ONFIELD)) or ( c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsLocation(LOCATION_DECK))
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tributecheck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler()) 
-	and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_ONFIELD+LOCATION_DECK,LOCATION_ONFIELD,1,e:GetHandler()) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tributecheck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler(),tp) 
+	and Duel.IsExistingMatchingCard(s.desfilter,tp,LOCATION_ONFIELD+LOCATION_DECK,LOCATION_ONFIELD,1,e:GetHandler()) end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,1,LOCATION_ONFIELD)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_DECK)
 end
 function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-	local g=Duel.SelectMatchingCard(tp,s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,c,tp)
 	if #g>0 then
 		--Same workaround as the above
 		--Since they can't be tribute for some reason due to game said so, we need to workaround by give REASON_RULE to force it
@@ -78,7 +71,7 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-		local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_ONFIELD+LOCATION_DECK,LOCATION_ONFIELD,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_ONFIELD+LOCATION_DECK,LOCATION_ONFIELD,1,1,nil)
 		if #g>0 then Duel.Destroy(g,REASON_EFFECT) end
 	end
 end

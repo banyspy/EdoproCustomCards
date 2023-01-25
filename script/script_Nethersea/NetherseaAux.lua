@@ -80,3 +80,13 @@ function Nethersea.WeManyDontAskMoreThanOnce(tp,e,f)
 
 	return true
 end
+
+--This workaround is because apparently IsReleasable() and IsReleasableByEffect() always return false for spell/trap in hand
+--So the clostest checking is if it's spell/trap in hand, and if the monster that activated in hand can be tributed
+--If monster that also in hand can be tributed, spell/trap in hand also likely can be tributed too
+--or if player is not affected by thing like masked of restricted or fog king
+--It isn't perfect but it's what can be do, for now
+function Nethersea.WorkaroundTributeSTinHandCheck(c,tp)
+	return c:IsSpellTrap() and c:IsLocation(LOCATION_HAND)
+	and (Duel.IsExistingMatchingCard(Card.IsReleasableByEffect,tp,LOCATION_HAND,0,1,nil) or Duel.IsPlayerCanRelease(tp))
+end

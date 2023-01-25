@@ -14,26 +14,35 @@ function s.initial_effect(c)
 	e1:SetTarget(s.handefftarget)
 	e1:SetOperation(s.handeffoperation)
 	c:RegisterEffect(e1)
+	--cannot be destroyed by card effect
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetValue(1)
+	c:RegisterEffect(e2)
+	--cannot be banished by card effect
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetCode(EFFECT_CANNOT_REMOVE)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetTargetRange(1,1)
+	e3:SetTarget(s.rmlimit)
+	c:RegisterEffect(e3)
 
 	Nethersea.GenerateToken(c)
 end
-function s.workaroundcheck(c)
-	return c:IsMonster() and c:IsReleasableByEffect()
-end
-function s.tributecheck(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsReleasableByEffect()
-	--This workaround is because apparently IsReleasable() and IsReleasableByEffect() always return false for spell/trap in hand
-	--So the clostest checking is if it's spell/trap in hand, and if the monster that activated in hand can be tributed
-	--If monster that also in hand can be tributed, spell/trap in hand also likely can be tributed too
-	--It isn't perfect but it's what can be do, for now
-	or (c:IsSpellTrap() and c:IsLocation(LOCATION_HAND) and Duel.IsExistingMatchingCard(s.workaroundcheck,tp,LOCATION_HAND,0,1))
+function s.tributecheck(c,tp)
+	return c:IsSetCard(SET_NETHERSEA) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.thfilter(c)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) 
-	and Duel.IsExistingMatchingCard(s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,e:GetHandler()) end
+	and Duel.IsExistingMatchingCard(s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,e:GetHandler(),tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 	--Duel.SetOperationInfo(0,CATEGORY_RELEASE,nil,0,tp,1)
 end
@@ -49,17 +58,20 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 		sg:Merge(g)
 		sg:AddCard(c)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-		local g=Duel.SelectMatchingCard(tp,s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,sg)
+		local g=Duel.SelectMatchingCard(tp,s.tributecheck,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,sg,tp)
+		sg:DeleteGroup()
 		if #g>0 then 
 			--Same workaround as the above
 			--Since they can't be tribute for some reason due to game said so, we need to workaround by give REASON_RULE to force it
 			local tc = g:GetFirst()
 			if tc:IsSpellTrap() and tc:IsLocation(LOCATION_HAND) then
-				if not (Duel.Release(g,REASON_RULE+REASON_EFFECT)>0) then return end
+				Duel.Release(g,REASON_RULE+REASON_EFFECT)
 			else
-				if not (Duel.Release(g,REASON_EFFECT)>0) then return end
+				Duel.Release(g,REASON_EFFECT)
 			end
 		end
-		sg:DeleteGroup()
 	end
+end
+function s.rmlimit(e,c,tp,r)
+	return c==e:GetHandler() and r==REASON_EFFECT
 end

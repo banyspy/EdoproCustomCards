@@ -21,8 +21,9 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TODECK+CATEGORY_DRAW)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCode(EVENT_RELEASE)
 	e2:SetCountLimit(1,{id,4})
+	e2:SetCondition(s.DoNotRepeatAsk)
 	e2:SetTarget(s.gravetarget)
 	e2:SetOperation(s.graveoperation)
 	c:RegisterEffect(e2)
@@ -30,7 +31,8 @@ function s.initial_effect(c)
     e3:SetCode(EVENT_DESTROYED)
     c:RegisterEffect(e3)
     local e4=e3:Clone()
-    e4:SetCode(EVENT_RELEASE)
+    e4:SetCode(EVENT_TO_GRAVE)
+	e4:SetCondition(s.gravecon)
     c:RegisterEffect(e4)
 end
 function s.filter(c)
@@ -48,6 +50,12 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
+function s.gravecon(e,tp,eg,ep,ev,re,r,rp)
+	return (r&REASON_EFFECT)~=0
+end
+function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
+    return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
+end
 function s.gravefilter(c)
 	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) and c:IsAbleToDeck()
 end
@@ -61,12 +69,12 @@ end
 function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetMatchingGroupCount(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil) < 3 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local tg=Duel.SelectTarget(tp,s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
+	local tg=Duel.SelectMatchingCard(tp,s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
 	Duel.SendtoDeck(tg,nil,0,REASON_EFFECT)
 	local tg=Duel.GetOperatedGroup()
 	if tg:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local ct=tg:FilterCount(Card.IsLocation,nil,LOCATION_DECK+LOCATION_EXTRA)
-	if ct==5 then
+	if ct==3 then
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end

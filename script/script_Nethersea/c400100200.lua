@@ -14,6 +14,23 @@ function s.initial_effect(c)
 	e1:SetTarget(s.handefftarget)
 	e1:SetOperation(s.handeffoperation)
 	c:RegisterEffect(e1)
+	--cannot be targeted by your opponent card effect
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetValue(aux.tgoval)
+	c:RegisterEffect(e2)
+	--Once per turn, negate your opponent attack
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e3:SetCode(EVENT_ATTACK_ANNOUNCE)
+	e3:SetCountLimit(1)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetTarget(s.negtg)
+	e3:SetOperation(s.negop)
+	c:RegisterEffect(e3)
 	
 	Nethersea.GenerateToken(c)
 end
@@ -51,4 +68,10 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 		local sp=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.handeffspfilter),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,g,e,tp)
 		if #sp>0 then Duel.SpecialSummon(sp,0,tp,tp,false,false,POS_FACEUP) end
 	end
+end
+function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return Duel.GetAttacker():IsControler(1-tp) end
+end
+function s.negop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.NegateAttack()
 end

@@ -145,7 +145,11 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 ## Progress
 Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
-There is also more archetype but I don't push it until I test it enough.
+There is also more archetype but I don't push it until I test it enough.<br />
+
+**Nethersea** - 9/12 - Abit of fixing of existing one then new card.<br />
+**Traptrix** - 5-6/(10?) - Abit on hold.<br />
+**Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 
 ## Other people who also make custom cards
 

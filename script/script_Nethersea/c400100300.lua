@@ -28,6 +28,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET)
 	e3:SetRange(LOCATION_MZONE)
+	e3:SetCountLimit(1,0,EFFECT_COUNT_CODE_SINGLE)
 	e3:SetCondition(s.rmvcon)
 	e3:SetTarget(s.rmvtg)
 	e3:SetOperation(s.rmvop)
@@ -78,11 +79,10 @@ function s.cfilter(c,tp)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsControler(tp)
 end
 function s.rmvcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.cfilter,1,e:GetHandler(),tp) and e:GetHandler():GetFlagEffect(0,CARD_NETHERSEA_SPEWER)==0
+	return eg:IsExists(s.cfilter,1,e:GetHandler(),tp)
 end
 function s.rmvtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
-	e:GetHandler():RegisterFlagEffect(0,CARD_NETHERSEA_SPEWER,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE_CAL,0,1)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectTarget(tp,Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)

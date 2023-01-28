@@ -30,7 +30,7 @@ function s.initial_effect(c)
     local e3=e2:Clone()
     e3:SetCode(EVENT_DESTROYED)
     c:RegisterEffect(e3)
-    local e4=e3:Clone()
+    local e4=e2:Clone()
     e4:SetCode(EVENT_TO_GRAVE)
 	e4:SetCondition(s.gravecon)
     c:RegisterEffect(e4)
@@ -54,7 +54,7 @@ function s.gravecon(e,tp,eg,ep,ev,re,r,rp)
 	return (r&REASON_EFFECT)~=0
 end
 function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
-    return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
+    return not (e:GetHandler():IsLocation(LOCATION_GRAVE))
 end
 function s.gravefilter(c)
 	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) and c:IsAbleToDeck()

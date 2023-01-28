@@ -4,8 +4,16 @@ local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	--special summon
+	--Cannot be special summon
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e0:SetValue(0)
+	c:RegisterEffect(e0)
+	--special summon (ignoring condition and revivelimit, essentially make above condition become "cannot be special summon by other way")
 	local e1a=Effect.CreateEffect(c)
+	e1a:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1a:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1a:SetCode(EVENT_CHAIN_END)
 	e1a:SetRange(LOCATION_HAND+LOCATION_GRAVE)
@@ -38,7 +46,7 @@ function s.checkcode(c,tem)
 end
 function s.summonfilter(c,tp,e)
 	return c:IsOriginalCode(id)  and Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) 
-	and c:IsCanBeSpecialSummoned(e,0,tp,false,true) and not c:IsDisabled()
+	and c:IsCanBeSpecialSummoned(e,0,tp,true,true) and not c:IsDisabled()
 end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -56,7 +64,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not Nethersea.WeManyDontAskMoreThanOnce(tp,e,s.summonfilter) then return end
 	
 	if Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) and Duel.GetFlagEffect(1,id)==0 and 
-	c:IsCanBeSpecialSummoned(e,0,tp,false,true) then
+	c:IsCanBeSpecialSummoned(e,0,tp,true,true) then
 		if Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,0)) then
 			Duel.RegisterFlagEffect(1,id,RESET_PHASE+PHASE_END,0,1)
 			local tg
@@ -67,7 +75,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 			end
 			local g=Duel.SelectReleaseGroup(tp,s.tokentributecheck,1,6,nil)
 			Duel.Release(g,REASON_RELEASE)
-		    if Duel.SpecialSummon(tg,0,tp,tp,false,true,POS_FACEUP)>0 then
+		    if Duel.SpecialSummon(tg,0,tp,tp,true,true,POS_FACEUP)>0 then
 
 				local tem = 400100110
 				while tem <= 400100610 do

@@ -131,6 +131,14 @@ If it stay unfinished, may be checked if there is something wrong with user_conf
 In deck editor, click at checkbox that is on the left of **"Alternative Formats"** to allow custom card in search filter and be able to use them in your deck and play test it.<br />
 This is because custom cards are stored as **Custom format** card, as oppose to usual TCG or OCG, it is for the sake of organized.<br />
 
+## How to actually play custom card
+
+Beside from test the card in **"Test hand"** in Decks editor page. You can also play it in **LAN + AI** section in main menu.<br />
+
+### Play against AI
+
+Click **Host**, then in **Allowed card** section, click it to choose **Anything goes** in option list. Since custom card isn't legal card, it isn't allowed in any other format. That's all the requirement to play with AI, after that you just do anything that you would to play against AI in general. You can let AI play your custom card, but as you might expected, it would be able to play via premade **Fellin' Lucky** executor that has no logic but to choose YES to anything it can, which is to say, not so well.<br />
+
 ## Custom cards detail
 
 You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).

@@ -131,13 +131,25 @@ If it stay unfinished, may be checked if there is something wrong with user_conf
 In deck editor, click at checkbox that is on the left of **"Alternative Formats"** to allow custom card in search filter and be able to use them in your deck and play test it.<br />
 This is because custom cards are stored as **Custom format** card, as oppose to usual TCG or OCG, it is for the sake of organized.<br />
 
+## How to actually play custom card
+
+Beside from test the card in **"Test hand"** in Decks editor page. You can also play it in **LAN + AI** section in main menu.<br />
+
+### Play against AI
+
+Click **Host**, then in **Allowed card** section, click it to choose **Anything goes** in option list. Since custom card isn't legal card, it isn't allowed in any other format. That's all the requirement to play with AI, after that you just do anything that you would to play against AI in general. You can let AI play your custom card, but as you might expected, it would be able to play via premade **Fellin' Lucky** executor that has no logic but to choose YES to anything it can, which is to say, not so well.<br />
+
 ## Custom cards detail
 
 You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
 
 ## Progress
 Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
-There is also more archetype but I don't push it until I test it enough.
+There is also more archetype but I don't push it until I test it enough.<br />
+
+**Nethersea** - 9/12 - Abit of fixing of existing one then new card.<br />
+**Traptrix** - 5-6/(10?) - Abit on hold.<br />
+**Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 
 ## Other people who also make custom cards
 

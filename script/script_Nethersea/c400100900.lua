@@ -54,13 +54,12 @@ function s.gravecon(e,tp,eg,ep,ev,re,r,rp)
 	return (r&REASON_EFFECT)~=0
 end
 function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
-    return not (e:GetHandler():IsLocation(LOCATION_GRAVE))
+    return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
 end
 function s.gravefilter(c)
 	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) and c:IsAbleToDeck()
 end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	--if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.filter(chkc) end
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
 		and Duel.IsExistingTarget(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,LOCATION_GRAVE+LOCATION_REMOVED,0,tp,3)

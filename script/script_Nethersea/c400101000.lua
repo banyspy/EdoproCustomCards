@@ -14,11 +14,11 @@ function s.initial_effect(c)
 	e1:SetTarget(s.activatetarget)
 	e1:SetOperation(s.activateoperation)
 	c:RegisterEffect(e1)
-    --[[
-    --shuffle and draw
+    
+    --destroy 1 from deck
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,4))
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_RELEASE)
@@ -33,7 +33,7 @@ function s.initial_effect(c)
     local e4=e2:Clone()
     e4:SetCode(EVENT_TO_GRAVE)
 	e4:SetCondition(s.gravecon)
-    c:RegisterEffect(e4)]]
+    c:RegisterEffect(e4)
 end
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
@@ -74,4 +74,22 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
 	--Duel.Hint(HINT_CARD,0,id)
 	Duel.Destroy(tc,REASON_EFFECT)
+end
+function s.gravecon(e,tp,eg,ep,ev,re,r,rp)
+	return (r&REASON_EFFECT)~=0
+end
+function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
+    return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
+end
+function s.gravefilter(c)
+	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) 
+end
+function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.gravefilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_DECK)
+end
+function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectMatchingCard(tp,s.gravefilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then Duel.Destroy(g,REASON_EFFECT) end
 end

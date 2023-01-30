@@ -13,7 +13,6 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,{id,0})
 	e1:SetCondition(s.spcon)
 	c:RegisterEffect(e1)
-
 	--Copy
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
@@ -26,7 +25,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.operation)
 	c:RegisterEffect(e2)
-
 	--tohand
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,2))
@@ -58,7 +56,7 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.filter(c)
 	return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x259) and c:IsAbleToRemove() and aux.SpElimFilter(c,true)
-	and not (c:IsOriginalCode(id) or c:IsOriginalCode(id+1))
+	and not (c:IsOriginalCode(CARD_ENDSPEAKER) or c:IsOriginalCode(CARD_ENDSPEAKER_WILLOFWEMANY))
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and chkc:IsControler(tp) and s.filter(chkc) end
@@ -94,7 +92,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		c:CopyEffect(code,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,1)
 	end
 end
-
 function s.con(e)
     return not e:GetHandler():IsLocation(LOCATION_GRAVE)
 end

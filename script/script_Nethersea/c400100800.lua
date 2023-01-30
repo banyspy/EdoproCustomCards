@@ -67,6 +67,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	c:IsCanBeSpecialSummoned(e,0,tp,true,true) then
 		if Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,0)) then
 			Duel.RegisterFlagEffect(1,id,RESET_PHASE+PHASE_END,0,1)
+			Nethersea.ResetWeManyFlag()
 			local tg
 			if(Duel.GetMatchingGroupCount(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) == 1) then
 				tg = c

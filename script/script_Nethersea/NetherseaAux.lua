@@ -81,6 +81,10 @@ function Nethersea.WeManyDontAskMoreThanOnce(tp,e,f)
 	return true
 end
 
+function Nethersea.ResetWeManyFlag()
+	Duel.ResetFlagEffect(0,REGISTER_FLAG_WEMANY)
+end
+
 --This workaround is because apparently IsReleasable() and IsReleasableByEffect() always return false for spell/trap in hand
 --So the clostest checking is if it's spell/trap in hand, and if the monster that activated in hand can be tributed
 --If monster that also in hand can be tributed, spell/trap in hand also likely can be tributed too

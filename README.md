@@ -139,6 +139,18 @@ Beside from test the card in **"Test hand"** in Decks editor page. You can also 
 
 Click **Host**, then in **Allowed card** section, click it to choose **Anything goes** in option list. Since custom card isn't legal card, it isn't allowed in any other format. That's all the requirement to play with AI, after that you just do anything that you would to play against AI in general. You can let AI play your custom card, but as you might expected, it would be able to play via premade **Fellin' Lucky** executor that has no logic but to choose YES to anything it can, which is to say, not so well.<br />
 
+### Play against actual person
+
+Same method of enable **Anything goes** in Allowed card section still apply, But you need to do something more as now you will play with other client that no longer on your own machine, unlike windbot.<br />
+Here is method specified from official ProjectIgnis page.
+
+>You have a couple of options:
+>
+>1) Port forward the LAN ports used by EDOPro and give your friend your IP to join in LAN mode.
+>
+>2) You and your friends can set up a VPN, such as [**Zerotier**](https://www.zerotier.com/), so everybody is on the same virtual LAN. Then you should be able to refresh the LAN room list or connect to the IP provided by the VPN. Both players must have the custom card databases to see what the cards are, and the hosting player must have the card scripts.
+
+
 ## Custom cards detail
 
 You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
@@ -147,8 +159,9 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
 There is also more archetype but I don't push it until I test it enough.<br />
 
-**Nethersea** - 9/12 - Abit of fixing of existing one then new card.<br />
-**Traptrix** - 5-6/(10?) - Abit on hold.<br />
+**Nethersea** - 10/12 - Abit of fixing of existing one then new card.<br />
+**Traptrix** - 5-6/(10?) - On hold.<br />
+**Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 
 ## Other people who also make custom cards

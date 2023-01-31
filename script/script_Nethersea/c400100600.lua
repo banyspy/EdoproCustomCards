@@ -17,24 +17,6 @@ function s.initial_effect(c)
 	
 	Nethersea.GenerateToken(c)
 end
-function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsSummonable(true,nil,1) or c:IsMSetable(true,nil,1) end
-	Duel.SetOperationInfo(0,CATEGORY_SUMMON,c,1,0,0)
-end
-function s.sumop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) then return end
-	local pos=0
-	if c:IsSummonable(true,nil,1) then pos=pos+POS_FACEUP_ATTACK end
-	if c:IsMSetable(true,nil,1) then pos=pos+POS_FACEDOWN_DEFENSE end
-	if pos==0 then return end
-	if Duel.SelectPosition(tp,c,pos)==POS_FACEUP_ATTACK then
-		Duel.Summon(tp,c,true,nil,1)
-	else
-		Duel.MSet(tp,c,true,nil,1)
-	end
-end
 function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetAttacker()==c and c:GetFlagEffect(id)==0 end

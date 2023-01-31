@@ -39,7 +39,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.tokentributecheck(c)
-	return c:IsSetCard(0x259) and c:IsMonster() and c:IsType(TYPE_TOKEN) and c:IsReleasable()
+	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsType(TYPE_TOKEN) and c:IsReleasable()
 end
 function s.checkcode(c,tem)
 	return c:IsOriginalCode(tem)

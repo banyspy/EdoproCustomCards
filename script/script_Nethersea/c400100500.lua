@@ -3,35 +3,8 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
-	--summon with nethersea card on field or s/t
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e0:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
-	e0:SetTargetRange(LOCATION_HAND+LOCATION_SZONE,0)
-	e0:SetTarget(aux.AND(aux.TargetBoolFunction(Card.IsSetCard,SET_NETHERSEA),aux.NOT(aux.TargetBoolFunction(Card.IsCode,id))))
-	e0:SetValue(POS_FACEUP)
-	c:RegisterEffect(e0)
-	--summon
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_SUMMON)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_HAND)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e1:SetCountLimit(1,{id,0})
-	e1:SetTarget(s.sumtg)
-	e1:SetOperation(s.sumop)
-	c:RegisterEffect(e1)
-	--[[
-	--act limit
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetCode(EVENT_CHAINING)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetOperation(s.chainop)
-	c:RegisterEffect(e2)]]
+	--Quick Tribute summon from hand
+	Nethersea.QuickTributeProc(c)
 	--Cannot negate the activation of your "Nethersea" card
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
@@ -72,12 +45,6 @@ function s.sumop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Summon(tp,c,true,nil,1)
 	else
 		Duel.MSet(tp,c,true,nil,1)
-	end
-end
-function s.chainop(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	if rc:IsSetCard(SET_NETHERSEA) and (rc:IsControler(tp)) then
-		Duel.SetChainLimit(s.chainlm)
 	end
 end
 function s.chainlm(e,rp,tp)

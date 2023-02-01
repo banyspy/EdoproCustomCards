@@ -66,14 +66,13 @@ function s.cfilter(c,tp)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsControler(tp) and c:IsDefensePos()
 end
 function s.setcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.cfilter,1,e:GetHandler(),tp) and e:GetHandler():GetFlagEffect(0,CARD_NETHERSEA_BRANDGUIDER)==0
+	return eg:IsExists(s.cfilter,1,e:GetHandler(),tp)
 end
 function s.setcheck(c)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and c:IsSSetable()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setcheck,tp,LOCATION_DECK,0,1,nil) end
-	e:GetHandler():RegisterFlagEffect(0,CARD_NETHERSEA_BRANDGUIDER,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE_CAL,0,1)
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)

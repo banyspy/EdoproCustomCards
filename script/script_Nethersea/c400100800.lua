@@ -50,11 +50,11 @@ function s.summonfilter(c,tp,e)
 end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return Duel.IsExistingMatchingCard(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp,e) and Duel.GetFlagEffect(1,id)==0
+	return Duel.IsExistingMatchingCard(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp,e) and Duel.GetFlagEffect(tp,id)==0
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return Duel.IsExistingMatchingCard(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp,e) and Duel.GetFlagEffect(1,id)==0
+	return Duel.IsExistingMatchingCard(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp,e) and Duel.GetFlagEffect(tp,id)==0
 	and Duel.GetCurrentChain(true)==0
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
@@ -63,10 +63,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
     
 	if not Nethersea.WeManyDontAskMoreThanOnce(tp,e,s.summonfilter) then return end
 	
-	if Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) and Duel.GetFlagEffect(1,id)==0 and 
+	if Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) and Duel.GetFlagEffect(tp,id)==0 and 
 	c:IsCanBeSpecialSummoned(e,0,tp,true,true) then
 		if Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,0)) then
-			Duel.RegisterFlagEffect(1,id,RESET_PHASE+PHASE_END,0,1)
+			Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
 			Nethersea.ResetWeManyFlag()
 			local tg
 			if(Duel.GetMatchingGroupCount(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) == 1) then

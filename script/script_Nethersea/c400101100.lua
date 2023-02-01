@@ -36,6 +36,26 @@ function s.initial_effect(c)
 	e4:SetOperation(s.otop)
 	e4:SetValue(SUMMON_TYPE_TRIBUTE)
 	c:RegisterEffect(e4)
+
+	--Set 1 "Nethersea"S/T from deck
+	local e6=Effect.CreateEffect(c)
+	e6:SetDescription(aux.Stringid(id,2))
+	e6:SetCategory(CATEGORY_DESTROY)
+	e6:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e6:SetProperty(EFFECT_FLAG_DELAY)
+	e6:SetCode(EVENT_RELEASE)
+	e6:SetCountLimit(1,{id,2})
+	e6:SetCondition(s.DoNotRepeatAsk)
+	e6:SetTarget(s.gravetarget)
+	e6:SetOperation(s.graveoperation)
+	c:RegisterEffect(e6)
+    local e7=e6:Clone()
+    e7:SetCode(EVENT_DESTROYED)
+    c:RegisterEffect(e7)
+    local e8=e6:Clone()
+    e8:SetCode(EVENT_TO_GRAVE)
+	e8:SetCondition(s.gravecon)
+    c:RegisterEffect(e8)
 end
 function s.tgfilter(c,e)
 	return c:IsAbleToGrave() and not c:IsImmuneToEffect(e)
@@ -67,4 +87,42 @@ function s.otop(e,tp,eg,ep,ev,re,r,rp,c)
 	if not sg then return end
 	Duel.SendtoGrave(sg,REASON_EFFECT)
 	sg:DeleteGroup()
+end
+function s.gravecon(e,tp,eg,ep,ev,re,r,rp)
+	return (r&REASON_EFFECT)~=0
+end
+function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
+    return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and ((r&REASON_EFFECT)~=0))
+end
+function s.setcheck(c)
+	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and c:IsSSetable() and not c:IsCode(id)
+end
+function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.setcheck,tp,LOCATION_DECK,0,1,nil) end
+end
+function s.graveoperation(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectMatchingCard(tp,s.setcheck,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		local tg=g:GetFirst()
+		Duel.SSet(tp,tg)
+		if tg:IsType(TYPE_QUICKPLAY) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+			e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			e1:SetDescription(aux.Stringid(id,3))
+			tg:RegisterEffect(e1)
+		end
+		if tg:IsType(TYPE_TRAP) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			e1:SetDescription(aux.Stringid(id,3))
+			tg:RegisterEffect(e1)
+		end
+	end
 end

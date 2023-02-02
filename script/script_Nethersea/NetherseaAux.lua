@@ -106,25 +106,25 @@ function Nethersea.QuickTributeProcOperation(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function Nethersea.WeManyDontAskMoreThanOnce(tp,e,f)
-	if(Duel.GetFlagEffect(0,REGISTER_FLAG_WEMANY)>0) then 
-		if(Duel.GetFlagEffect(0,REGISTER_FLAG_WEMANY) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) - 1)then
-			Duel.ResetFlagEffect(0,REGISTER_FLAG_WEMANY)
+	if(Duel.GetFlagEffect(tp,REGISTER_FLAG_WEMANY)>0) then 
+		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_WEMANY) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) - 1)then
+			Duel.ResetFlagEffect(tp,REGISTER_FLAG_WEMANY)
 		else
-			Duel.RegisterFlagEffect(0,REGISTER_FLAG_WEMANY,0,0,1) 
+			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_WEMANY,0,0,1) 
 		end
 		return false
 	end
-	Duel.RegisterFlagEffect(0,REGISTER_FLAG_WEMANY,0,0,1) 
+	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_WEMANY,0,0,1) 
 	
 	if(Duel.GetMatchingGroupCount(f,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) == 1) then
-		Duel.ResetFlagEffect(0,REGISTER_FLAG_WEMANY)
+		Duel.ResetFlagEffect(tp,REGISTER_FLAG_WEMANY)
 	end
 
 	return true
 end
 
-function Nethersea.ResetWeManyFlag()
-	Duel.ResetFlagEffect(0,REGISTER_FLAG_WEMANY)
+function Nethersea.ResetWeManyFlag(tp)
+	Duel.ResetFlagEffect(tp,REGISTER_FLAG_WEMANY)
 end
 
 --This workaround is because apparently IsReleasable() and IsReleasableByEffect() always return false for spell/trap in hand

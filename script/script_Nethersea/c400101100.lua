@@ -1,6 +1,7 @@
 --Nethersea Hivemind
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

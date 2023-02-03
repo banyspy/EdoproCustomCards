@@ -38,8 +38,9 @@ function s.negActTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function s.negActOperation(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
-        re:GetHandler():CancelToGrave()
+    local rc=re:GetHandler()
+	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) and Duel.IsPlayerCanSendtoDeck(tp,rc) and (not rc:IsHasEffect(EFFECT_CANNOT_TO_DECK))then
+        rc:CancelToGrave()
 		Duel.SendtoDeck(eg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
 end

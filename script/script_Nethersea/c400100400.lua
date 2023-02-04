@@ -95,6 +95,24 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if #g>0 then
 		local tg=g:GetFirst()
 		Duel.SSet(tp,tg)
+		if tg:IsType(TYPE_QUICKPLAY) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+			e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			e1:SetDescription(aux.Stringid(CARD_NETHERSEA_HIVEMIND,3))
+			tg:RegisterEffect(e1)
+		end
+		if tg:IsType(TYPE_TRAP) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			e1:SetDescription(aux.Stringid(CARD_NETHERSEA_HIVEMIND,3))
+			tg:RegisterEffect(e1)
+		end
 	end
 end
 function s.resetcon(e,tp,eg,ep,ev,re,r,rp)

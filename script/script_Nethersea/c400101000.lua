@@ -3,7 +3,7 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
-	-- Negate then destroy, possibly summon monster
+	-- Special summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -17,12 +17,12 @@ function s.initial_effect(c)
     
     --destroy 1 from deck
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,4))
+	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_RELEASE)
-	e2:SetCountLimit(1,{id,4})
+	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.DoNotRepeatAsk)
 	e2:SetTarget(s.gravetarget)
 	e2:SetOperation(s.graveoperation)
@@ -47,28 +47,7 @@ function s.activateoperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local sp=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.spfilter),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp)
-	if #sp>0 then 
-        if Duel.SpecialSummon(sp,0,tp,tp,false,false,POS_FACEUP)>0 then
-            local e1=Effect.CreateEffect(c)
-            --e1:SetDescription(aux.Stringid(id,1))
-		    e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		    e1:SetRange(LOCATION_MZONE)
-		    e1:SetCode(EVENT_PHASE+PHASE_END)
-		    e1:SetOperation(s.desop)
-            e1:SetLabelObject(sp:GetFirst())
-		    e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		    e1:SetCountLimit(1)
-		    Duel.RegisterEffect(e1,tp)
-            --sp:GetFirst():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
-            --Show description
-            local e2=Effect.CreateEffect(c)
-			e2:SetDescription(aux.Stringid(id,1))
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
-			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-			sp:GetFirst():RegisterEffect(e2)
-        end
-    end
+	if #sp>0 then Duel.SpecialSummon(sp,0,tp,tp,false,false,POS_FACEUP) end
 end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()

@@ -46,14 +46,24 @@ function s.tributecheckoperation(c,tp)
 	return c:IsSetCard(SET_NETHERSEA) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tributechecktarget,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler(),e,tp) 
+	if chk==0 then 
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+			return Duel.IsExistingMatchingCard(s.tributechecktarget,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler(),e,tp)
+		else
+			return Duel.IsExistingMatchingCard(s.tributechecktarget,tp,LOCATION_MZONE,0,1,e:GetHandler(),e,tp)
+		end
 	 end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
 end
 function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local g
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-	local g=Duel.SelectMatchingCard(tp,s.tributecheckoperation,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,c,tp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then
+		g=Duel.SelectMatchingCard(tp,s.tributecheckoperation,tp,LOCATION_MZONE,0,1,1,c,tp)
+	else
+		g=Duel.SelectMatchingCard(tp,s.tributecheckoperation,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,c,tp)
+	end
 	if #g>0 then
 		--Same workaround as the above
 		--Since they can't be tribute for some reason due to game said so, we need to workaround by give REASON_RULE to force it

@@ -44,6 +44,7 @@ function s.initial_effect(c)
     e6:SetCode(EVENT_RELEASE)
     c:RegisterEffect(e6)
 end
+s.listed_names={id,CARD_ENDSPEAKER_WILLOFWEMANY}
 function s.spcon(e,c)
 	if c==nil then return true end
 	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0

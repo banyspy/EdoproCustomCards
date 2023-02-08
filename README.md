@@ -175,6 +175,7 @@ Here is who I found:
 * [**Satellaa**](https://github.com/Satellaa/Custom-Cards)<br />
 * [**Henrique-Izidio**](https://github.com/Henrique-Izidio/EDOPro-RMS)<br />
 * [**KServantes**](https://github.com/KServantes/Customs)<br />
+* [**Neoyuno**](https://github.com/NeoYuno/leafbladie-cards)<br />
 * [**scarletkc**](https://github.com/scarletkc/FogMoeYGO-Card-Database)<br />
 * [**supr3meofficial**](https://github.com/supr3meofficial/supremeygo)<br />
 * [**NiiMiyo**](https://github.com/NiiMiyo/EDOPro-JJBA-Cards)<br />

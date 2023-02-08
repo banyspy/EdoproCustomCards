@@ -159,6 +159,8 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
 There is also more archetype but I don't push it until I test it enough.<br />
 
+**Always take In-game text higher priority than card picture file while still in development phase, as editing text in database is alot more convenient than edit card text in card maker and render card picture and place it in folder**
+
 **Nethersea** - 10/12 - Abit of fixing of existing one then new card.<br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />

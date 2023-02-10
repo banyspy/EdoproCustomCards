@@ -46,19 +46,19 @@ function s.initial_effect(c)
 	e4:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e4:SetDescription(aux.Stringid(id,2))
 	e4:SetValue(function(e,c) e:SetLabel(1) end)
-	e4:SetCondition(function(e) return Duel.IsExistingMatchingCard(s.costfilter,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,1,nil) end)
+	e4:SetCondition(function(e) return Duel.IsExistingMatchingCard(s.costfilter,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,1,nil,e:GetHandlerPlayer()) end)
 	c:RegisterEffect(e4)
 	e1:SetLabelObject(e4)
 	e2:SetLabelObject(e4)
 end
-function s.costfilter(c)
+function s.costfilter(c,tp)
 	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasable() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.handcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then e:GetLabelObject():SetLabel(0) return true end
 	if e:GetLabelObject():GetLabel()>0 then
 		e:GetLabelObject():SetLabel(0)
-		local tc=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler()):GetFirst()
+		local tc=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler(),tp):GetFirst()
 		Duel.Release(tc,REASON_COST)
 	end
 end
@@ -95,8 +95,8 @@ function s.negSummonOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SendtoDeck(eg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil) end
-	local tc=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil):GetFirst()
+	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil,tp) end
+	local tc=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil,tp):GetFirst()
 	Duel.Release(tc,REASON_COST)
 end
 function s.thfilter(c)

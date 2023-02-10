@@ -24,19 +24,9 @@ function s.initial_effect(c)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END+TIMING_END_PHASE)
 	e3:SetCondition(s.setcon)
-	e3:SetCountLimit(1)
 	e3:SetTarget(s.settg)
 	e3:SetOperation(s.setop)
 	c:RegisterEffect(e3)
-	--For reset flag of set s/t effect
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_DELAY+EFFECT_FLAG_UNCOPYABLE)
-	e4:SetCode(EVENT_TURN_END)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetCondition(s.resetcon)
-	e4:SetOperation(s.reset)
-	c:RegisterEffect(e4)
 
 	Nethersea.GenerateToken(c)
 end
@@ -74,20 +64,21 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	c:RegisterEffect(e1)
 end
 function s.setcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetFlagEffect(tp,CARD_NETHERSEA_BRANDGUIDER) == 0
+	return e:GetHandler():GetFlagEffect(CARD_NETHERSEA_BRANDGUIDER) == 0
 end
 function s.setcheck(c)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and c:IsSSetable()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setcheck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) end
-	e:GetHandler():RegisterFlagEffect(tp,CARD_NETHERSEA_BRANDGUIDER,RESET_EVENT+RESETS_STANDARD,0,1)
-	local e1=Effect.CreateEffect(e:GetHandler())
+	c:RegisterFlagEffect(CARD_NETHERSEA_BRANDGUIDER,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END+RESET_OPPO_TURN,0,1)
+	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END+RESET_OPPO_TURN)
-	e:GetHandler():RegisterEffect(e1)
+	c:RegisterEffect(e1)
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -115,10 +106,4 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 			tg:RegisterEffect(e1)
 		end
 	end
-end
-function s.resetcon(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsTurnPlayer(tp)
-end
-function s.reset(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():ResetFlagEffect(tp,CARD_NETHERSEA_BRANDGUIDER)
 end

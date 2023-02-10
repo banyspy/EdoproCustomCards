@@ -37,7 +37,7 @@ function s.initial_effect(c)
 	e2:SetCode(EFFECT_CANNOT_DISABLE_SPSUMMON)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	c:RegisterEffect(e2)
-	-- Search 1 "Nethersea" card
+	-- Search 1 "Nethersea" monster or WATER Aqua monster
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_HANDES)
@@ -51,9 +51,6 @@ function s.initial_effect(c)
 end
 function s.tokentributecheck(c)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsType(TYPE_TOKEN) and c:IsReleasable()
-end
-function s.checkcode(c,tem)
-	return c:IsOriginalCode(tem)
 end
 function s.summonfilter(c,tp,e)
 	return c:IsOriginalCode(id)  and Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) 
@@ -91,7 +88,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 
 				local tem = 400100110
 				while tem <= 400100610 do
-					if g:IsExists(s.checkcode,1,nil,tem) then
+					if g:IsExists(Card.IsOriginalCode,1,nil,tem) then
 						local temcard = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_ALL,0,nil,tem-10)
 						local code = temcard:GetOriginalCode()
 						local e1=Effect.CreateEffect(tg)
@@ -114,7 +111,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.thfilter(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsAbleToHand() and not c:IsCode(id)
+	return Nethersea.NetherseaMonsterOrWQ(c) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end

@@ -44,11 +44,10 @@ function s.initial_effect(c)
     e6:SetCode(EVENT_RELEASE)
     c:RegisterEffect(e6)
 end
-s.listed_names={id,CARD_ENDSPEAKER_WILLOFWEMANY}
 function s.spcon(e,c)
 	if c==nil then return true end
-	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
-	and ( Duel.IsExistingMatchingCard(Card.IsSetCard,c:GetControler(),LOCATION_MZONE,0,1,nil,SET_NETHERSEA)
+	return Duel.GetMZoneCount(c:GetControler())>0
+	and ( Duel.IsExistingMatchingCard(Nethersea.NetherseaMonsterOrWQ,c:GetControler(),LOCATION_MZONE,0,1,nil)
 	or  Duel.GetFieldGroupCount(c:GetControler(),LOCATION_MZONE,0)==0 )
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -56,7 +55,7 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
 end
 function s.filter(c)
-	return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x259) and c:IsAbleToRemove() and aux.SpElimFilter(c,true)
+	return c:IsType(TYPE_EFFECT) and c:IsSetCard(SET_NETHERSEA) and c:IsAbleToRemove() and aux.SpElimFilter(c,true)
 	and not (c:IsOriginalCode(CARD_ENDSPEAKER) or c:IsOriginalCode(CARD_ENDSPEAKER_WILLOFWEMANY))
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -103,7 +102,7 @@ function s.con(e)
     return not e:GetHandler():IsLocation(LOCATION_GRAVE)
 end
 function s.thfilter(c)
-    return c:IsSetCard(0x259) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()
+    return Nethersea.NetherseaMonsterOrWQ(c) and not c:IsCode(id) and c:IsAbleToHand()
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end

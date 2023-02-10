@@ -42,11 +42,12 @@ end
 function s.chainfilter(e,ct)
 	local p=e:GetHandlerPlayer()
 	local te,tp=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
-	return p==tp and te:GetHandler():IsSetCard(SET_NETHERSEA)
+	local tc=te:GetHandler()
+	return p==tp and Nethersea.NetherseaCardOrWQ(tc)
 end
 function s.distarget(e,c)
-	return c:IsSetCard(SET_NETHERSEA)
+	return Nethersea.NetherseaCardOrWQ(c)
 end
 function s.tgtg(e,c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsFaceup() and c~=e:GetHandler()
+	return Nethersea.NetherseaCardOrWQ(c) and c:IsFaceup() and c~=e:GetHandler()
 end

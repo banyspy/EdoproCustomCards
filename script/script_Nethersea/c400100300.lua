@@ -44,11 +44,11 @@ function s.initial_effect(c)
 	Nethersea.GenerateToken(c)
 end
 function s.tributecheck(c,tp)
-	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) and
+	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and
 	 (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.desfilter(c)
-	return (c:IsLocation(LOCATION_ONFIELD)) or ( c:IsSetCard(SET_NETHERSEA) and c:IsLocation(LOCATION_DECK))
+	return (c:IsLocation(LOCATION_ONFIELD)) or ( Nethersea.NetherseaCardOrWQ(c) and c:IsLocation(LOCATION_DECK))
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.tributecheck,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler(),tp) 

@@ -36,14 +36,14 @@ function s.initial_effect(c)
 	Nethersea.GenerateToken(c)
 end
 function s.handeffspfilter(c,e,tp)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return Nethersea.NetherseaMonsterOrWQ(c) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.tributechecktarget(c,e,tp)
-	return c:IsSetCard(SET_NETHERSEA) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
+	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 	and Duel.IsExistingMatchingCard(s.handeffspfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,c,e,tp)
 end
 function s.tributecheckoperation(c,tp)
-	return c:IsSetCard(SET_NETHERSEA) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
+	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then 

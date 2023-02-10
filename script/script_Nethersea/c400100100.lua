@@ -3,7 +3,7 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
-	-- Search 1 "Nethersea" card, then tribute 1 "Nethersea" card from hand or field
+	-- Search 1 "Nethersea" card or water aqua monster, then tribute 1 "Nethersea" card or water aqua monster from hand or field
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_RELEASE)
@@ -36,10 +36,10 @@ function s.initial_effect(c)
 	Nethersea.GenerateToken(c)
 end
 function s.tributecheck(c,tp)
-	return c:IsSetCard(SET_NETHERSEA) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
+	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.thfilter(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsAbleToHand() and not c:IsCode(id)
+	return Nethersea.NetherseaCardOrWQ(c) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.handefftarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) 

@@ -39,7 +39,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.thtg)
 	e3:SetOperation(s.thop)
 	c:RegisterEffect(e3)
-	--Can be activated the same turn it was set
+	--Can be activated from hand
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetCode(EFFECT_TRAP_ACT_IN_HAND)
@@ -52,7 +52,7 @@ function s.initial_effect(c)
 	e2:SetLabelObject(e4)
 end
 function s.costfilter(c)
-	return Nethersea.NetherseaCardOrWQ(c) and c:IsReleasable()
+	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasable() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
 function s.handcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then e:GetLabelObject():SetLabel(0) return true end

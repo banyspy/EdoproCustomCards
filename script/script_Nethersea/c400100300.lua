@@ -77,7 +77,7 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.cfilter(c,tp)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsControler(tp)
+	return Nethersea.NetherseaMonsterOrWQ(c) and c:IsControler(tp)
 end
 function s.rmvcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.cfilter,1,e:GetHandler(),tp)

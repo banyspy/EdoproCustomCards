@@ -36,7 +36,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e4)
 end
 function s.spfilter(c,e,tp)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return Nethersea.NetherseaMonsterOrWQ(c) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.activatetarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil,e,tp) 
@@ -62,7 +62,7 @@ function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
     return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
 end
 function s.gravefilter(c)
-	return c:IsSetCard(SET_NETHERSEA) and not c:IsCode(id) 
+	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) 
 end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gravefilter,tp,LOCATION_DECK,0,1,nil) end

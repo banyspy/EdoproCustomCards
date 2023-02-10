@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.cfilter(c)
-    return c:IsFaceup() and c:IsSetCard(SET_NETHERSEA)
+    return c:IsFaceup() and Nethersea.NetherseaCardOrWQ(c)
 end
 function s.negActCondition(e,tp,eg,ep,ev,re,r,rp)
 	return re and Duel.IsChainNegatable(ev) and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_ONFIELD,0,1,nil)

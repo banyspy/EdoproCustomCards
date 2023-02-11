@@ -73,17 +73,29 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	
 	if Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) and Duel.GetFlagEffect(tp,id)==0 and 
 	c:IsCanBeSpecialSummoned(e,0,tp,true,true) then
+		local g=Group.CreateGroup() --Group of token that will be released
+		local tg -- Copy of WeMany that will be summoned
+		repeat
+		g:Clear()
 		if Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,0)) then
-			Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
-			Nethersea.ResetWeManyFlag(tp)
-			local tg
 			if(Duel.GetMatchingGroupCount(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) == 1) then
 				tg = c
 			else
 				tg = Duel.SelectMatchingCard(tp,s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,tp,e):GetFirst()
 			end
-			local g=Duel.SelectReleaseGroup(tp,s.tokentributecheck,1,6,nil)
+			local ag=Duel.GetMatchingGroup(s.tokentributecheck,tp,LOCATION_MZONE,0,nil) -- Group of valid token
+			g=aux.SelectUnselectGroup(ag,e,tp,1,#ag,aux.TRUE,1,tp,HINTMSG_RELEASE,aux.TRUE,nil,true) --Select token from ag group into g group
+		else
+			g:DeleteGroup()
+			return
+		end
+
+		until(#g>0)	
+
+			Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
+			Nethersea.ResetWeManyFlag(tp)
 			Duel.Release(g,REASON_RELEASE)
+		
 		    if Duel.SpecialSummon(tg,0,tp,tp,true,true,POS_FACEUP)>0 then
 
 				local tem = 400100110
@@ -107,7 +119,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 				end
 		    	c:CompleteProcedure()
 			end
-        end
+		g:DeleteGroup()
 	end
 end
 function s.thfilter(c)

@@ -109,11 +109,36 @@ function Nethersea.QuickTributeProcOperation(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsSummonable(true,nil,1) then pos=pos+POS_FACEUP_ATTACK end
 	if c:IsMSetable(true,nil,1) then pos=pos+POS_FACEDOWN_DEFENSE end
 	if pos==0 then return end
+
+	--Workaround Spell/Trap sent to GY before choose to tribute if you activate quick tribute as chain link 1
+	--Make Spell/trap stuck on the field until monster summon
+	local g=Duel.GetMatchingGroup(Nethersea.WorkaroundFilter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
+	if  ((Duel.GetCurrentChain(true))==1) and (#g>0)then
+		local tg=g:GetFirst()
+		for tg in aux.Next(g) do
+			tg:CancelToGrave()
+			local e1=Effect.CreateEffect(tg)
+			e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+			e1:SetCode(EVENT_SUMMON)
+			e1:SetRange(LOCATION_SZONE)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			e1:SetOperation(Nethersea.WorkaroundSTtoGraveBeforeTributeOperation)
+			tg:RegisterEffect(e1)
+		end
+	end
 	if Duel.SelectPosition(tp,c,pos)==POS_FACEUP_ATTACK then
 		Duel.Summon(tp,c,true,nil,1)
 	else
 		Duel.MSet(tp,c,true,nil,1)
 	end
+end
+
+function Nethersea.WorkaroundFilter(c)
+	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and not c:IsType(TYPE_CONTINUOUS|TYPE_FIELD|TYPE_EQUIP)
+end
+
+function Nethersea.WorkaroundSTtoGraveBeforeTributeOperation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.SendtoGrave(e:GetHandler(),REASON_RULE)
 end
 
 function Nethersea.WeManyDontAskMoreThanOnce(tp,e,f)

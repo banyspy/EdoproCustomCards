@@ -67,10 +67,16 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 		
 		if tg:IsStatus(STATUS_BATTLE_DESTROYED) then
 			Duel.Destroy(tg,REASON_BATTLE)
+			tg:SetStatus(STATUS_BATTLE_DESTROYED|STATUS_OPPO_BATTLE,true)
+			tg:SetReason(REASON_BATTLE)
+			tg:SetReasonCard(c)
 		end
 
 		if c:IsStatus(STATUS_BATTLE_DESTROYED) then
 			Duel.Destroy(c,REASON_BATTLE)
+			c:SetStatus(STATUS_BATTLE_DESTROYED|STATUS_OPPO_BATTLE,true)
+			c:SetReason(REASON_BATTLE)
+			c:SetReasonCard(tg)
 		end
 	end
 end

@@ -39,25 +39,30 @@ function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and c:IsFaceup() then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
-		e1:SetValue(800)
-		c:RegisterEffect(e1)
-	end
+	if not (c:IsRelateToEffect(e) and c:IsFaceup()) then return end
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
+	e1:SetValue(800)
+	c:RegisterEffect(e1)
+	
 	local g=Duel.SelectMatchingCard(tp,s.atkcheck,tp,0,LOCATION_MZONE,1,1,nil,e)
 	if #g>0 then
 		local tg=g:GetFirst()
 		Duel.HintSelection(tg)
 		local e1=Effect.CreateEffect(c)
-		e1:SetDescription(aux.Stringid(id,3))
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_NO_BATTLE_DAMAGE)
+		e1:SetValue(1)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
 		c:RegisterEffect(e1)
+		local e2=e1:Clone()
+		e2:SetDescription(aux.Stringid(id,3))
+		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+		e2:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
+		c:RegisterEffect(e2)
 		Duel.CalculateDamage(c,tg,true)
 		
 		if tg:IsStatus(STATUS_BATTLE_DESTROYED) then

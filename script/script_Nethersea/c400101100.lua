@@ -34,7 +34,19 @@ function s.initial_effect(c)
 	e4:SetOperation(s.otop)
 	e4:SetValue(SUMMON_TYPE_TRIBUTE)
 	c:RegisterEffect(e4)
-
+	--Negate
+	local e5=Effect.CreateEffect(c)
+	e5:SetDescription(aux.Stringid(id,1))
+	e5:SetCategory(CATEGORY_DISABLE)
+	e5:SetType(EFFECT_TYPE_QUICK_O)
+	e5:SetCode(EVENT_FREE_CHAIN)
+	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e5:SetRange(LOCATION_SZONE)
+    e5:SetCountLimit(1,{id,1})
+	e5:SetCost(s.negcost)
+	e5:SetTarget(s.negtg)
+	e5:SetOperation(s.negop)
+	c:RegisterEffect(e5)
 	--Set 1 "Nethersea"S/T from deck
 	local e6=Effect.CreateEffect(c)
 	e6:SetDescription(aux.Stringid(id,2))
@@ -85,6 +97,34 @@ function s.otop(e,tp,eg,ep,ev,re,r,rp,c)
 	if not sg then return end
 	Duel.SendtoGrave(sg,REASON_EFFECT)
 	sg:DeleteGroup()
+end
+function s.costfilter(c)
+	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeckOrExtraAsCost()
+end
+function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,nil) end 
+	local tg=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
+	Duel.HintSelection(tg,true)
+	local rg=tg:Filter(Card.IsFacedown,nil)
+	if #rg>0 then Duel.ConfirmCards(1-tp,rg) end
+	Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+end
+function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingTarget(Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	local g=Duel.SelectTarget(tp,Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
+end
+function s.negop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) and tc:IsFaceup() and not tc:IsDisabled() then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_DISABLE)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		tc:RegisterEffect(e1)
+	end
 end
 function s.gravecon(e,tp,eg,ep,ev,re,r,rp)
 	return (r&REASON_EFFECT)~=0

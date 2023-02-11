@@ -56,7 +56,7 @@ function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
     return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
 end
 function s.gravefilter(c)
-	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeckOrExtra()
+	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeck()
 end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)

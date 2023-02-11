@@ -56,7 +56,7 @@ function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
     return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
 end
 function s.gravefilter(c)
-	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeck()
+	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeckOrExtraAsCost()
 end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
@@ -68,6 +68,9 @@ function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetMatchingGroupCount(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil) < 3 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local tg=Duel.SelectMatchingCard(tp,s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
+	Duel.HintSelection(tg,true)
+	local rg=tg:Filter(Card.IsFacedown,nil)
+	if #rg>0 then Duel.ConfirmCards(1-tp,rg) end
 	Duel.SendtoDeck(tg,nil,0,REASON_EFFECT)
 	local tg=Duel.GetOperatedGroup()
 	if tg:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end

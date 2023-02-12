@@ -67,10 +67,26 @@ function Nethersea.GenerateTokenTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
     local id=e:GetHandler():GetOriginalCode()
+	local c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,id+10,SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
 		local token=Duel.CreateToken(tp,id+10)
-		Duel.SpecialSummon(token,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
+		--Cannot Special Summon monsters except WATER Aqua/Thunder/Fish/Sea serpent
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetTargetRange(1,0)
+		e1:SetTarget(function(_,c) return not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_AQUA|RACE_THUNDER|RACE_FISH|RACE_SEASERPENT)) end)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		token:RegisterEffect(e1,true)
+		--Clock Lizard check
+		local e2=aux.createContinuousLizardCheck(c,LOCATION_MZONE,function(_,c) return not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_AQUA|RACE_THUNDER|RACE_FISH|RACE_SEASERPENT)) end)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+		token:RegisterEffect(e2,true)
+		Duel.SpecialSummonComplete()
 	end
 end
 
@@ -109,10 +125,9 @@ function Nethersea.QuickTributeProcOperation(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsSummonable(true,nil,1) then pos=pos+POS_FACEUP_ATTACK end
 	if c:IsMSetable(true,nil,1) then pos=pos+POS_FACEDOWN_DEFENSE end
 	if pos==0 then return end
-
 	--Workaround Spell/Trap sent to GY before choose to tribute if you activate quick tribute as chain link 1
 	--Make Spell/trap stuck on the field until monster summon
-	local g=Duel.GetMatchingGroup(Nethersea.WorkaroundFilter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
+	local g=Duel.GetMatchingGroup(Nethersea.WorkaroundPreventSTtoGYFilter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
 	if  ((Duel.GetCurrentChain(true))==1) and (#g>0)then
 		local tg=g:GetFirst()
 		for tg in aux.Next(g) do
@@ -133,7 +148,7 @@ function Nethersea.QuickTributeProcOperation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function Nethersea.WorkaroundFilter(c)
+function Nethersea.WorkaroundPreventSTtoGYFilter(c)
 	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and not c:IsType(TYPE_CONTINUOUS|TYPE_FIELD|TYPE_EQUIP)
 end
 

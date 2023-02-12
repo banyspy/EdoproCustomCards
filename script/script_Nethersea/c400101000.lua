@@ -3,18 +3,19 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--Also treated as "Umi"
+	Nethersea.AlsoTreatedAsUmi(c)
 	-- Special summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e1:SetCountLimit(1,{id,0},EFFECT_COUNT_CODE_OATH)
 	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END+TIMING_END_PHASE)
 	e1:SetTarget(s.activatetarget)
 	e1:SetOperation(s.activateoperation)
 	c:RegisterEffect(e1)
-    
     --destroy 1 from deck
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))

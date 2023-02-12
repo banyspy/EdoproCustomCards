@@ -3,6 +3,8 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--Also treated as "Umi"
+	Nethersea.AlsoTreatedAsUmi(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

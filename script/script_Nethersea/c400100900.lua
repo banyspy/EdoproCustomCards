@@ -3,25 +3,27 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--Also treated as "Umi"
+	Nethersea.AlsoTreatedAsUmi(c)
 	-- Add "Nethersea" card or water aqua monster from deck to hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e1:SetCountLimit(1,{id,0},EFFECT_COUNT_CODE_OATH)
 	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END+TIMING_END_PHASE)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
     --shuffle and draw
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,4))
+	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TODECK+CATEGORY_DRAW)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_RELEASE)
-	e2:SetCountLimit(1,{id,4})
+	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.DoNotRepeatAsk)
 	e2:SetTarget(s.gravetarget)
 	e2:SetOperation(s.graveoperation)
@@ -56,11 +58,11 @@ function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
     return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and (r&REASON_EFFECT)~=0)
 end
 function s.gravefilter(c)
-	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeck()
+	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and (c:IsAbleToDeck() or c:IsAbleToExtra())
 end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
-		and Duel.IsExistingTarget(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,nil) end
+	if chk==0 then 
+		return Duel.IsPlayerCanDraw(tp,1) and (Duel.GetMatchingGroupCount(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil) >= 3) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,LOCATION_GRAVE+LOCATION_REMOVED,0,tp,3)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end

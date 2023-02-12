@@ -199,3 +199,13 @@ function Nethersea.SpecialSummonLimit(c)
 	e1:SetTarget(function(_,c) return not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_AQUA|RACE_THUNDER|RACE_FISH|RACE_SEASERPENT)) end)
 	c:RegisterEffect(e1)
 end
+
+--Also treated as "Umi"
+function Nethersea.AlsoTreatedAsUmi(c)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCode(EFFECT_ADD_CODE)
+	e1:SetValue(CARD_UMI)
+	c:RegisterEffect(e1)
+end

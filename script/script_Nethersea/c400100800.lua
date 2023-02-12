@@ -3,6 +3,7 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--Revive limit
 	c:EnableReviveLimit()
 	--Cannot be special summon
 	local e0=Effect.CreateEffect(c)

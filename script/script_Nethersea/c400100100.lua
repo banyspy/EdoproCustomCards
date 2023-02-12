@@ -3,6 +3,8 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--spsummon limit
+	Nethersea.SpecialSummonLimit(c)
 	-- Search 1 "Nethersea" card or water aqua monster, then tribute 1 "Nethersea" card or water aqua monster from hand or field
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

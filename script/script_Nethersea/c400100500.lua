@@ -3,6 +3,8 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--spsummon limit
+	Nethersea.SpecialSummonLimit(c)
 	--Quick Tribute summon from hand
 	Nethersea.QuickTributeProc(c)
 	--Cannot negate the activation of your "Nethersea" card

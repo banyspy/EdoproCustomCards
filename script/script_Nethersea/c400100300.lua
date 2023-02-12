@@ -3,6 +3,8 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--spsummon limit
+	Nethersea.SpecialSummonLimit(c)
 	-- Tribute 1 "Nethersea" card from hand or field except this card, and if you do, destroy 1 card on the field or 1 "Nethersea" monster from your deck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

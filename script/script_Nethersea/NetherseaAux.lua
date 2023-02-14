@@ -204,8 +204,21 @@ end
 function Nethersea.AlsoTreatedAsUmi(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetCode(EFFECT_ADD_CODE)
 	e1:SetValue(CARD_UMI)
 	c:RegisterEffect(e1)
+end
+
+--Attribute and race cannot be changed as rule
+function Nethersea.CannotChangeAttributeRace(c)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetCode(EFFECT_IMMUNE_EFFECT)
+	e1:SetValue(function(e,te) return te:GetCode()&EFFECT_CHANGE_RACE==EFFECT_CHANGE_RACE end)
+	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetValue(function(e,te) return te:GetCode()&EFFECT_CHANGE_ATTRIBUTE==EFFECT_CHANGE_ATTRIBUTE end)
+	c:RegisterEffect(e2)
 end

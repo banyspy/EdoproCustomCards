@@ -3,6 +3,8 @@
 local s,id=GetID()
 Duel.LoadScript('NetherseaAux.lua')
 function s.initial_effect(c)
+	--Attribute and race cannot be changed as rule
+	Nethersea.CannotChangeAttributeRace(c)
 	--Revive limit
 	c:EnableReviveLimit()
 	--Cannot be special summon

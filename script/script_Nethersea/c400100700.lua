@@ -52,7 +52,8 @@ function s.spcon(e,c)
 	if c==nil then return true end
 	return Duel.GetMZoneCount(c:GetControler())>0
 	and ( Duel.IsExistingMatchingCard(Nethersea.NetherseaMonsterOrWQ,c:GetControler(),LOCATION_MZONE,0,1,nil)
-	or  Duel.GetFieldGroupCount(c:GetControler(),LOCATION_MZONE,0)==0 )
+	or Duel.IsExistingMatchingCard(Card.IsCode,c:GetControler(),LOCATION_ONFIELD,0,1,nil,CARD_UMI)
+	or Duel.GetFieldGroupCount(c:GetControler(),LOCATION_MZONE,0)==0 )
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():GetFlagEffect(id)==0 end

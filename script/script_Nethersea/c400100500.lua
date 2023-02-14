@@ -23,6 +23,16 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetValue(s.chainfilter)
 	c:RegisterEffect(e2)
+	--Unaffected by effect that your opponent response to
+	local e2a=Effect.CreateEffect(c)
+	e2a:SetType(EFFECT_TYPE_FIELD)
+	e2a:SetCode(EFFECT_IMMUNE_EFFECT)
+	e2a:SetRange(LOCATION_MZONE)
+	e2a:SetTargetRange(LOCATION_ALL,0)
+	e2a:SetTarget(s.UnaffectedFilter)
+	e2a:SetValue(s.efilter)
+	c:RegisterEffect(e2a)
+	--Cannot be negated continuously
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_CANNOT_DISABLE)
@@ -49,6 +59,23 @@ function s.chainfilter(e,ct)
 	local te,tp=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
 	local tc=te:GetHandler()
 	return p==tp and Nethersea.NetherseaCardOrWQ(tc)
+end
+function s.UnaffectedFilter(e,c) --Check if in previous chain link there is your card activated and which card is it
+	local ch=Duel.GetCurrentChain(true)
+	local che,chcode=Duel.GetChainInfo(ch-1,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_CODE)
+	--[[Debug.Message("UnaffectedFilter")
+	Debug.Message(chcode)
+	Debug.Message(Duel.GetCurrentChain(true))
+	Debug.Message(c:GetCode())]]
+	return Nethersea.NetherseaCardOrWQ(c) and ch>1 and che:IsActivated() and (c == che:GetHandler())
+end
+function s.efilter(e,re) --Check if card in current chain link is your opponent's activated effect and which card is it
+	local ch=Duel.GetCurrentChain(true)
+	local che,chcode=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_CODE)
+	--[[Debug.Message("efilter")
+	Debug.Message(chcode)
+	Debug.Message(Duel.GetCurrentChain(true))]]
+	return e:GetOwnerPlayer()~=re:GetOwnerPlayer() and re:IsActivated() and (re:GetHandler() == che:GetHandler())
 end
 function s.distarget(e,c)
 	return Nethersea.NetherseaCardOrWQ(c)

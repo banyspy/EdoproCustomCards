@@ -69,6 +69,7 @@ function s.initial_effect(c)
 	e8:SetCondition(s.gravecon)
     c:RegisterEffect(e8)
 end
+s.listed_names={CARD_UMI}
 function s.tgfilter(c,e)
 	return c:IsAbleToGrave() and not c:IsImmuneToEffect(e)
 end
@@ -135,7 +136,7 @@ function s.DoNotRepeatAsk(e,tp,eg,ep,ev,re,r,rp)
     return not (e:GetHandler():IsLocation(LOCATION_GRAVE) and ((r&REASON_EFFECT)~=0))
 end
 function s.setcheck(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and c:IsSSetable() and not c:IsCode(id)
+	return c:IsCode(CARD_UMI) and c:IsSSetable() and not c:IsCode(id)
 end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setcheck,tp,LOCATION_DECK,0,1,nil) end

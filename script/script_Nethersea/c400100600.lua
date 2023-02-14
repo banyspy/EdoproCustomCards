@@ -34,6 +34,7 @@ function s.initial_effect(c)
 	
 	Nethersea.GenerateToken(c)
 end
+s.listed_names={CARD_UMI}
 function s.atkcheck(c,e)
 	return not e:GetHandler():IsImmuneToEffect(e) and not c:IsImmuneToEffect(e) and e:GetHandler():CanAttack()
 end

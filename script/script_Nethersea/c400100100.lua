@@ -39,6 +39,7 @@ function s.initial_effect(c)
 
 	Nethersea.GenerateToken(c)
 end
+s.listed_names={CARD_UMI}
 function s.tributecheck(c,tp)
 	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasableByEffect() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end

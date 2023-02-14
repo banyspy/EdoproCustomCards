@@ -28,11 +28,11 @@ SET_NETHERSEA = 0x259
 REGISTER_FLAG_WEMANY = 400100000
 
 function Nethersea.NetherseaMonsterOrWQ(c)
-	return c:IsMonster() and (c:IsSetCard(SET_NETHERSEA) or (c:IsRace(RACE_AQUA) and c:IsAttribute(ATTRIBUTE_WATER)))
+	return c:IsMonster() and c:IsRace(RACE_AQUA) and c:IsAttribute(ATTRIBUTE_WATER)
 end
 
 function Nethersea.NetherseaCardOrWQ(c)
-	return c:IsSetCard(SET_NETHERSEA) or (c:IsMonster() and c:IsRace(RACE_AQUA) and c:IsAttribute(ATTRIBUTE_WATER))
+	return c:IsCode(CARD_UMI) or (c:IsMonster() and c:IsRace(RACE_AQUA) and c:IsAttribute(ATTRIBUTE_WATER))
 end
 
 function Nethersea.GenerateToken(c)
@@ -97,7 +97,7 @@ function Nethersea.QuickTributeProc(c)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
 	e0:SetTargetRange(LOCATION_HAND+LOCATION_ONFIELD,0)
-	e0:SetTarget(aux.AND(aux.OR(aux.TargetBoolFunction(Card.IsSetCard,SET_NETHERSEA),aux.AND(aux.TargetBoolFunction(Card.IsRace,RACE_AQUA),aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER))),aux.NOT(aux.TargetBoolFunction(Card.IsCode,c:GetOriginalCode()))))
+	e0:SetTarget(aux.AND(aux.OR(aux.TargetBoolFunction(Card.IsCode,CARD_UMI),aux.AND(aux.TargetBoolFunction(Card.IsRace,RACE_AQUA),aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER))),aux.NOT(aux.TargetBoolFunction(Card.IsCode,c:GetOriginalCode()))))
 	e0:SetValue(POS_FACEUP)
 	c:RegisterEffect(e0)
 	--summon
@@ -149,7 +149,7 @@ function Nethersea.QuickTributeProcOperation(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function Nethersea.WorkaroundPreventSTtoGYFilter(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and not c:IsType(TYPE_CONTINUOUS|TYPE_FIELD|TYPE_EQUIP)
+	return c:IsCode(CARD_UMI) and c:IsSpellTrap() and not c:IsType(TYPE_CONTINUOUS|TYPE_FIELD|TYPE_EQUIP)
 end
 
 function Nethersea.WorkaroundSTtoGraveBeforeTributeOperation(e,tp,eg,ep,ev,re,r,rp)

@@ -36,6 +36,7 @@ function s.initial_effect(c)
 	e4:SetCondition(s.gravecon)
     c:RegisterEffect(e4)
 end
+s.listed_names={CARD_UMI}
 function s.spfilter(c,e,tp)
 	return Nethersea.NetherseaMonsterOrWQ(c) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end

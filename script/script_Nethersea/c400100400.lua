@@ -67,11 +67,12 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	e1:SetValue(c:GetAttack())
 	c:RegisterEffect(e1)
 end
+s.listed_names={CARD_UMI}
 function s.setcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetFlagEffect(CARD_NETHERSEA_BRANDGUIDER) == 0
 end
 function s.setcheck(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and c:IsSSetable()
+	return c:IsCode(CARD_UMI) and c:IsSSetable()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()

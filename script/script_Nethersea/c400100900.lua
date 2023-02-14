@@ -36,6 +36,7 @@ function s.initial_effect(c)
 	e4:SetCondition(s.gravecon)
     c:RegisterEffect(e4)
 end
+s.listed_names={CARD_UMI}
 function s.filter(c)
 	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToHand()
 end

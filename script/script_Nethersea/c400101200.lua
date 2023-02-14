@@ -53,6 +53,7 @@ function s.initial_effect(c)
 	e1:SetLabelObject(e4)
 	e2:SetLabelObject(e4)
 end
+s.listed_names={CARD_UMI}
 function s.costfilter(c,tp)
 	return Nethersea.NetherseaCardOrWQ(c) and (c:IsReleasable() or Nethersea.WorkaroundTributeSTinHandCheck(c,tp))
 end
@@ -102,7 +103,7 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(tc,REASON_COST)
 end
 function s.thfilter(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsSpellTrap() and (c:IsSSetable() or c:IsAbleToHand()) and not c:IsCode(id)
+	return c:IsCode(CARD_UMI) and (c:IsSSetable() or c:IsAbleToHand()) and not c:IsCode(id)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) end

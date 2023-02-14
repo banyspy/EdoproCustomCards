@@ -43,6 +43,7 @@ function s.initial_effect(c)
 	
 	Nethersea.GenerateToken(c)
 end
+s.listed_names={CARD_UMI}
 function s.chainfilter(e,ct)
 	local p=e:GetHandlerPlayer()
 	local te,tp=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)

@@ -39,6 +39,7 @@ function s.initial_effect(c)
 	
 	Nethersea.GenerateToken(c)
 end
+s.listed_names={CARD_UMI}
 function s.handeffspfilter(c,e,tp)
 	return Nethersea.NetherseaMonsterOrWQ(c) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end

@@ -161,11 +161,11 @@ function Nethersea.WeManyDontAskMoreThanOnce(tp,e,f)
 		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_WEMANY) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) - 1)then
 			Duel.ResetFlagEffect(tp,REGISTER_FLAG_WEMANY)
 		else
-			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_WEMANY,0,0,1) 
+			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_WEMANY,RESET_PHASE+PHASE_END,0,1) 
 		end
 		return false
 	end
-	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_WEMANY,0,0,1) 
+	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_WEMANY,RESET_PHASE+PHASE_END,0,1) 
 	
 	if(Duel.GetMatchingGroupCount(f,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,e) == 1) then
 		Duel.ResetFlagEffect(tp,REGISTER_FLAG_WEMANY)

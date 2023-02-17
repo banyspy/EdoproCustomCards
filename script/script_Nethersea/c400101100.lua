@@ -36,18 +36,17 @@ function s.initial_effect(c)
 	e4:SetOperation(s.otop)
 	e4:SetValue(SUMMON_TYPE_TRIBUTE)
 	c:RegisterEffect(e4)
-	--Negate
+	--Draw
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(id,1))
-	e5:SetCategory(CATEGORY_DISABLE)
+	e5:SetCategory(CATEGORY_DRAW+CATEGORY_RECOVER)
 	e5:SetType(EFFECT_TYPE_QUICK_O)
 	e5:SetCode(EVENT_FREE_CHAIN)
-	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e5:SetRange(LOCATION_SZONE)
     e5:SetCountLimit(1,{id,1})
-	e5:SetCost(s.negcost)
-	e5:SetTarget(s.negtg)
-	e5:SetOperation(s.negop)
+	e5:SetCost(s.drawcost)
+	e5:SetTarget(s.drawtg)
+	e5:SetOperation(s.drawop)
 	c:RegisterEffect(e5)
 	--Set 1 "Nethersea"S/T from deck
 	local e6=Effect.CreateEffect(c)
@@ -104,7 +103,7 @@ end
 function s.costfilter(c)
 	return Nethersea.NetherseaCardOrWQ(c) and not c:IsCode(id) and c:IsAbleToDeckOrExtraAsCost()
 end
-function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.drawcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,nil) end 
 	local tg=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
 	Duel.HintSelection(tg,true)
@@ -112,21 +111,17 @@ function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if #rg>0 then Duel.ConfirmCards(1-tp,rg) end
 	Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
-function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingTarget(Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local g=Duel.SelectTarget(tp,Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
+function s.drawtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetTargetPlayer(tp)
+	Duel.SetTargetParam(1)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,1200)
 end
-function s.negop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() and not tc:IsDisabled() then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e1)
+function s.drawop(e,tp,eg,ep,ev,re,r,rp)
+	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+	if Duel.Draw(p,d,REASON_EFFECT)>0 and Duel.SelectEffectYesNo(tp,e:GetHandler(),aux.Stringid(id,3)) then
+		Duel.Recover(p,1200,REASON_EFFECT)
 	end
 end
 function s.gravecon(e,tp,eg,ep,ev,re,r,rp)

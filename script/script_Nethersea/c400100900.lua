@@ -19,7 +19,7 @@ function s.initial_effect(c)
     --shuffle and draw
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW+CATEGORY_RECOVER)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_RELEASE)
@@ -64,8 +64,11 @@ end
 function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then 
 		return Duel.IsPlayerCanDraw(tp,1) and (Duel.GetMatchingGroupCount(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil) >= 3) end
+	Duel.SetTargetPlayer(tp)
+	Duel.SetTargetParam(1)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,LOCATION_GRAVE+LOCATION_REMOVED,0,tp,3)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,1200)
 end
 function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetMatchingGroupCount(s.gravefilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil) < 3 then return end
@@ -80,6 +83,9 @@ function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
 	local ct=tg:FilterCount(Card.IsLocation,nil,LOCATION_DECK+LOCATION_EXTRA)
 	if ct==3 then
 		Duel.BreakEffect()
-		Duel.Draw(tp,1,REASON_EFFECT)
+		local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+		if Duel.Draw(p,d,REASON_EFFECT)>0 and Duel.SelectEffectYesNo(tp,e:GetHandler(),aux.Stringid(id,2)) then
+			Duel.Recover(p,1200,REASON_EFFECT)
+		end
 	end
 end

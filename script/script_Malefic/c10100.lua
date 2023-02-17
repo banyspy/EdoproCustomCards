@@ -42,7 +42,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function s.spcon(e,c)
-	return not Duel.IsExistingMatchingCard(aux.FilterFaceupFunction(Card.IsCode,id),e:GetHandlerPlayer(),LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+	return not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,id),e:GetHandlerPlayer(),LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
 end
 function s.descon(e)
 	local f1=Duel.GetFieldCard(0,LOCATION_SZONE,5)

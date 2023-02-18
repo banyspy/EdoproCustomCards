@@ -36,6 +36,22 @@ function s.initial_effect(c)
 	e3:SetTargetRange(1,1)
 	e3:SetTarget(s.rmlimit)
 	c:RegisterEffect(e3)
+	--Negate the effects of monsters that battle your WATER Aqua monsters
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetCode(EFFECT_DISABLE)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetTargetRange(0,LOCATION_MZONE)
+	e4:SetTarget(s.distg)
+	c:RegisterEffect(e4)
+	--Adjust itself to apply the negation effect right away
+	local e5=Effect.CreateEffect(c)
+	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e5:SetCode(EVENT_BE_BATTLE_TARGET)
+	e5:SetRange(LOCATION_MZONE)
+	e5:SetOperation(function(e) Duel.AdjustInstantly(e:GetHandler()) end)
+	c:RegisterEffect(e5)
 
 	Nethersea.GenerateToken(c)
 end
@@ -80,4 +96,22 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.rmlimit(e,c,tp,r)
 	return c==e:GetHandler() and r==REASON_EFFECT
+end
+function s.distg(e,c)
+	local bc=c:GetBattleTarget()
+	if c:IsRelateToBattle() and bc and bc:IsControler(e:GetHandlerPlayer())
+		and bc:IsFaceup() and Nethersea.NetherseaMonsterOrWQ(bc) then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_DISABLE)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e1)
+		local e2=Effect.CreateEffect(e:GetHandler())
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetCode(EFFECT_DISABLE_EFFECT)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e2)
+		return true
+	end
+	return false
 end

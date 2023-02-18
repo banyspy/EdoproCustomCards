@@ -95,33 +95,34 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 
 		until(#g>0)	
 
-			Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
-			Nethersea.ResetWeManyFlag(tp)
-			Duel.Release(g,REASON_RELEASE)
+		Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
+		Nethersea.ResetWeManyFlag(tp)
+		Duel.Release(g,REASON_RELEASE)
 		
-		    if Duel.SpecialSummon(tg,0,tp,tp,true,true,POS_FACEUP)>0 then
+		if Duel.SpecialSummonStep(tg,0,tp,tp,true,true,POS_FACEUP) then
 
-				local tem = 400100110
-				while tem <= 400100610 do
-					if g:IsExists(Card.IsOriginalCode,1,nil,tem) then
-						local temcard = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_ALL,0,nil,tem-10)
-						local code = temcard:GetOriginalCode()
-						local e1=Effect.CreateEffect(tg)
-						e1:SetDescription(aux.Stringid(id,9 + math.floor((tem - 400100010)/100)))
-						e1:SetType(EFFECT_TYPE_SINGLE)
-						e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
-						e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-						tg:RegisterEffect(e1)
-						tg:CopyEffect(code,RESET_EVENT+RESETS_STANDARD)
-					end
-					tem = tem + 100
+			local tem = 400100110
+			while tem <= 400100610 do
+				if g:IsExists(Card.IsOriginalCode,1,nil,tem) then
+					local temcard = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_ALL,0,nil,tem-10)
+					local code = temcard:GetOriginalCode()
+					local e1=Effect.CreateEffect(tg)
+					e1:SetDescription(aux.Stringid(id,9 + math.floor((tem - 400100010)/100)))
+					e1:SetType(EFFECT_TYPE_SINGLE)
+					e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+					e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+					tg:RegisterEffect(e1)
+					tg:CopyEffect(code,RESET_EVENT+RESETS_STANDARD)
 				end
-
-				if(Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,1))) then
-					Duel.Recover(tp,g:GetCount()*1000,0)
-				end
-		    	c:CompleteProcedure()
+				tem = tem + 100
 			end
+
+			if(Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,1))) then
+				Duel.Recover(tp,g:GetCount()*1000,0)
+			end
+			Duel.SpecialSummonComplete()
+			c:CompleteProcedure()
+		end
 		g:DeleteGroup()
 	end
 end

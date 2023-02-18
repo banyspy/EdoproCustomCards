@@ -156,20 +156,24 @@ Here is method specified from official ProjectIgnis page.
 You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
 
 ## Progress
-Incomplete for now. Some of uploaded card isn't even finished making (as can see from card text). More card and fix to existing card to come.
-There is also more archetype but I don't push it until I test it enough.<br />
 
 **Always take In-game text higher priority than card picture file while still in development phase, as editing text in database is alot more convenient than edit card text in card maker and render card picture and place it in folder**
 
-**Nethersea** - 10/12 - Abit of fixing of existing one then new card.<br />
+**Nethersea** - 12/12 - Mostly finished now!! Just change card image and reorganize card number/code and the rest is fix bug in case detected.<br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 
+### Planned Archetype
+
+* **Magikular**<br />
+* **??**<br />
+* **??**<br />
+
 ## Other people who also make custom cards
 
 If you come here due to interest in using custom card, then you may interest to checkout other's custom card as well.<br />
-So shout out to fellow scripted custom card make!<br />
+So shout out to fellow scripted custom card maker!<br />
 Here is who I found:
 
 * [**Satellaa**](https://github.com/Satellaa/Custom-Cards)<br />
@@ -177,8 +181,10 @@ Here is who I found:
 * [**KServantes**](https://github.com/KServantes/Customs)<br />
 * [**Neoyuno**](https://github.com/NeoYuno/leafbladie-cards)<br />
 * [**scarletkc**](https://github.com/scarletkc/FogMoeYGO-Card-Database)<br />
+* [**darkignister**](https://github.com/darkignister/edopro-kamenridercards)<br />
 * [**supr3meofficial**](https://github.com/supr3meofficial/supremeygo)<br />
 * [**NiiMiyo**](https://github.com/NiiMiyo/EDOPro-JJBA-Cards)<br />
+* [**RayeHikawa227**](https://github.com/RayeHikawa227/xylen-scripts)<br />
 * [**gabrielfandrade**](https://github.com/gabrielfandrade/Customs)<br />
 * [**OmegaArmadillo**](https://github.com/OmegaArmadillo/EDOPro-Custom-Cards)<br />
 * [**Rising Phoenix**](https://custom-ygo-rp.jimdofree.com/downloads/) **(Originally created for ygopro, beware of incompatibility issue)**<br />

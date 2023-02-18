@@ -51,6 +51,7 @@ end
 function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.IsExistingMatchingCard(s.atkcheck,tp,0,LOCATION_MZONE,1,nil,e) end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -99,6 +100,7 @@ function s.gainatktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetAttacker()==c and c:GetFlagEffect(CARD_NETHERSEA_REEFBREAKER)==0 end
 	c:RegisterFlagEffect(CARD_NETHERSEA_REEFBREAKER,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE_CAL,0,1)
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
 function s.gainatkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -29,6 +29,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--Once per turn, negate your opponent attack
 	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_ATTACK_ANNOUNCE)
 	e3:SetCountLimit(1)
@@ -87,6 +88,7 @@ function s.handeffoperation(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.GetAttacker():IsControler(1-tp) end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateAttack()

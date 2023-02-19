@@ -166,7 +166,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 ### Planned Archetype
 
-* **Magikular**<br />
+* **Magikular** (Side project from long time ago)<br />
 * **??**<br />
 * **??**<br />
 

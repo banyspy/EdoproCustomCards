@@ -159,7 +159,8 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 **Always take In-game text higher priority than card picture file while still in development phase, as editing text in database is alot more convenient than edit card text in card maker and render card picture and place it in folder**
 
-**Nethersea** - 12/12 - Mostly finished now!! Just change card image and reorganize card number/code and the rest is fix bug in case detected.<br />
+**Nethersea** - 12/12 - Finished.<br />
+**Ancient Deep** - 6/6 - Finished.<br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />

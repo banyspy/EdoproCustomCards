@@ -8,24 +8,24 @@ if not Nethersea then
 end
 
 --Card name variable
-CARD_NETHERSEA_FOUNDER       = 400100100
-CARD_NETHERSEA_PREDATOR      = 400100200
-CARD_NETHERSEA_SPEWER        = 400100300
-CARD_NETHERSEA_BRANDGUIDER   = 400100400
-CARD_NETHERSEA_SWARMCALLER   = 400100500
-CARD_NETHERSEA_REEFBREAKER   = 400100600
-CARD_ENDSPEAKER              = 400100700
-CARD_ENDSPEAKER_WILLOFWEMANY = 400100800
-CARD_NETHERSEA_COMMUNICATION = 400100900
-CARD_NETHERSEA_APPROACHING   = 400101000
-CARD_NETHERSEA_HIVEMIND      = 400101100
-CARD_NETHERSEA_EVOLUTION     = 400101200 
+CARD_NETHERSEA_FOUNDER       = 655360101
+CARD_NETHERSEA_PREDATOR      = 655360102
+CARD_NETHERSEA_SPEWER        = 655360103
+CARD_NETHERSEA_BRANDGUIDER   = 655360104
+CARD_NETHERSEA_SWARMCALLER   = 655360105
+CARD_NETHERSEA_REEFBREAKER   = 655360106
+CARD_ENDSPEAKER              = 655360107
+CARD_ENDSPEAKER_WILLOFWEMANY = 655360108
+CARD_NETHERSEA_COMMUNICATION = 655360109
+CARD_NETHERSEA_APPROACHING   = 655360110
+CARD_NETHERSEA_HIVEMIND      = 655360111
+CARD_NETHERSEA_EVOLUTION     = 655360112 
 
 --Archetype code
-SET_NETHERSEA = 0x259
+SET_NETHERSEA = 0xb11
 
 --Flag Check
-REGISTER_FLAG_WEMANY = 400100000
+REGISTER_FLAG_WEMANY = 655360100
 
 function Nethersea.NetherseaMonsterOrWQ(c)
 	return c:IsMonster() and c:IsRace(RACE_AQUA) and c:IsAttribute(ATTRIBUTE_WATER)
@@ -61,7 +61,7 @@ end
 function Nethersea.GenerateTokenTarget(e,tp,eg,ep,ev,re,r,rp,chk)
     local id=e:GetHandler():GetOriginalCode()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,id+10,SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,Nethersea.TokenID(id),SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
 end
@@ -69,9 +69,10 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
     local id=e:GetHandler():GetOriginalCode()
 	local c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,id+10,SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
-		local token=Duel.CreateToken(tp,id+10)
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,Nethersea.TokenID(id),SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
+		local token=Duel.CreateToken(tp,Nethersea.TokenID(id))
 		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
+		Debug.Message(Nethersea.TokenID(id))
 		--Cannot Special Summon monsters except WATER Aqua/Thunder/Fish/Sea serpent
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD)
@@ -88,6 +89,10 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 		token:RegisterEffect(e2,true)
 		Duel.SpecialSummonComplete()
 	end
+end
+
+function Nethersea.TokenID(id)
+	return 655360100+((id-655360100)*20)
 end
 
 function Nethersea.QuickTributeProc(c)

@@ -81,7 +81,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		local bd=tc:GetBaseDefense()
 		local lv=tc:GetOriginalLevel()
 		local e1=Effect.CreateEffect(c)-- inherit strings from WeMany
-		e1:SetDescription(aux.Stringid(CARD_ENDSPEAKER_WILLOFWEMANY,9 + math.floor((code - 400100000)/100)))
+		e1:SetDescription(aux.Stringid(CARD_ENDSPEAKER_WILLOFWEMANY,9 + (code - 655360100)))
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)

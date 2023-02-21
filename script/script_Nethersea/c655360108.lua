@@ -101,20 +101,20 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		
 		if Duel.SpecialSummonStep(tg,0,tp,tp,true,true,POS_FACEUP) then
 
-			local tem = 400100110
-			while tem <= 400100610 do
+			local tem = 655360120
+			while tem <= 655360220 do
 				if g:IsExists(Card.IsOriginalCode,1,nil,tem) then
-					local temcard = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_ALL,0,nil,tem-10)
+					local temcard = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_ALL,0,nil,655360100+((tem-655360100)//20))
 					local code = temcard:GetOriginalCode()
 					local e1=Effect.CreateEffect(tg)
-					e1:SetDescription(aux.Stringid(id,9 + math.floor((tem - 400100010)/100)))
+					e1:SetDescription(aux.Stringid(id,9 + ((tem-655360100)//20)))
 					e1:SetType(EFFECT_TYPE_SINGLE)
 					e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
 					e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 					tg:RegisterEffect(e1)
 					tg:CopyEffect(code,RESET_EVENT+RESETS_STANDARD)
 				end
-				tem = tem + 100
+				tem = tem + 20
 			end
 
 			if(Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,1))) then

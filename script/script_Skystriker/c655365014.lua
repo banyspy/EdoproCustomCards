@@ -1,4 +1,4 @@
---Sky striker Ace - Asahi
+--Sky striker Ace - Chikara
 --Scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
@@ -8,18 +8,18 @@ function s.initial_effect(c)
 	c:EnableReviveLimit()
     --Can only special summon once per turn
     c:SetSPSummonOnce(id)
-    --Double damage and piercing
+    --Excavate and add 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,1))
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_DECKDES)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetCountLimit(1)
 	e1:SetRange(LOCATION_MZONE)
-    e1:SetCondition(s.con)
 	e1:SetCost(s.cost)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1,false,REGISTER_FLAG_DETACH_XMAT)
-    --A link monster using this card cannot be destroyed by battle
+    --A link monster using this card cannot be destroyed by effect
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_BE_MATERIAL)
@@ -27,57 +27,57 @@ function s.initial_effect(c)
 	e1:SetOperation(s.lkop)
 	c:RegisterEffect(e1)
 end
-s.listed_series={SET_SKY_STRIKER_ACE}
+s.listed_series={SET_SKY_STRIKER,SET_SKY_STRIKER_ACE}
 function s.xyzfilter(c)
     return c:IsMonster() and c:IsSetCard(SET_SKY_STRIKER_ACE)
 end
 function s.xyzlinkfilter(c)
-    return c:IsMonster() and c:IsSetCard(SET_SKY_STRIKER_ACE) and c:IsType(TYPE_LINK) and c:IsAttribute(ATTRIBUTE_FIRE)
+    return c:IsMonster() and c:IsSetCard(SET_SKY_STRIKER_ACE) and c:IsType(TYPE_LINK) and c:IsAttribute(ATTRIBUTE_EARTH)
 end
 
-function s.con(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsAbleToEnterBP()
-end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetTargetPlayer(tp)
+	if chk==0 then 
+		if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)<3 then return false end
+		local g=Duel.GetDecktopGroup(tp,3)
+		local result=g:FilterCount(Card.IsAbleToHand,nil)>0
+		return result and Duel.IsPlayerCanDiscardDeck(tp,3)
+	end
+end
+function s.filter(c)
+	return c:IsSetCard(SET_SKY_STRIKER)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
-    local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	local c=e:GetHandler()
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetTargetRange(0,1)
-	e1:SetValue(s.damageval)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,p)
-    local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_PIERCE)
-    e2:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,SET_SKY_STRIKER_ACE))
-    e2:SetTargetRange(LOCATION_MZONE,0)
-    e2:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e2,p)
-    aux.RegisterClientHint(c,0,p,1,0,aux.Stringid(id,2),RESET_PHASE|PHASE_END,1)
-end
-function s.damageval(e,c)
-    if c:IsSetCard(SET_SKY_STRIKER_ACE) then 
-        return DOUBLE_DAMAGE 
-    else
-        return Duel.GetBattleDamage(1-e:GetOwnerPlayer())
-    end
+    if not Duel.IsPlayerCanDiscardDeck(tp,3) then return end
+	Duel.ConfirmDecktop(tp,3)
+	local g=Duel.GetDecktopGroup(tp,3)
+	if #g>0 then
+		Duel.DisableShuffleCheck()
+		if g:IsExists(s.filter,1,nil) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+			local sg=g:FilterSelect(tp,s.filter,1,1,nil)
+			if sg:GetFirst():IsAbleToHand() then 
+				Duel.SendtoHand(sg,nil,REASON_EFFECT)
+				Duel.ConfirmCards(1-tp,sg)
+				Duel.ShuffleHand(tp)
+				g:Sub(sg)
+				Duel.SendtoGrave(g,REASON_EFFECT+REASON_REVEAL)
+			else Duel.SendtoGrave(g,REASON_EFFECT+REASON_REVEAL)
+			end
+		else
+			Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT+REASON_REVEAL)
+			Duel.ShuffleDeck(tp)
+		end
+	end
 end
 	--If sent as link material
 function s.lkcon(e,tp,eg,ep,ev,re,r,rp)
 	return r==REASON_LINK and e:GetHandler():GetReasonCard():IsSetCard(SET_SKY_STRIKER_ACE)
 end
-	--A "Sky Striker Ace" link monster using this card cannot be destroyed by battle
+	--A "Sky Striker Ace" link monster using this card cannot be destroyed by effect
 function s.lkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=c:GetReasonCard()
@@ -85,7 +85,7 @@ function s.lkop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e1:SetValue(1)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	rc:RegisterEffect(e1)

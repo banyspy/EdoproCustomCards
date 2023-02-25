@@ -1,6 +1,8 @@
 # Banyspy EdoproCustomCards
-This is repository contains custom card for Edopro made by banyspy.<br />
-These cards are already test in Edopro.
+This is repository contains custom card for Edopro script by banyspy.<br />
+These cards are already test in Edopro.<br />
+
+I do not own art that is use in this project. Most what I do is edited some of them to look like how I want.
 
 ## How to install custom card
 First, you need to get the necessary files to the game folder.
@@ -159,15 +161,16 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 **Always take In-game text higher priority than card picture file while still in development phase, as editing text in database is alot more convenient than edit card text in card maker and render card picture and place it in folder**
 
+**Magikular** - 15/15 - Finished.<br />
 **Nethersea** - 12/12 - Finished.<br />
-**Ancient Deep** - 6/6 - Finished.<br />
+**Ancient Deep** - 6/6 - Finished. *(Actually there might be more)* <br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
+**Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 
 ### Planned Archetype
 
-* **Magikular** (Side project from long time ago)<br />
 * **??**<br />
 * **??**<br />
 

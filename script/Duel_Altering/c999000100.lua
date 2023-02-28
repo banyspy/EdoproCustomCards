@@ -372,7 +372,7 @@ function s.negtargetfilter(c,tp)
 end
 function s.negtargetcon(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
-    Debug.Message("check1")
+    --Debug.Message("check1")
 	return e:GetHandlerPlayer()==rp and re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and (trgpro==1)
     and g and g:IsExists(s.negtargetfilter,1,e:GetHandler(),tp) and Duel.IsChainDisablable(ev)
 end
@@ -527,7 +527,7 @@ function s.skipmaxrisk(temp)
 end
 
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("check2")
+    --Debug.Message("check2")
 	return rp==tp and Duel.IsChainDisablable(ev) and (magehand == 1) 
     and not (e:GetHandlerPlayer()==rp and re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and (trgpro==1)
     and g and g:IsExists(s.negtargetfilter,1,e:GetHandler(),tp) and Duel.IsChainDisablable(ev) and (targetnegateflag == false))

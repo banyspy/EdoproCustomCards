@@ -36,7 +36,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
-	--Can be activated the same turn it was set
+	--Can be activated from hand by send other S/T from hand or field
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetCode(EFFECT_TRAP_ACT_IN_HAND)

@@ -36,24 +36,27 @@ function s.initial_effect(c)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
-	--act in hand
+	--Can be activated the same turn it was set
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	e4:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+	e4:SetDescription(aux.Stringid(id,3))
+	e4:SetValue(function(e,c) e:SetLabel(1) end)
+	e4:SetCondition(function(e) return Duel.IsExistingMatchingCard(s.costfilter,e:GetHandlerPlayer(),LOCATION_HAND+LOCATION_ONFIELD,0,1,e:GetHandler()) end)
 	c:RegisterEffect(e4)
+	e1:SetLabelObject(e4)
 end
 function s.costfilter(c)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToGraveAsCost()
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then if e:GetHandler():IsLocation(LOCATION_HAND) then 
-		return Duel.IsExistingTarget(s.costfilter,tp,0,LOCATION_HAND+LOCATION_ONFIELD,1,e:GetHandler()) 
-		else return true end
-	end
-	if e:GetHandler():IsStatus(STATUS_ACT_FROM_HAND) then
+	if chk==0 then e:GetLabelObject():SetLabel(0) return true end
+	if e:GetLabelObject():GetLabel()>0 then
+		e:GetLabelObject():SetLabel(0)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local g=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,e:GetHandler(),e,tp)
-		if g:GetCount()>0 then
+		local g=Duel.SelectMatchingCard(tp,s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,e:GetHandler())
+		if #g>0 then
 			Duel.SendtoGrave(g,REASON_COST)
 		end
 	end

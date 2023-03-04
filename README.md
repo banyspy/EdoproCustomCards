@@ -171,7 +171,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 ### Planned Archetype
 
-* **??**<br />
+* **SoulForce** - Unconfirmed detail<br />
 * **??**<br />
 
 ## Other people who also make custom cards

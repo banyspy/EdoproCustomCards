@@ -1,4 +1,4 @@
---Zodragon Pisces
+--Zodragon Taurus
 --Scripted by bankkyza
 local s,id=GetID()
 Duel.LoadScript("ZodragonAux.lua")
@@ -11,10 +11,10 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
     e1:SetCode(EVENT_FREE_CHAIN)
-    e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
+    e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E+TIMING_MAIN_END)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,{id,0})
-	e1:SetCondition(s.spquickcon)
+	e1:SetCondition(function() return Duel.IsMainPhase() end)
     e1:SetCost(s.spcost)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
@@ -25,12 +25,6 @@ function s.initial_effect(c)
 	e2:SetCode(EFFECT_PIERCE)
 	e2:SetValue(DOUBLE_DAMAGE)
 	c:RegisterEffect(e2)
-end
-function s.counterfilter(c)
-	return c:IsSetCard(SET_ZODRAGON)
-end
-function s.spquickcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsMainPhase()
 end
 function s.cfilter(c)
 	return c:IsSetCard(SET_ZODRAGON) and c:IsAbleToGraveAsCost()

@@ -49,7 +49,7 @@ function s.rmop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.handconfilter(c)
-	return c:IsSetCard(SET_ZODRAGON) and c:IsMonster()
+	return c:IsSetCard(SET_ZODRAGON) and c:IsMonster() and c:IsFaceup()
 end
 function s.handcon(e)
 	return Duel.IsExistingMatchingCard(s.handconfilter,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,1,nil)

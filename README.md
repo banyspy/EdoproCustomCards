@@ -164,7 +164,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Magikular** - 15/15 - Finished.<br />
 **Nethersea** - 12/12 - Finished.<br />
 **Ancient Deep** - 6/6 - Finished. *(Actually there might be more)* <br />
-**Zodragon** - 11/13 - Working on <br />
+**Zodragon** - 13/13 - Finished. <br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />

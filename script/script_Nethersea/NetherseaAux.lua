@@ -238,4 +238,36 @@ function Nethersea.CannotChangeAttributeRace(c)
 	local e6=e1:Clone()
 	e6:SetValue(function(e,te) return te:GetCode()&EFFECT_CHANGE_ATTRIBUTE==EFFECT_CHANGE_ATTRIBUTE end)
 	c:RegisterEffect(e6)
+
+	local e7=Effect.CreateEffect(c)
+	e7:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e7:SetCode(EVENT_ADJUST)
+	e7:SetRange(LOCATION_ALL)
+	e7:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e7:SetCondition(function(e) return not (e:GetHandler():GetAttribute() == e:GetHandler():GetOriginalAttribute()) end)
+	e7:SetOperation(function(e) 
+		local changeAdd = e:GetHandler():GetCardEffect(EFFECT_ADD_ATTRIBUTE)
+		local changeChange = e:GetHandler():GetCardEffect(EFFECT_CHANGE_ATTRIBUTE)
+		local changeRemove = e:GetHandler():GetCardEffect(EFFECT_REMOVE_ATTRIBUTE)
+		if(changeAdd~=nil)		then changeAdd:SetValue(e:GetHandler():GetOriginalAttribute()) end
+		if(changeChange~=nil)	then changeChange:SetValue(e:GetHandler():GetOriginalAttribute()) end
+		if(changeRemove~=nil)	then changeRemove:SetValue(0) end
+	end)
+	c:RegisterEffect(e7)
+
+	local e8=Effect.CreateEffect(c)
+	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e8:SetCode(EVENT_ADJUST)
+	e8:SetRange(LOCATION_ALL)
+	e8:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e8:SetCondition(function(e) return not (e:GetHandler():GetRace() == e:GetHandler():GetOriginalRace()) end)
+	e8:SetOperation(function(e) 
+		local changeAdd = e:GetHandler():GetCardEffect(EFFECT_ADD_RACE)
+		local changeChange = e:GetHandler():GetCardEffect(EFFECT_CHANGE_RACE)
+		local changeRemove = e:GetHandler():GetCardEffect(EFFECT_REMOVE_RACE)
+		if(changeAdd~=nil)		then changeAdd:SetValue(e:GetHandler():GetOriginalRace()) end
+		if(changeChange~=nil)	then changeChange:SetValue(e:GetHandler():GetOriginalRace()) end
+		if(changeRemove~=nil)	then changeRemove:SetValue(0) end
+	end)
+	c:RegisterEffect(e8)
 end

@@ -240,9 +240,12 @@ function Nethersea.CannotChangeAttributeRace(c)
 		local changeAdd = e:GetHandler():GetCardEffect(EFFECT_ADD_ATTRIBUTE)
 		local changeChange = e:GetHandler():GetCardEffect(EFFECT_CHANGE_ATTRIBUTE)
 		local changeRemove = e:GetHandler():GetCardEffect(EFFECT_REMOVE_ATTRIBUTE)
-		if(changeAdd~=nil)		then changeAdd:SetValue(e:GetHandler():GetOriginalAttribute()) end
-		if(changeChange~=nil)	then changeChange:SetValue(e:GetHandler():GetOriginalAttribute()) end
-		if(changeRemove~=nil)	then changeRemove:SetValue(0) end
+		if(changeAdd~=nil and changeAdd:GetType()&EFFECT_TYPE_SINGLE~=0 and changeAdd:GetHandler()==e:GetHandler()) then
+			changeAdd:Reset() end
+		if(changeChange~=nil and changeChange:GetType()&EFFECT_TYPE_SINGLE~=0 and changeChange:GetHandler()==e:GetHandler()) then
+			changeChange:Reset() end
+		if(changeRemove~=nil and changeRemove:GetType()&EFFECT_TYPE_SINGLE~=0 and changeRemove:GetHandler()==e:GetHandler()) then
+			changeRemove:Reset() end
 	end)
 	c:RegisterEffect(e2)
 
@@ -256,9 +259,12 @@ function Nethersea.CannotChangeAttributeRace(c)
 		local changeAdd = e:GetHandler():GetCardEffect(EFFECT_ADD_RACE)
 		local changeChange = e:GetHandler():GetCardEffect(EFFECT_CHANGE_RACE)
 		local changeRemove = e:GetHandler():GetCardEffect(EFFECT_REMOVE_RACE)
-		if(changeAdd~=nil)		then changeAdd:SetValue(e:GetHandler():GetOriginalRace()) end
-		if(changeChange~=nil)	then changeChange:SetValue(e:GetHandler():GetOriginalRace()) end
-		if(changeRemove~=nil)	then changeRemove:SetValue(0) end
+		if(changeAdd~=nil and changeAdd:GetType()&EFFECT_TYPE_SINGLE~=0 and changeAdd:GetHandler()==e:GetHandler()) then
+			changeAdd:Reset() end
+		if(changeChange~=nil and changeChange:GetType()&EFFECT_TYPE_SINGLE~=0 and changeChange:GetHandler()==e:GetHandler()) then
+			changeChange:Reset() end
+		if(changeRemove~=nil and changeRemove:GetType()&EFFECT_TYPE_SINGLE~=0 and changeRemove:GetHandler()==e:GetHandler()) then
+			changeRemove:Reset() end
 	end)
 	c:RegisterEffect(e3)
 end

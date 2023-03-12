@@ -72,7 +72,7 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,Nethersea.TokenID(id),SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
 		local token=Duel.CreateToken(tp,Nethersea.TokenID(id))
 		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
-		Debug.Message(Nethersea.TokenID(id))
+		--Debug.Message(Nethersea.TokenID(id))
 		--Cannot Special Summon monsters except WATER Aqua/Thunder/Fish/Sea serpent
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD)

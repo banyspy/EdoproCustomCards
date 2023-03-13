@@ -63,6 +63,7 @@ function s.drawop(e,tp,eg,ep,ev,re,r,rp)
 					tc=aux.SelectUnselectGroup(bc,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE,aux.TRUE,nil,true)
 				else
 					bc:DeleteGroup()
+					Duel.ShuffleHand(p)
 					return
 				end
 			until (#tc>0)
@@ -70,6 +71,7 @@ function s.drawop(e,tp,eg,ep,ev,re,r,rp)
 			bc:DeleteGroup()
 			tc:DeleteGroup()
 		end
+		Duel.ShuffleHand(p)
 	end
 end
 function s.spfilter(c,e,tp)

@@ -1,7 +1,7 @@
 --Reo-Whelp - Bone Dragon
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	--special summon
 	local e1=Effect.CreateEffect(c)
@@ -48,7 +48,7 @@ function s.cfilter(c)
 	return c:IsMonster() and not c:IsFacedown() and c:IsAttribute(ATTRIBUTE_DARK)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.cfilter,tp,LOCATION_MZONE,0,1,nil)==Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)
+	return Duel.GetMatchingGroupCount(s.cfilter,tp,LOCATION_MZONE,0,nil)==Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)
 	and Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)>0
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -63,7 +63,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.thfilter(c)
-	return c:IsCode(655360061) or (c:IsSetCard(0xb04) and c:IsSpellTrap())
+	return c:IsCode(655360061) or (c:IsSetCard(SET_REOYIN) and c:IsSpellTrap())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -78,7 +78,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.revfilter(c,tp)
-	return c:IsMonster() and c:IsSetCard(0xb04) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD)
+	return c:IsMonster() and c:IsSetCard(SET_REOYIN) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD)
 	and c:GetReasonPlayer()==1-tp
 end
 function s.revcon(e,tp,eg,ep,ev,re,r,rp)
@@ -94,14 +94,14 @@ function s.revcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,1000)
 end
 function s.spfilter(c,e,tp)
-	return c:IsMonster() and c:IsSetCard(0xb04) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD) 
+	return c:IsMonster() and c:IsSetCard(SET_REOYIN) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD) 
 	and c:GetReasonPlayer()==1-tp and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.revtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local ct=eg:FilterCount(s.spfilter,nil,e,tp)
-		return ct>0 and (ct==1 or not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT))
-			and Duel.GetLocationCount(tp,LOCATION_MZONE)>=ct
+		local sg=eg:Filter(s.spfilter,nil,e,tp)
+		return Reoyin.MassSummonLegalityCheck(sg,tp)
+			--Reoyin.SummonLegalityCheck(sg,tp)
 	end
 	local g=eg:Filter(s.spfilter,nil,e,tp)
 	--Debug.Message("Amount: "..#g) 
@@ -110,19 +110,15 @@ function s.revtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
 end
 function s.spfilter2(c,e,tp)
-	return c:IsMonster() and c:IsSetCard(0xb04) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD) 
+	return c:IsMonster() and c:IsSetCard(SET_REOYIN) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD) 
 	and c:GetReasonPlayer()==1-tp and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsRelateToEffect(e)
 end
 function s.revop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	--Debug.Message("ft: "..ft) 
-	if ft<=0 then return end
-	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
 	local sg=eg:Filter(s.spfilter2,nil,e,tp)
 	--Debug.Message("Amount eg: "..#eg) 
 	--Debug.Message("Amount: "..#sg) 
-	if ft<#sg then return end
+	if not Reoyin.MassSummonLegalityCheck(sg,tp) then return end
 	if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)>0 and c:IsRelateToEffect(e) and c:IsAbleToHand() then
 		Duel.BreakEffect()
 		Duel.SendtoHand(c,nil,REASON_EFFECT)

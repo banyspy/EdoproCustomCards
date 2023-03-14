@@ -1,7 +1,7 @@
 --Light of Hope Utopia Reoyin
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	--Xyz Summon
 	Xyz.AddProcedure(c,nil,8,2,s.xyzfilter,aux.Stringid(id,0))

@@ -1,7 +1,7 @@
 --Reoyin x Dark Magician
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Fusion.AddProcMix(c,true,true,s.matfilter1,s.matfilter2)
@@ -31,10 +31,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={CARD_DARK_MAGICIAN}
-s.listed_series={0xb04}
-s.material_setcode={0xb04}--This include both mentioning archetype and specific name
+s.listed_series={SET_REOYIN}
+s.material_setcode={SET_REOYIN}--This include both mentioning archetype and specific name
 function s.matfilter1(c,fc,sumtype,tp)
-	return c:IsSetCard(0xb04) and c:IsMonster()
+	return c:IsSetCard(SET_REOYIN) and c:IsMonster()
 end
 function s.matfilter2(c,fc,sumtype,tp)
 	return c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp) and c:IsMonster()

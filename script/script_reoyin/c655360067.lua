@@ -1,7 +1,7 @@
 --Stardust Reoyin
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--Synchro Summon procedure

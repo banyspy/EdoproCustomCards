@@ -1,7 +1,7 @@
 --Reoyin x Firewall Dragon
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--Link Summon procedure
@@ -30,7 +30,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.spop)
 	c:RegisterEffect(e2)
 end
-s.listed_names={655360061,5043010}
+s.listed_names={CARD_SILENCER_REOYIN,5043010}
 function s.thfilter(c)
 	return c:IsMonster() and c:IsAbleToHand()
 end
@@ -39,7 +39,7 @@ function s.cfilter(c)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	local ct=Duel.GetMatchingGroupCount(s.cfilter,tp,LOCATION_MZONE,0,nil)
+	local ct=Duel.GetMatchingGroupCount(s.cfilter,tp,LOCATION_ONFIELD,0,nil)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.thfilter(chkc) end
 	if chk==0 then return ct>0 and Duel.IsExistingTarget(s.thfilter,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
@@ -60,7 +60,7 @@ function s.spfirewallfilter(c,e,tp)
 	return c:IsCode(5043010) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spreoyinfilter(c,e,tp)
-	return c:IsCode(655360061) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(CARD_SILENCER_REOYIN) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE|LOCATION_EXTRA) and chkc:IsControler(tp) and s.spfilter(chkc,e,tp) end

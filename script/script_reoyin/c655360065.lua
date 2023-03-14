@@ -1,7 +1,7 @@
 --Reoyin x Neos
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Fusion.AddProcMix(c,true,true,s.matfilter1,s.matfilter2)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetCountLimit(1,id)
+	e1:SetCountLimit(1,{id,0})
 	e1:SetCondition(s.thcon)
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
@@ -37,10 +37,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 s.listed_names={CARD_NEOS}
-s.listed_series={0xb04}
-s.material_setcode={0xb04}--This include both mentioning archetype and specific name
+s.listed_series={SET_REOYIN}
+s.material_setcode={SET_REOYIN}--This include both mentioning archetype and specific name
 function s.matfilter1(c,fc,sumtype,tp)
-	return c:IsSetCard(0xb04) and c:IsMonster()
+	return c:IsSetCard(SET_REOYIN) and c:IsMonster()
 end
 function s.matfilter2(c,fc,sumtype,tp)
 	return c:IsType(TYPE_NORMAL,fc,sumtype,tp) and c:IsMonster()
@@ -49,7 +49,7 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 function s.thfilter(c)
-	return (c:ListsCode(CARD_NEOS) or c:IsSetCard(0xb04)) and c:IsSpellTrap() and c:IsAbleToHand()
+	return (c:ListsCode(CARD_NEOS) or c:IsSetCard(SET_REOYIN)) and c:IsSpellTrap() and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end

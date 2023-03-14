@@ -1,7 +1,7 @@
 --The Silencer - Little Reoyin
 --Scripted by bankkyza
 local s,id=GetID()
---Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript('ReoyinAux.lua')
 function s.initial_effect(c)
 	--Must be properly summoned before reviving
 	c:EnableReviveLimit()
@@ -83,6 +83,7 @@ function s.cantnegop(e,tp,eg,ep,ev,re,r,rp)
 	local rc=c:GetReasonCard()
 	--Cannot be destroyed by opponent's card effects
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,1))
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_CANNOT_DISABLE)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD)

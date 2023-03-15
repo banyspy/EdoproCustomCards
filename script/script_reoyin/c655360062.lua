@@ -44,7 +44,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(tp,g)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local tc=g:FilterSelect(tp,Card.IsCanBeSpecialSummoned,1,1,nil,e,0,tp,false,false):GetFirst()
-		if Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
+		if tc and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_DISABLE)
@@ -73,6 +73,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 				else Duel.LinkSummon(tp,sc,nil,lg,2,2) end
 			end
 		end
+		Duel.ShuffleHand(1-tp)
 	end
 end
 function s.cantnegcon(e,tp,eg,ep,ev,re,r,rp)

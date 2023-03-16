@@ -165,6 +165,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Nethersea** - 12/12 - Finished.<br />
 **Ancient Deep** - 6/6 - Finished. *(Actually there might be more)* <br />
 **Zodragon** - 13/13 - Finished. <br />
+**Reoyin** - 12/12 - Finished. *(Might be bug fixed abit in case there is but that's it)* <br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />

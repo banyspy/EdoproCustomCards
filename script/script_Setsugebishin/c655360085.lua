@@ -33,7 +33,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3)
 end
-s.listed_name={89516305}--Queen of the night
+s.listed_names={89516305}--Queen of the night
 	--If there a monster in the EMZ
 function s.spcon1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0 or Duel.GetFieldGroupCount(tp,0,LOCATION_EMZONE)>0
@@ -71,8 +71,8 @@ end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	local mat=Duel.GetMatchingGroup(s.matfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,nil)
 	Duel.Draw(p,d,REASON_EFFECT)
+	local mat=Duel.GetMatchingGroup(s.matfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,nil)
 	if #mat>0 and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		local tc=Duel.SelectMatchingCard(tp,s.matfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,1,2,nil)
 		Duel.Overlay(c,tc)

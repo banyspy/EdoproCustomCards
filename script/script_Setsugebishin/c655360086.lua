@@ -52,7 +52,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3,false,REGISTER_FLAG_DETACH_XMAT)
 end
-s.listed_name={89516305}--Queen of the night
+s.listed_names={89516305}--Queen of the night
 function s.spcfilter(c)
 	return c:IsCode(89516305) and not c:IsPublic()
 end

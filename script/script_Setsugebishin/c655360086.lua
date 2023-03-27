@@ -2,6 +2,8 @@
 --Scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
+	--Cannot be Normal Summoned/Set
+	c:EnableUnsummonable()
 	--Special summon procedure (from hand)
 	local e0=Effect.CreateEffect(c)
 	e0:SetDescription(aux.Stringid(id,0))
@@ -80,7 +82,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	g:DeleteGroup()
 end
 function s.thfilter(c,e,tp)
-	return c:IsSetCard(0xb05) and c:IsMonster() and c:IsAbleToHand() and not c:IsCode(id)
+	return c:IsSetCard(0xb05) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsContains(e:GetHandler())

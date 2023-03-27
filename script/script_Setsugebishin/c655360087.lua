@@ -51,7 +51,7 @@ function s.attachfilter(c,tp,mc)
 	return c:IsCanBeXyzMaterial(mc,tp,REASON_EFFECT) and c:IsMonster() and c:IsSetCard(0xb05)
 end
 function s.attachmonster(c,tp)
-	return c:IsMonster() and c:IsType(TYPE_XYZ) and c:IsRace(RACE_PLANT)
+	return c:IsMonster() and c:IsType(TYPE_XYZ) and c:IsRace(RACE_PLANT) and c:IsFaceup()
 	and Duel.IsExistingMatchingCard(s.attachfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,1,nil,tp,c)
 end
 function s.attachtg(e,tp,eg,ep,ev,re,r,rp,chk)

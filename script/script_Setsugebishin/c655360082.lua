@@ -65,7 +65,7 @@ function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.ChangePosition(e:GetHandler(),POS_FACEUP_DEFENSE)
 end
 function s.isplant(c)
-    return c:IsMonster() and c:IsRace(RACE_PLANT) and c:HasLevel()
+    return c:IsMonster() and c:IsRace(RACE_PLANT) and c:HasLevel() and c:IsFaceup()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.isplant(chkc) end

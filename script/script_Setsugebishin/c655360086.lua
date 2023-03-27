@@ -82,7 +82,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	g:DeleteGroup()
 end
 function s.thfilter(c,e,tp)
-	return c:IsSetCard(0xb05) and c:IsMonster() and c:IsAbleToHand()
+	return c:IsRace(RACE_PLANT) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsContains(e:GetHandler())

@@ -48,7 +48,8 @@ end
 function s.filter2(c,e,tp,mc,rk)--Filter for monster that will be xyz summoned
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
 	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) 
-		and ((c:IsRank(rk+1) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_PLANT)) or (c:GetRank()>rk and c:IsCode(89516305)))
+		and (((c:IsRank(rk+1) or c:IsRank(rk+2)) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_PLANT)) 
+		or (c:GetRank()>rk and c:IsCode(89516305)))
 		and mc:IsCanBeXyzMaterial(c,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end

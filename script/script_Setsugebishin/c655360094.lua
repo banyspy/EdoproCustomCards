@@ -1,6 +1,7 @@
 --Number S87: Setsugebishin Queen of Manyo
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--xyz summon
@@ -11,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e1:SetCode(EFFECT_CHANGE_CODE)
 	e1:SetRange(LOCATION_MZONE|LOCATION_GRAVE)
-	e1:SetValue(89516305)
+	e1:SetValue(CARD_NO_87_QUEEN_OF_THE_NIGHT)
 	c:RegisterEffect(e1)
 	--Negate effect and decrease ATK
 	local e2=Effect.CreateEffect(c)
@@ -40,7 +41,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.hdop)
 	c:RegisterEffect(e3)
 end
-s.listed_names={89516305}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
 --s.listed_series={0xb05}
 s.xyz_number=87
 function s.ovfilter(c,tp,xyzc)

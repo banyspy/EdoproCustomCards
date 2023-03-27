@@ -1,6 +1,7 @@
 --Setsugebishin the Rose Queen
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Special Summon from hand
 	local e1=Effect.CreateEffect(c)
@@ -33,7 +34,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3)
 end
-s.listed_names={89516305}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
 	--If there a monster in the EMZ
 function s.spcon1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0 or Duel.GetFieldGroupCount(tp,0,LOCATION_EMZONE)>0
@@ -52,7 +53,7 @@ function s.spop1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end
 function s.tgval(e,c)
-	return c:IsCode(89516305)--Queen of the night
+	return c:IsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT)--Queen of the night
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -1,33 +1,17 @@
 --Setsugebishin the Safflower
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Target 1 card your opponent control and negate it
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_DISABLE)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_BECOME_TARGET)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCountLimit(1,{id,0})
-	e1:SetCondition(s.discon)
-	e1:SetTarget(s.distg)
-	e1:SetOperation(s.disop)
+	local e1,e2=Setsugebishin.CreateTargetFlipEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_DISABLE,
+		property=EFFECT_FLAG_CARD_TARGET,
+		functg=s.distg,
+		funcop=s.disop})
 	c:RegisterEffect(e1)
-    --Activate
-	local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_DISABLE)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-    e2:SetRange(LOCATION_MZONE)
-    e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE|EFFECT_FLAG_CARD_TARGET)
-    e2:SetCountLimit(1,{id,0})
-    e2:SetCost(s.discost)
-	e2:SetCondition(function(e) return e:GetHandler():IsFacedown() end)
-	e2:SetTarget(s.distg)
-	e2:SetOperation(s.disop)
 	c:RegisterEffect(e2)
     --Normal summon search
 	local e3=Effect.CreateEffect(c)
@@ -57,12 +41,9 @@ function s.initial_effect(c)
 	e5:SetCode(EVENT_REMOVE)
 	c:RegisterEffect(e5)
 end
-s.listed_series={0xb05}
+s.listed_series={SET_SETSUGEBISHIN}
 function s.spfilter(c,e,tp)
 	return (c:IsLevel(4) or c:IsLevel(8)) and c:IsRace(RACE_PLANT) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-function s.discon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsContains(e:GetHandler())
 end
 function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,nil,e,tp) end
@@ -98,12 +79,8 @@ function s.disop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
-function s.discost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.ChangePosition(e:GetHandler(),POS_FACEUP_DEFENSE)
-end
 function s.thfilter(c,e,tp)
-	return c:IsSetCard(0xb05) and c:IsMonster() and c:IsAbleToHand() and not c:IsCode(id)
+	return c:IsSetCard(SET_SETSUGEBISHIN) and c:IsMonster() and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end

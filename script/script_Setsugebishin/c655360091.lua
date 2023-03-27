@@ -1,6 +1,7 @@
 --Setsugebishin the Pure Floral
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--xyz summon
@@ -29,7 +30,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.spop)
 	c:RegisterEffect(e2)
 end
-s.listed_names={89516305}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
 --s.listed_series={0xb05}
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD|LOCATION_GRAVE,1,nil) end
@@ -44,7 +45,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.spfilter(c,e,tp,mc,pg)
-	return c:IsType(TYPE_XYZ) and c:IsCode(89516305)
+	return c:IsType(TYPE_XYZ) and c:IsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT)
 		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 		and (#pg<=0 or pg:IsContains(mc))
 		and mc:IsCanBeXyzMaterial(c,tp)

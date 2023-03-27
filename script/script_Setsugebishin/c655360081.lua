@@ -1,32 +1,16 @@
 --Setsugebishin the Amethyst
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Add 1 "Setsugebishin" upon being target
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_BECOME_TARGET)
-	e1:SetCountLimit(1,{id,0})
-	e1:SetCondition(s.thcon)
-	e1:SetTarget(s.thtg)
-	e1:SetOperation(s.thop)
+	local e1,e2=Setsugebishin.CreateTargetFlipEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_TOHAND|CATEGORY_SEARCH,
+		functg=s.thtg,
+		funcop=s.thop})
 	c:RegisterEffect(e1)
-    --Activate
-	local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-    e2:SetRange(LOCATION_MZONE)
-    e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-    e2:SetCountLimit(1,{id,0})
-    e2:SetCost(s.thcost)
-	e2:SetCondition(function(e) return e:GetHandler():IsFacedown() end)
-	e2:SetTarget(s.thtg)
-	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
     --Grant effect
 	local e3=Effect.CreateEffect(c)
@@ -42,12 +26,9 @@ function s.initial_effect(c)
 	e3:SetOperation(s.disop)
 	c:RegisterEffect(e3)
 end
-s.listed_series={0xb05}
+s.listed_series={SET_SETSUGEBISHIN}
 function s.thfilter(c,e,tp)
-	return c:IsSetCard(0xb05) and c:IsMonster() and c:IsAbleToHand() and not c:IsCode(id)
-end
-function s.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsContains(e:GetHandler())
+	return c:IsSetCard(SET_SETSUGEBISHIN) and c:IsMonster() and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -60,10 +41,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
         Duel.SendtoHand(g,nil,REASON_EFFECT)
         Duel.ConfirmCards(1-tp,g)
 	end
-end
-function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.ChangePosition(e:GetHandler(),POS_FACEUP_DEFENSE)
 end
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -1,6 +1,7 @@
 --Setsugebishin the Floral Sea
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--material
 	local e1=Effect.CreateEffect(c)
@@ -22,7 +23,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.operation)
 	c:RegisterEffect(e2)
 end
---s.listed_series={0xb05}
+--s.listed_series={SET_SETSUGEBISHIN}
 function s.filter(c)
 	return c:IsFaceup() and c:IsRace(RACE_PLANT) and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
 end

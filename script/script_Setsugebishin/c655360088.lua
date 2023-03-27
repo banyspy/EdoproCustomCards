@@ -1,6 +1,7 @@
 --Rank-Up-Magic The Night Shine
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Add
 	local e1=Effect.CreateEffect(c)
@@ -22,10 +23,10 @@ function s.initial_effect(c)
 	e2:SetOperation(s.spop)
 	c:RegisterEffect(e2)
 end
-s.listed_names={89516305}--Queen of the night
-s.listed_series={0xb05}
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
+s.listed_series={SET_SETSUGEBISHIN}
 function s.filter(c)
-	return c:IsSetCard(0xb05) and c:IsMonster() and c:IsAbleToHand()
+	return c:IsSetCard(SET_SETSUGEBISHIN) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
@@ -49,7 +50,7 @@ function s.filter2(c,e,tp,mc,rk)--Filter for monster that will be xyz summoned
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
 	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) 
 		and (((c:IsRank(rk+1) or c:IsRank(rk+2)) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_PLANT)) 
-		or (c:GetRank()>rk and c:IsCode(89516305)))
+		or (c:GetRank()>rk and c:IsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT)))
 		and mc:IsCanBeXyzMaterial(c,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end

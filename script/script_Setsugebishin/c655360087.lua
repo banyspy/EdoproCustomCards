@@ -1,6 +1,7 @@
 --Floral Scenery
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Add
 	local e1=Effect.CreateEffect(c)
@@ -32,9 +33,9 @@ function s.initial_effect(c)
 	e3:SetOperation(s.spoperation)
 	c:RegisterEffect(e3)
 end
-s.listed_names={89516305,id}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT,id}--Queen of the night
 function s.filter(c)
-	return c:IsSpellTrap() and c:ListsCode(89516305) and c:IsAbleToHand() and not c:IsCode(id)
+	return c:IsSpellTrap() and c:ListsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end

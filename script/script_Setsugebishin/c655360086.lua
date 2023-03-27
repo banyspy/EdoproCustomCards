@@ -1,46 +1,30 @@
 --Setsugebishin the Floren
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Cannot be Normal Summoned/Set
 	c:EnableUnsummonable()
 	--Special summon procedure (from hand)
 	local e0=Effect.CreateEffect(c)
-	e0:SetDescription(aux.Stringid(id,0))
+	e0:SetDescription(aux.Stringid(id,1))
 	e0:SetType(EFFECT_TYPE_FIELD)
 	e0:SetCode(EFFECT_SPSUMMON_PROC)
 	e0:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
 	e0:SetRange(LOCATION_HAND)
-	e0:SetCountLimit(1,{id,0})
+	e0:SetCountLimit(1,{id,1})
 	e0:SetCondition(s.spcon)
 	e0:SetTarget(s.sptg)
 	e0:SetOperation(s.spop)
 	c:RegisterEffect(e0)
-	--Add 1 "Setsugebishin" upon being target
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_TOHAND)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_BECOME_TARGET)
-	e1:SetCountLimit(1,{id,1})
-	e1:SetCondition(s.thcon)
-	e1:SetTarget(s.thtg)
-	e1:SetOperation(s.thop)
+	--Add 1 Plant from GY upon being target
+	local e1,e2=Setsugebishin.CreateTargetFlipEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_TOHAND,
+		functg=s.thtg,
+		funcop=s.thop})
 	c:RegisterEffect(e1)
-    --Activate
-	local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-    e2:SetRange(LOCATION_MZONE)
-    e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-    e2:SetCountLimit(1,{id,1})
-    e2:SetCost(s.thcost)
-	e2:SetCondition(function(e) return e:GetHandler():IsFacedown() end)
-	e2:SetTarget(s.thtg)
-	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
 	--attach s/t
 	local e3=Effect.CreateEffect(c)
@@ -54,9 +38,9 @@ function s.initial_effect(c)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3,false,REGISTER_FLAG_DETACH_XMAT)
 end
-s.listed_names={89516305}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
 function s.spcfilter(c)
-	return c:IsCode(89516305) and not c:IsPublic()
+	return c:IsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT) and not c:IsPublic()
 end
 function s.spcon(e,c)
 	local c=e:GetHandler()

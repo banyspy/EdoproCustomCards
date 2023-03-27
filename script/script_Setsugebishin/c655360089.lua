@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 end
-s.listed_names={89516305}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
 function s.costfilter(c)
 	return c:IsMonster() and c:IsRace(RACE_PLANT) and c:IsAbleToRemoveAsCost()
 end
@@ -29,7 +29,7 @@ function s.egfilter(c,tp)
 	return not c:IsSummonPlayer(tp) and c:IsLocation(LOCATION_MZONE)
 end
 function s.spfilter(c,e,tp)
-	return c:IsCode(89516305) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.attachfilter(c,tp,tc)
 	return c:IsCanBeXyzMaterial(tc,tp,REASON_EFFECT)

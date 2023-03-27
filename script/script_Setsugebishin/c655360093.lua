@@ -1,6 +1,7 @@
 --Number C87: White Queen of the Night
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--xyz summon
@@ -50,7 +51,7 @@ function s.initial_effect(c)
 	e4:SetOperation(s.spop)
 	c:RegisterEffect(e4)
 end
-s.listed_names={89516305}--Queen of the night
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
 --s.listed_series={0xb05}
 s.xyz_number=87
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
@@ -91,7 +92,8 @@ function s.spfilter(c,e,tp)
 	return c:IsMonster() and c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetFlagEffect(id)>0
+	return e:GetHandler():GetFlagEffect(id)>0 
+	and duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,CARD_NO_87_QUEEN_OF_THE_NIGHT)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

@@ -1,32 +1,16 @@
 --Setsugebishin the Wind Sword
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("SetsugebishinAux.lua")
 function s.initial_effect(c)
 	--Special 1 level 4 or 8 plant upon being target
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_BECOME_TARGET)
-	e1:SetCountLimit(1,{id,0})
-	e1:SetCondition(s.spcon)
-	e1:SetTarget(s.sptg)
-	e1:SetOperation(s.spop)
+	local e1,e2=Setsugebishin.CreateTargetFlipEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_SPECIAL_SUMMON,
+		functg=s.sptg,
+		funcop=s.spop})
 	c:RegisterEffect(e1)
-    --Activate
-	local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-    e2:SetRange(LOCATION_MZONE)
-    e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-    e2:SetCountLimit(1,{id,0})
-    e2:SetCost(s.spcost)
-	e2:SetCondition(function(e) return e:GetHandler():IsFacedown() end)
-	e2:SetTarget(s.sptg)
-	e2:SetOperation(s.spop)
 	c:RegisterEffect(e2)
     --Special summon itself
 	local e3=Effect.CreateEffect(c)
@@ -42,12 +26,9 @@ function s.initial_effect(c)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3)
 end
---s.listed_series={0xb05}
+--s.listed_series={SET_SETSUGEBISHIN}
 function s.spfilter(c,e,tp)
 	return (c:IsLevel(4) or c:IsLevel(8)) and c:IsRace(RACE_PLANT) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsContains(e:GetHandler())
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,1,nil,e,tp) end
@@ -59,10 +40,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then 
         Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
-end
-function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.ChangePosition(e:GetHandler(),POS_FACEUP_DEFENSE)
 end
 function s.isplant(c)
     return c:IsMonster() and c:IsRace(RACE_PLANT) and c:HasLevel() and c:IsFaceup()

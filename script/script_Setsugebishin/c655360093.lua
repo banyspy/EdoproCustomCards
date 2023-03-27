@@ -52,6 +52,7 @@ function s.initial_effect(c)
 end
 s.listed_names={89516305}--Queen of the night
 --s.listed_series={0xb05}
+s.xyz_number=87
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) then return false end
 	if not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return false end

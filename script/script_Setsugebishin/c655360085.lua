@@ -65,8 +65,8 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetTargetParam(1)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
-function s.matfilter(c)
-	return c:IsRace(RACE_PLANT) and c:IsMonster()
+function s.matfilter(c,ac,tp)
+	return c:IsRace(RACE_PLANT) and c:IsMonster() and c:IsCanBeXyzMaterial(ac,tp)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -74,7 +74,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(p,d,REASON_EFFECT)
 	local mat=Duel.GetMatchingGroup(s.matfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,nil)
 	if #mat>0 and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-		local tc=Duel.SelectMatchingCard(tp,s.matfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,1,2,nil)
+		local tc=Duel.SelectMatchingCard(tp,s.matfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,1,2,nil,c,tp)
 		Duel.Overlay(c,tc)
 	end
 end

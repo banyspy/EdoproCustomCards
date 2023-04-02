@@ -167,6 +167,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Zodragon** - 13/13 - Finished. <br />
 **Reoyin** - 12/12 - Finished. *(Might be bug fixed abit in case there is but that's it)* <br />
 **Setsugebishin** - 14/14 - Finished. <br />
+**Mei Misaki** - 3/12 - On Going. <br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />
@@ -174,7 +175,6 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 ### Planned Archetype
 
-* **~~SoulForce~~Ephnel** - Unconfirmed detail<br />
 * **??**<br />
 
 ## Other people who also make custom cards

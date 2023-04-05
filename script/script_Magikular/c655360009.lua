@@ -1,7 +1,7 @@
---Magikular Sunthoraphob
+--Magikular Lavika
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,SET_MAGIKULAR),2,2)

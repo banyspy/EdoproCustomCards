@@ -1,7 +1,7 @@
 --Setsugebishin the Wind Sword
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Special 1 level 4 or 8 plant upon being target
 	local e1,e2=Setsugebishin.CreateTargetFlipEff({

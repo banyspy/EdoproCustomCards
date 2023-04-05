@@ -1,6 +1,7 @@
 --Setsugebishin the Nature
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--Link Summon procedure
@@ -29,15 +30,15 @@ function s.initial_effect(c)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
 end
-s.listed_names={89516305}--Queen of the night
-s.listed_series={0xb05}
+s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
+s.listed_series={SET_SETSUGEBISHIN}
 function s.spfilter(c,e,tp)
-	return c:IsMonster() and c:IsSetCard(0xb05) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsMonster() and c:IsSetCard(SET_SETSUGEBISHIN) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingTarget(s.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) and Duel.GetMZoneCount(tp)>0 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectTarget(tp,s.spfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil,e,tp)
+	local g=Duel.SelectTarget(tp,s.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
@@ -50,7 +51,7 @@ function s.negfilter(c)
 	return c:IsRace(RACE_PLANT) and c:IsFaceup() and not (c:GetAttack()==0 and c:IsDisabled())
 end
 function s.thfilter(c)
-	return ((c:IsSpellTrap() and c:ListsCode(89516305) ) or (c:IsMonster() and c:IsSetCard(0xb05))) and c:IsAbleToHand()
+	return ((c:IsSpellTrap() and c:ListsCode(CARD_NO_87_QUEEN_OF_THE_NIGHT) ) or (c:IsMonster() and c:IsSetCard(SET_SETSUGEBISHIN))) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingTarget(s.negfilter,tp,LOCATION_MZONE,0,1,nil) 

@@ -1,7 +1,7 @@
 --Magikular Marisa
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,SET_MAGIKULAR),1,1,Synchro.NonTuner(nil),2,99)
 	c:EnableReviveLimit()

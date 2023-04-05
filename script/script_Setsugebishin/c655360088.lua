@@ -1,7 +1,7 @@
 --Rank-Up-Magic The Night Shine
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Add
 	local e1=Effect.CreateEffect(c)

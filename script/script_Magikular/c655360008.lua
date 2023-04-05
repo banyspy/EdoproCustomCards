@@ -1,7 +1,7 @@
 --Magikular Sarinee
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--xyz summon
 	Xyz.AddProcedure(c,s.mfilter,4,2,s.ovfilter,aux.Stringid(id,0),2,s.xyzop)

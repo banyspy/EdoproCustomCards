@@ -1,7 +1,7 @@
 --The Silencer - Reoyin
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	-- Special summon if used as material
 	local e1=Effect.CreateEffect(c)

@@ -1,7 +1,7 @@
 --The Silencer - Little Reoyin
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Must be properly summoned before reviving
 	c:EnableReviveLimit()

@@ -1,7 +1,7 @@
 --Into The Mystery
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("MeiMisakiAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Send from deck, extra deck or opponent extra deck to GY
 	local e1,e2=MeiMisaki.CreateActivateDiscardEff({

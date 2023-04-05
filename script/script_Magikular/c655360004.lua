@@ -1,7 +1,7 @@
 --Magikular White gaiden
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--cannot special summon by other way

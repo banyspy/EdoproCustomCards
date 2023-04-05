@@ -1,7 +1,7 @@
 --Reo-Whelp - Bone Dragon
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--special summon
 	local e1=Effect.CreateEffect(c)
@@ -43,7 +43,8 @@ function s.initial_effect(c)
 	e4:SetOperation(s.revop)
 	c:RegisterEffect(e4)
 end
-s.listed_names={655360061}
+s.listed_names={CARD_SILENCER_REOYIN}
+s.listed_series={SET_REOYIN}
 function s.cfilter(c)
 	return c:IsMonster() and not c:IsFacedown() and c:IsAttribute(ATTRIBUTE_DARK)
 end
@@ -63,7 +64,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.thfilter(c)
-	return c:IsCode(655360061) or (c:IsSetCard(SET_REOYIN) and c:IsSpellTrap())
+	return c:IsCode(CARD_SILENCER_REOYIN) or (c:IsSetCard(SET_REOYIN) and c:IsSpellTrap())
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end

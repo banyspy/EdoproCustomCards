@@ -1,7 +1,7 @@
 --Unknown Destination
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("MeiMisakiAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Plus sign banish and zone ban
 	local e1,e2=MeiMisaki.CreateActivateDiscardEff({

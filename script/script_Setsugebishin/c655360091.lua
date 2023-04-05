@@ -1,7 +1,7 @@
 --Setsugebishin the Pure Floral
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--xyz summon

@@ -1,7 +1,7 @@
 --Reoyin x Firewall Dragon
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--Link Summon procedure

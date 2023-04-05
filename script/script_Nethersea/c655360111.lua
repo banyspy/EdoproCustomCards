@@ -1,7 +1,7 @@
 --Nethersea Hivemind
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('NetherseaAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Also treated as "Umi"
 	Nethersea.AlsoTreatedAsUmi(c)

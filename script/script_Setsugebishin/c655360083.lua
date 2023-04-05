@@ -1,7 +1,7 @@
 --Setsugebishin the Safflower
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Target 1 card your opponent control and negate it
 	local e1,e2=Setsugebishin.CreateTargetFlipEff({

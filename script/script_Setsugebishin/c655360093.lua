@@ -1,7 +1,7 @@
 --Number C87: White Queen of the Night
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	--xyz summon
@@ -93,7 +93,7 @@ function s.spfilter(c,e,tp)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetFlagEffect(id)>0 
-	and duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,CARD_NO_87_QUEEN_OF_THE_NIGHT)
+	and Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,CARD_NO_87_QUEEN_OF_THE_NIGHT)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

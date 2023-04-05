@@ -1,7 +1,7 @@
 --Setsugebishin the Amethyst
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Add 1 "Setsugebishin" upon being target
 	local e1,e2=Setsugebishin.CreateTargetFlipEff({

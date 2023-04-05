@@ -1,7 +1,7 @@
 --Magikular - Fusion
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Activate
 	local e1=Fusion.CreateSummonEff({

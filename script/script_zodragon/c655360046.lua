@@ -1,7 +1,7 @@
 --Zodragon Aquarius
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("ZodragonAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Xyz Summon
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,SET_ZODRAGON),nil,2,nil,nil,99)

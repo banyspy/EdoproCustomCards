@@ -1,7 +1,7 @@
 --Reoyin Arsenal
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Fusion
 	local e1=Fusion.CreateSummonEff({handler=c,matfilter=Fusion.OnFieldMat,extrafil=s.fextra})

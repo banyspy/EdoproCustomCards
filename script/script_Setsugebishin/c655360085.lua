@@ -1,7 +1,7 @@
 --Setsugebishin the Rose Queen
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("SetsugebishinAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Special Summon from hand
 	local e1=Effect.CreateEffect(c)

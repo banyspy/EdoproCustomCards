@@ -1,7 +1,7 @@
 --Mei Misaki
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("MeiMisakiAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Can also normal summon by tribute 1 card on the field
 	local e0=Effect.CreateEffect(c)

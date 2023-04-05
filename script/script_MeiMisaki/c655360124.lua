@@ -1,7 +1,7 @@
 --Doll Eye
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("MeiMisakiAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Set up to spell/trap effect that activated this turn
 	local e1,e2=MeiMisaki.CreateActivateDiscardEff({

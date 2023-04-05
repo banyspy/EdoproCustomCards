@@ -1,7 +1,7 @@
 -- Magikular ☆ Extruder
 -- Extruder custom card set
 local s,id = GetID()
-Duel.LoadScript('MagikularAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Pendulum.AddProcedure(c)

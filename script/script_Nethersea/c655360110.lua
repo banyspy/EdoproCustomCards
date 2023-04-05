@@ -1,7 +1,7 @@
 --Nethersea Approaching
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('NetherseaAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Also treated as "Umi"
 	Nethersea.AlsoTreatedAsUmi(c)
@@ -73,5 +73,8 @@ end
 function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g=Duel.SelectMatchingCard(tp,s.gravefilter,tp,LOCATION_DECK,0,1,1,nil)
-	if #g>0 then Duel.Destroy(g,REASON_EFFECT) end
+	--Debug.Message(#g)
+	if #g>0 then 
+		Duel.Destroy(g,REASON_EFFECT)
+	end
 end

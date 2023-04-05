@@ -1,6 +1,6 @@
 --Ancient Deep Megalo
 local s,id=GetID()
-Duel.LoadScript('AncientDeepAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

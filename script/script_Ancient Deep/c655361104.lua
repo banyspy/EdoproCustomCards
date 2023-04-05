@@ -1,6 +1,6 @@
 --Ancient Deep Megalo
 local s,id=GetID()
-Duel.LoadScript('AncientDeepAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Summon limit to you after summon successfully
 	local e0=Effect.CreateEffect(c)

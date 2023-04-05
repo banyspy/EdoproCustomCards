@@ -1,6 +1,7 @@
 --Moon Sublimation
 --Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--special summon
 	local e1=Effect.CreateEffect(c)

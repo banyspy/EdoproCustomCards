@@ -1,7 +1,7 @@
 --Zodragon Cancer
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("ZodragonAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Activate when attack is declared
 	local e1=Effect.CreateEffect(c)

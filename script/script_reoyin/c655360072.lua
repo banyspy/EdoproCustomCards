@@ -1,7 +1,7 @@
 --Frey Servant - Blackstar Dragon 
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Return 1 card the opponent controls to the hand
 	local e1=Effect.CreateEffect(c)

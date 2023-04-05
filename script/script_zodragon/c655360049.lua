@@ -1,7 +1,7 @@
 --Zodragon Ophiuchus
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("ZodragonAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Xyz Summon
 	Xyz.AddProcedure(c,nil,10,5,s.xyzfilter,aux.Stringid(id,0))

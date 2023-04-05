@@ -1,7 +1,7 @@
 --Nethersea Predator
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('NetherseaAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Attribute and race cannot be changed as rule
 	Nethersea.CannotChangeAttributeRace(c)

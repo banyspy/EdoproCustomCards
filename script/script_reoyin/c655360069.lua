@@ -1,7 +1,7 @@
 --Reoyin x Odd-Eyes Pendulum Dragon
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript('ReoyinAux.lua')
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--pendulum summon
 	Pendulum.AddProcedure(c)

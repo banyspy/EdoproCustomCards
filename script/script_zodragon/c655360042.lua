@@ -1,7 +1,7 @@
 --Zodragon Libra
 --Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("ZodragonAux.lua")
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--summon cost
 	Zodragon.SummonLimit(c)

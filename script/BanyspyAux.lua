@@ -1,4 +1,6 @@
 --Banyspy Aux File
+--Duel.LoadScript("BanyspyAux.lua") 
+
 
 --Load Constant file
 Duel.LoadScript("BanyspyConstant.lua")
@@ -520,3 +522,84 @@ function MeiMisaki.CreateShuffleAddEff(c,id)
 	end)
 	c:RegisterEffect(e1)
 end
+
+--------------------------------------------------------------------
+------------------------------  NGNL  ------------------------------
+--------------------------------------------------------------------
+
+NGNL = {}
+
+function NGNL.ForceChangeScaleEffect(c)
+	--(1) Scale change
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_DICE)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+	e1:SetRange(LOCATION_PZONE)
+	e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
+	e1:SetCountLimit(1)
+	e1:SetCondition(function(_,tp) return Duel.GetTurnPlayer()==tp end)
+	e1:SetTarget(NGNL.ForceChangeScaleEffectTarget)
+	e1:SetOperation(NGNL.ForceChangeScaleEffectOperation)
+	c:RegisterEffect(e1)
+end
+function NGNL.ForceChangeScaleEffectTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+  if chk==0 then return true end
+  op=Duel.SelectOption(tp,aux.Stringid(e:GetHandler():GetOriginalCode(),0),aux.Stringid(e:GetHandler():GetOriginalCode(),1))
+  e:SetLabel(op)
+  if op==0 then
+    Duel.SetOperationInfo(0,CATEGORY_DICE,nil,0,tp,1)
+  else
+    Duel.SetOperationInfo(0,CATEGORY_DICE,nil,0,tp,2)
+  end
+end
+function NGNL.ForceChangeScaleEffectOperation(e,tp,eg,ep,ev,re,r,rp)
+  local c=e:GetHandler()
+  if not c:IsRelateToEffect(e) then return end
+  if e:GetLabel()==0 then
+    local dc=Duel.TossDice(tp,1)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_CHANGE_LSCALE)
+    e1:SetValue(dc)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
+    c:RegisterEffect(e1)
+    local e2=e1:Clone()
+    e2:SetCode(EFFECT_CHANGE_RSCALE)
+    c:RegisterEffect(e2)
+  else
+    local d1,d2=Duel.TossDice(tp,2)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_CHANGE_LSCALE)
+    e1:SetValue(d1+d2)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)--0x1ff0000
+    c:RegisterEffect(e1)
+    local e2=e1:Clone()
+    e2:SetCode(EFFECT_CHANGE_RSCALE)
+    c:RegisterEffect(e2)
+  end
+end
+function NGNL.SpellTrapReturnToHand(c)
+	local e2=Effect.CreateEffect(c)
+  	e2:SetDescription(aux.Stringid(655368006,1))
+  	e2:SetCategory(CATEGORY_TOHAND)
+  	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+  	e2:SetProperty(EFFECT_FLAG_DELAY)
+  	e2:SetCode(EVENT_TO_GRAVE)
+  	e2:SetCondition(function(e) return e:GetHandler():IsReason(REASON_EFFECT)
+		and (e:GetHandler():GetPreviousLocation()==LOCATION_DECK or e:GetHandler():GetPreviousLocation()==LOCATION_HAND) end)
+  	e2:SetTarget(function(e,tp,eg,ep,ev,re,r,rp,chk)
+		if chk==0 then return e:GetHandler():IsAbleToHand() end
+		Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+		Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,tp,LOCATION_GRAVE)
+	  end)
+  	e2:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
+		if e:GetHandler():IsRelateToEffect(e) and Duel.SendtoHand(e:GetHandler(),nil,REASON_EFFECT)~=0 
+		and Duel.ConfirmCards(1-tp,e:GetHandler())~=0 then
+		  Duel.RaiseEvent(e:GetHandler(),EVENT_CUSTOM+655368011,e,0,tp,0,0)
+		end
+	  end)
+  	c:RegisterEffect(e2)
+end
+  
+  

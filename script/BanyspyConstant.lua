@@ -8,6 +8,8 @@ SET_REOYIN                   = 0xb04
 SET_SETSUGEBISHIN            = 0xb05
 SET_NETHERSEA                = 0xb11
 SET_ANCIENTDEEP              = 0xb51
+--Cstudio Archetype
+SET_NGNL                     = 0xbc0
 
 --Card Name Variable
 

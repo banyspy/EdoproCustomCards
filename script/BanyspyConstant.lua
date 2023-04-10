@@ -10,6 +10,7 @@ SET_NETHERSEA                = 0xb11
 SET_ANCIENTDEEP              = 0xb51
 --Cstudio Archetype
 SET_NGNL                     = 0xbc0
+SET_YUYUYU                   = 0xbc1
 
 --Card Name Variable
 
@@ -29,6 +30,8 @@ CARD_NETHERSEA_APPROACHING   = 655360110
 CARD_NETHERSEA_HIVEMIND      = 655360111
 CARD_NETHERSEA_EVOLUTION     = 655360112 
 CARD_MEI_MISAKI              = 655360121
+
+CARD_YUYUYU_SEA_OF_TREES     = 655368032
 
 
 --Flag Check

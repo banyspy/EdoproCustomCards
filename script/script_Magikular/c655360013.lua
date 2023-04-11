@@ -31,7 +31,10 @@ end
 function s.fextra(e,tp,mg)
 	local GYmat = Duel.GetMatchingGroup(Fusion.IsMonsterFilter(Card.IsAbleToRemove),tp,LOCATION_GRAVE,0,nil)
 	local Deckmat = Duel.GetMatchingGroup(Fusion.IsMonsterFilter(Card.IsAbleToGrave),tp,LOCATION_DECK|LOCATION_EXTRA,0,nil)
-	if Duel.IsExistingMatchingCard(Card.IsSummonLocation,tp,0,LOCATION_MZONE,1,nil,LOCATION_EXTRA) then
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD) --Official Evenly match condition code
+	local ct=#g-Duel.GetFieldGroupCount(tp,LOCATION_ONFIELD,0)
+	if e:GetHandler():IsLocation(LOCATION_HAND) then ct=ct-1 end
+	if ct>0 then
 		GYmat:Merge(Deckmat)
 	end
 	return GYmat

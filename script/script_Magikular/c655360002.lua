@@ -67,7 +67,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 		if #sg>0 then
-			Magikular.SummonSpellTrap(sg:GetFirst(),tp,ATTRIBUTE_LIGHT)
+			Magikular.SummonSpellTrap(sg:GetFirst(),tp,ATTRIBUTE_LIGHT,e)
 		end
 	end
 end

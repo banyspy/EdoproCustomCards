@@ -11,7 +11,7 @@ Duel.LoadScript("BanyspyConstant.lua")
 
 Magikular = {}
 
-function Magikular.SummonSpellTrap(c,tp,attribute)
+function Magikular.SummonSpellTrap(c,tp,attribute,e)
 	c:AddMonsterAttribute(TYPE_NORMAL)
 	Duel.SpecialSummon(c,0,tp,tp,true,false,POS_FACEUP)
 	local e1=Effect.CreateEffect(e:GetHandler())

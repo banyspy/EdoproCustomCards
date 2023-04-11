@@ -96,7 +96,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		while tc do
 			if tc:IsRelateToEffect(e) and 
 			Duel.IsPlayerCanSpecialSummonMonster(tp,tc:GetCode(),0,SET_MAGIKULAR,1500,1500,4,RACE_SPELLCASTER,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT) then
-				Magikular.SummonSpellTrap(tc,tp,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT)
+				Magikular.SummonSpellTrap(tc,tp,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT,e)
 			end
 		end
 	end

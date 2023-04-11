@@ -34,7 +34,7 @@ function s.initial_effect(c)
 	e4:SetCode(EVENT_FREE_CHAIN)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetCountLimit(1,{id,2})
-	e4:SetCondition(s.movecon)
+	e4:SetCondition(function (_,tp) return Duel.GetMZoneCount(tp)>0 end)
 	e4:SetOperation(s.moveop)
 	c:RegisterEffect(e4)
 	--equip from GY
@@ -91,47 +91,15 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,s.spfilter2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
 	if #g>0 and Duel.SendtoGrave(g,REASON_EFFECT)~=0 and g:GetFirst():IsLocation(LOCATION_GRAVE) then
 		local sg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
-		if sg:GetCount()>0 then
-			tc = sg:GetFirst()
-			while tc do
+		if sg:GetCount()<=0 then return end
+		tc = sg:GetFirst()
+		while tc do
 			if tc:IsRelateToEffect(e) and 
 			Duel.IsPlayerCanSpecialSummonMonster(tp,tc:GetCode(),0,SET_MAGIKULAR,1500,1500,4,RACE_SPELLCASTER,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT) then
-				tc:AddMonsterAttribute(TYPE_NORMAL)
-				Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP)
-				local e1=Effect.CreateEffect(e:GetHandler())
-				e1:SetType(EFFECT_TYPE_SINGLE)
-				e1:SetCode(EFFECT_CHANGE_LEVEL)
-				e1:SetValue(4)
-				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-				tc:RegisterEffect(e1,true)
-				local e2=e1:Clone()
-				e2:SetCode(EFFECT_CHANGE_ATTRIBUTE)
-				e2:SetValue(ATTRIBUTE_DARK+ATTRIBUTE_LIGHT)
-				tc:RegisterEffect(e2,true)
-				local e3=e1:Clone()
-				e3:SetCode(EFFECT_CHANGE_RACE)
-				e3:SetValue(RACE_SPELLCASTER)
-				tc:RegisterEffect(e3,true)
-				local e4=e1:Clone()
-				e4:SetCode(EFFECT_SET_BASE_ATTACK)
-				e4:SetValue(1500)
-				tc:RegisterEffect(e4,true)
-				local e5=e4:Clone()
-				e5:SetCode(EFFECT_SET_BASE_DEFENSE)
-				tc:RegisterEffect(e5,true)
-				local e6=e1:Clone()
-				e6:SetCode(EFFECT_ADD_SETCODE)
-				e6:SetValue(SET_MAGIKULAR)
-				tc:RegisterEffect(e6,true)
-				tc:AddMonsterAttributeComplete()
-				tc = sg:GetNext()
-			end
+				Magikular.SummonSpellTrap(tc,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT)
 			end
 		end
 	end
-end
-function s.movecon(e,tp,eg,ep,ev,re,r,rp)
-	return ( Duel.GetLocationCount(tp,LOCATION_MZONE) > 0 )
 end
 function s.moveop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -165,7 +133,7 @@ function s.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_EQUIP_LIMIT)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	e1:SetValue(s.eqlimit)
 	c:RegisterEffect(e1)
 end

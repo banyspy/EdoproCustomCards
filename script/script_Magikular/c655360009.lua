@@ -92,8 +92,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 and Duel.SendtoGrave(g,REASON_EFFECT)~=0 and g:GetFirst():IsLocation(LOCATION_GRAVE) then
 		local sg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 		if sg:GetCount()<=0 then return end
-		tc = sg:GetFirst()
-		while tc do
+		for tc in aux.Next(sg) do
 			if tc:IsRelateToEffect(e) and 
 			Duel.IsPlayerCanSpecialSummonMonster(tp,tc:GetCode(),0,SET_MAGIKULAR,1500,1500,4,RACE_SPELLCASTER,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT) then
 				Magikular.SummonSpellTrap(tc,tp,ATTRIBUTE_DARK+ATTRIBUTE_LIGHT,e)

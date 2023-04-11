@@ -13,7 +13,7 @@ Magikular = {}
 
 function Magikular.SummonSpellTrap(c,attribute)
 	c:AddMonsterAttribute(TYPE_NORMAL)
-	Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP)
+	Duel.SpecialSummon(c,0,tp,tp,true,false,POS_FACEUP)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_CHANGE_LEVEL)

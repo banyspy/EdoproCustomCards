@@ -14,14 +14,7 @@ function s.initial_effect(c)
   e1:SetOperation(s.mtop)
   c:RegisterEffect(e1)
   --(2) Destroy replace
-  local e2=Effect.CreateEffect(c)
-  e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-  e2:SetCode(EFFECT_DESTROY_REPLACE)
-  e2:SetRange(LOCATION_GRAVE)
-  e2:SetTarget(s.dreptg)
-  e2:SetValue(s.drepval)
-  e2:SetOperation(s.drepop)
-  c:RegisterEffect(e2)
+  YuYuYu.DestroyReplace(c,id)
 end
 --(2) Give effect
 function s.mtcon(e,tp,eg,ep,ev,re,r,rp)
@@ -73,19 +66,4 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
   end
 end
 --(2) Destroy replace
-function s.drepfilter(c,tp)
-  return c:IsFaceup() and c:IsSetCard(SET_YUYUYU) and bit.band(c:GetType(),0x81)==0x81 and c:IsControler(tp)
-  and c:IsLocation(LOCATION_MZONE) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
-end
-function s.dreptg(e,tp,eg,ep,ev,re,r,rp,chk)
-  if chk==0 then return e:GetHandler():IsAbleToRemove() and eg:IsExists(s.drepfilter,1,nil,tp) and eg:GetCount()==1 
-  and Duel.GetFlagEffect(tp,id)==0 end
-  return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
-end
-function s.drepval(e,c)
-  return s.drepfilter(c,e:GetHandlerPlayer())
-end
-function s.drepop(e,tp,eg,ep,ev,re,r,rp)
-  Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
-  Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
-end
+--Already handle by BanyspyAux file

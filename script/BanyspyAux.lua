@@ -601,5 +601,130 @@ function NGNL.SpellTrapReturnToHand(c)
 	  end)
   	c:RegisterEffect(e2)
 end
-  
-  
+
+--------------------------------------------------------------------
+-----------------------------  YuYuYu  -----------------------------
+--------------------------------------------------------------------
+
+YuYuYu = {}
+
+function YuYuYu.DestroyReplace(c,id)
+	local e2=Effect.CreateEffect(c)
+  	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+  	e2:SetCode(EFFECT_DESTROY_REPLACE)
+  	e2:SetRange(LOCATION_GRAVE)
+  	e2:SetTarget(YuYuYu.dreptg(id))
+  	e2:SetValue(function(e,c) return YuYuYu.drepfilter(c,e:GetHandlerPlayer()) end)
+  	e2:SetOperation(YuYuYu.drepop(id))
+  	c:RegisterEffect(e2)
+end
+function YuYuYu.drepfilter(c,tp)
+	return c:IsFaceup() and c:IsSetCard(SET_YUYUYU) and c:IsRitualMonster() and c:IsControler(tp)
+	and c:IsLocation(LOCATION_MZONE) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
+end
+function YuYuYu.dreptg(id)
+	return function(e,tp,eg,ep,ev,re,r,rp,chk)
+		if chk==0 then return e:GetHandler():IsAbleToRemove() and eg:IsExists(YuYuYu.drepfilter,1,nil,tp) and eg:GetCount()==1 
+		and Duel.GetFlagEffect(tp,id)==0 end
+		return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
+	end
+end
+function YuYuYu.drepop(id)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
+		Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
+	end
+end
+function YuYuYu.DestroyAddRitualSpell(c,id)
+	local e1=Effect.CreateEffect(c)
+  	e1:SetDescription(aux.Stringid(id,0))
+  	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_TOHAND+CATEGORY_SEARCH)
+  	e1:SetType(EFFECT_TYPE_IGNITION)
+  	e1:SetRange(LOCATION_PZONE)
+  	e1:SetCountLimit(1,id)
+  	e1:SetTarget(YuYuYu.destg1)
+  	e1:SetOperation(YuYuYu.desop1)
+  	c:RegisterEffect(e1)
+end
+function YuYuYu.thfilter1(c)
+  return c:IsSetCard(SET_YUYUYU) and c:IsRitualSpell() and c:IsAbleToHand()
+end
+function YuYuYu.destg1(e,tp,eg,ep,ev,re,r,rp,chk)
+  if chk==0 then return e:GetHandler():IsDestructable() and Duel.IsExistingMatchingCard(YuYuYu.thfilter1,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
+  Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  Duel.SetOperationInfo(0,CATEGORY_DESTROY,e:GetHandler(),1,0,0)
+  Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+end
+function YuYuYu.desop1(e,tp,eg,ep,ev,re,r,rp)
+  if not e:GetHandler():IsRelateToEffect(e) then return end
+  if Duel.Destroy(e:GetHandler(),REASON_EFFECT)~=0 then
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+    local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(YuYuYu.thfilter1),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+    if g:GetCount()>0 then
+      Duel.SendtoHand(g,nil,REASON_EFFECT)
+      Duel.ConfirmCards(1-tp,g)
+    end
+  end
+end
+function YuYuYu.TributeAdd(c,id,description)
+	local e3=Effect.CreateEffect(c)
+  	e3:SetDescription(aux.Stringid(id,description))
+  	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+  	e3:SetType(EFFECT_TYPE_IGNITION)
+  	e3:SetRange(LOCATION_MZONE)
+  	e3:SetCountLimit(1)
+  	e3:SetCost(YuYuYu.thcost1)
+  	e3:SetTarget(YuYuYu.thtg1)
+  	e3:SetOperation(YuYuYu.thop1)
+  	c:RegisterEffect(e3)
+end
+function YuYuYu.thcost1(e,tp,eg,ep,ev,re,r,rp,chk)
+  	if chk==0 then return e:GetHandler():IsReleasable() end
+  	Duel.Release(e:GetHandler(),REASON_COST)
+end
+function YuYuYu.thfilter2(c)
+  	return c:IsSetCard(SET_YUYUYU) and c:IsRitualMonster() and not c:IsCode(id) and c:IsAbleToHand()
+end
+function YuYuYu.thtg1(e,tp,eg,ep,ev,re,r,rp,chk)
+  	if chk==0 then return Duel.IsExistingMatchingCard(YuYuYu.thfilter2,tp,LOCATION_DECK,0,1,nil) end
+  	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+function YuYuYu.thop1(e,tp,eg,ep,ev,re,r,rp)
+  	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+  	local g=Duel.SelectMatchingCard(tp,YuYuYu.thfilter2,tp,LOCATION_DECK,0,1,1,nil)
+  	if g:GetCount()>0 then
+    	Duel.SendtoHand(g,nil,REASON_EFFECT)
+    	Duel.ConfirmCards(1-tp,g)
+  	end
+end
+function YuYuYu.LeaveFieldAdd(c,id,description)
+	local e5=Effect.CreateEffect(c)
+  	e5:SetDescription(aux.Stringid(id,description))
+  	e5:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+  	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+  	e5:SetCode(EVENT_LEAVE_FIELD)
+  	e5:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+  	e5:SetCondition(YuYuYu.thcon2)
+  	e5:SetTarget(YuYuYu.thtg2)
+  	e5:SetOperation(YuYuYu.thop2)
+  	c:RegisterEffect(e5)
+end
+function YuYuYu.thcon2(e,tp,eg,ep,ev,re,r,rp)
+  	local c=e:GetHandler()
+  	return (c:IsReason(REASON_BATTLE) or (c:GetReasonPlayer()~=tp and c:IsReason(REASON_EFFECT)))
+  	and c:GetPreviousControler()==tp and c:IsPreviousLocation(LOCATION_MZONE)
+end
+function YuYuYu.thtg2(e,tp,eg,ep,ev,re,r,rp,chk)
+  	if chk==0 then return Duel.IsExistingMatchingCard(YuYuYu.thfilter1,tp,LOCATION_GRAVE,0,1,nil) end
+  	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+end
+function YuYuYu.thop2(e,tp,eg,ep,ev,re,r,rp)
+  	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+  	local g=Duel.SelectMatchingCard(tp,YuYuYu.thfilter1,tp,LOCATION_GRAVE,0,1,1,nil)
+  	if g:GetCount()>0 and Duel.SendtoHand(g,tp,REASON_EFFECT)>0 and g:GetFirst():IsLocation(LOCATION_HAND) then
+    	Duel.ConfirmCards(1-tp,g)
+    	Duel.Recover(tp,500,REASON_EFFECT)
+  	end
+end

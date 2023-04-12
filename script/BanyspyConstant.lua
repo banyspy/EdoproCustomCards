@@ -12,6 +12,8 @@ SET_ANCIENTDEEP              = 0xb51
 SET_NGNL                     = 0xbc0
 SET_YUYUYU                   = 0xbc1
 
+SET_OTNN                     = 0xbc3
+
 --Card Name Variable
 
 CARD_NO_87_QUEEN_OF_THE_NIGHT= 89516305

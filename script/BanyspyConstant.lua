@@ -11,7 +11,11 @@ SET_ANCIENTDEEP              = 0xb51
 --Cstudio Archetype
 SET_NGNL                     = 0xbc0
 SET_YUYUYU                   = 0xbc1
-
+SET_HN                       = 0xbc2
+SET_HN_CPU                   = 0x3bc2 -- 3 = 0011
+SET_HN_HDD                   = 0x5bc2 -- 5 = 0101
+SET_HN_NATION                = 0x6bc2 -- 6 = 0110
+SET_HN_CPU_CANDIDATE         = 0xbbc2 -- b = 1011
 SET_OTNN                     = 0xbc3
 
 --Card Name Variable
@@ -35,6 +39,17 @@ CARD_MEI_MISAKI              = 655360121
 
 CARD_YUYUYU_SEA_OF_TREES     = 655368032
 
+
+CARD_HN_ARFOIRE              = 655368055
+CARD_HN_HDD_PURPLE_HEART     = 655368063
+CARD_HN_HDD_BLACK_HEART      = 655368064
+CARD_HN_HDD_WHITE_HEART      = 655368065
+CARD_HN_HDD_GREEN_HEART      = 655368066
+
+CARD_HN_NATION_PLANEPTUNE    = 655368098
+CARD_HN_NATION_LASTATION     = 655368099
+CARD_HN_NATION_LOWEE         = 655368100
+CARD_HN_NATION_LEANBOX       = 655368101
 
 --Flag Check
 REGISTER_FLAG_WEMANY = 655360100

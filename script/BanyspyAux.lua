@@ -765,3 +765,212 @@ function YuYuYu.thop2(e,tp,eg,ep,ev,re,r,rp)
     	Duel.Recover(tp,500,REASON_EFFECT)
   	end
 end
+
+--------------------------------------------------------------------
+-------------------------------  HN  -------------------------------
+--------------------------------------------------------------------
+
+HN = {}
+
+function HN.HasNeptuneInName(c) --Hardcode for card with name in it
+	return c:IsCode({	655368041,	--HN CPU Neptune
+						655368051,	--HN UD Neptune
+						655368056,	--HN Histoire, Planeptune's Oracle
+						655368098})	--HN Nation Planeptune (In case it somehow become monster,haha)
+end
+
+function HN.HasNoireInName(c) --Hardcode for card with name in it
+	return c:IsCode({	655368042})	--HN CPU Noire
+end
+
+function HN.HasBlancInName(c) --Hardcode for card with name in it
+	return c:IsCode({	655368043})	--HN CPU Blanc
+end
+
+function HN.HasVertInName(c) --Hardcode for card with name in it
+	return c:IsCode({	655368044})	--HN CPU Vert
+end
+
+function HN.LinkReviveOtherOnSummon(c,id)
+	local e1=Effect.CreateEffect(c)
+  	e1:SetDescription(aux.Stringid(id,0))
+  	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+  	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+  	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+  	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+  	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) end)
+  	e1:SetTarget(HN.sptg)
+  	e1:SetOperation(HN.spop)
+  	c:RegisterEffect(e1)
+end
+function HN.spfilter(c,e,tp,zone)
+  return c:IsSetCard(SET_HN) and not c:IsType(TYPE_LINK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone)
+end
+function HN.spzonefilter(c,e,tp,sc)
+  return c:IsSetCard(SET_HN) and c:IsType(TYPE_LINK)
+end
+function HN.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+  local zone=0
+  local g1=Duel.GetMatchingGroup(HN.spzonefilter,tp,LOCATION_MZONE,0,nil)
+  for tc in aux.Next(g1) do
+    zone=zone | tc:GetLinkedZone()
+  end
+  zone = zone & 0x1f
+  if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+  and Duel.IsExistingTarget(HN.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp,zone) end
+  Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+  local g=Duel.SelectTarget(tp,HN.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,zone)
+  Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
+end
+function HN.spop(e,tp,eg,ep,ev,re,r,rp)
+  local zone=0
+  local g=Duel.GetMatchingGroup(HN.spzonefilter,tp,LOCATION_MZONE,0,nil)
+  for tc in aux.Next(g) do
+    zone=zone | tc:GetLinkedZone()
+  end
+  zone = zone & 0x1f
+  local tc=Duel.GetFirstTarget()
+  if tc and tc:IsRelateToEffect(e) and zone~=0 then 
+    Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP,zone)
+  end
+end
+function HN.AddOrPlaceOnSummon(c,id,card) --For Nations card since they have exact repeat effect
+	--(1) Search
+	local e1=Effect.CreateEffect(c)
+  	e1:SetDescription(aux.Stringid(id,0))
+  	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+  	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+  	e1:SetProperty(EFFECT_FLAG_DELAY)
+  	e1:SetCode(EVENT_SUMMON_SUCCESS)
+  	e1:SetCountLimit(1,id)
+  	e1:SetTarget(HN.thtg(card))
+  	e1:SetOperation(HN.thop(card))
+  	c:RegisterEffect(e1)
+  	--(2) Place in S/T Zone
+  	local e2=Effect.CreateEffect(c)
+  	e2:SetDescription(aux.Stringid(id,1))
+  	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+  	e2:SetProperty(EFFECT_FLAG_DELAY)
+  	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+  	e2:SetCountLimit(1,{id,1})
+  	e2:SetCondition(function() return Duel.IsBattlePhase() end)
+  	e2:SetTarget(HN.stztg(card))
+  	e2:SetOperation(HN.stzop(card))
+  	c:RegisterEffect(e2)
+end
+function HN.thfilter_con(c,card)
+  	return c:IsCode(card) and c:IsAbleToHand()
+end
+function HN.thtg(card)
+	return function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+  		if chk==0 then return Duel.IsExistingMatchingCard(HN.thfilter_con,tp,LOCATION_DECK,0,1,nil,card) end
+  		Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	end
+end
+function HN.thop(card)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		local tc=Duel.GetFirstMatchingCard(HN.thfilter_con,tp,LOCATION_DECK,0,nil,card)
+  		if tc then
+    		Duel.SendtoHand(tc,nil,REASON_EFFECT)
+    		Duel.ConfirmCards(1-tp,tc)
+  		end
+	end
+end
+function HN.stzfilter(c,tp,card)
+  	return c:IsCode(card) and not c:IsForbidden() and c:CheckUniqueOnField(tp)
+end
+function HN.stztg(card)
+	return function(e,tp,eg,ep,ev,re,r,rp,chk)
+  		if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 
+			and Duel.IsExistingMatchingCard(HN.stzfilter,tp,LOCATION_DECK,0,1,nil,tp,card) end
+  		Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+	end
+end
+function HN.stzop(card)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+  		if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
+  		local tc=Duel.GetFirstMatchingCard(HN.stzfilter,tp,LOCATION_DECK,0,nil,tp,card)
+  		if tc then
+    		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+  		end
+	end
+end
+function HN.HDDNextCommonEffect(c,id,card) 
+	--(1) Gain additional effect --Your opponent cannot response if it xyz summon with certain material
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e0:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e0:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ) and e:GetLabel()==1 end)
+	e0:SetOperation(function(id) return function(e)
+		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(id,0))
+	  end end)
+	c:RegisterEffect(e0)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_MATERIAL_CHECK)
+	e1:SetValue(function(card) return function(e,c)
+		if c:GetMaterial():IsExists(Card.IsCode,1,nil,card) then
+		  	e:GetLabelObject():SetLabel(1)
+		else
+		  	e:GetLabelObject():SetLabel(0)
+		end
+	  end end)
+	e1:SetLabelObject(e0)
+	c:RegisterEffect(e1)
+	--(1.1) Cannot chain
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EVENT_CHAINING)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCondition(function(id) return function (e) return e:GetHandler():GetFlagEffect(id)>0 end end)
+	e2:SetOperation(function(e,tp,eg,ep,ev,re,r,rp) 
+		if re:GetHandler()==e:GetHandler() then 
+			Duel.SetChainLimit(function(e,ep,tp) return ep==tp end) 
+		end 
+	end)
+	c:RegisterEffect(e2)
+	--(3) Special Summon 
+	-- At the end of the Damage Step, if this card attacked an opponent's monster: 
+	-- You can Special Summon 1 [name] from your GY, and if you do, attach this card to it as material. 
+	-- (Transfer its materials to that monster.)
+	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(id,2))
+	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e4:SetCode(EVENT_DAMAGE_STEP_END)
+	e4:SetCountLimit(1,id)
+	e4:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return Duel.GetAttacker()==e:GetHandler() and Duel.GetAttackTarget() end)
+	e4:SetTarget(HN.revtg(card))
+	e4:SetOperation(HN.revop(card))
+	c:RegisterEffect(e4)
+end
+function HN.revfilter(c,e,tp,card)
+	return c:IsCode(card) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+function HN.revtg(card)
+	return function(e,tp,eg,ep,ev,re,r,rp,chk)
+		if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(HN.revfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp,card) end
+		Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
+	end
+end
+function HN.revop(card)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		local c=e:GetHandler()
+		if Duel.GetMZoneCount(tp)<=0 then return end
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+		local g=Duel.SelectMatchingCard(tp,HN.revfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,card)
+		local tc=g:GetFirst()
+		if tc and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0
+		and c:IsFaceup() and c:IsRelateToEffect(e) then
+	  	local mg=c:GetOverlayGroup()
+	  	if #mg>0 then Duel.Overlay(tc,mg) end
+	  		Duel.Overlay(tc,Group.FromCards(c))
+		end
+	end
+end
+  

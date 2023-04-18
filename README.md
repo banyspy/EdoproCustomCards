@@ -169,6 +169,10 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Setsugebishin** - 14/14 - Finished. <br />
 **Mei Misaki** - 5/12 - On Going. <br />
 **Melodious** - 4/4 - Finished. <br />
+**NGNL (No Game No Life) (From Cstudio)** - 13/13 - Finished. <br />
+**YuYuYu (From Cstudio)** - 13/13 - Finished. <br />
+**HN (Hyper Neptunia) (From Cstudio)** - 64/64 - Finished. <br />
+**OTNN (Ore, Twintail ni narimasu) (From Cstudio)** - 13/13 - Finished. <br />
 **Traptrix** - 5-6/(10?) - On hold.<br />
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />

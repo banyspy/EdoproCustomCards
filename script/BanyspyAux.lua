@@ -251,7 +251,15 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function Nethersea.TokenID(id)
-	return 655360100+((id-655360100)*20)
+	local base = CARD_NETHERSEA_FOUNDER-1
+	--base value is here to help calculate the token id that is correspond to the nethersea monster
+	--655369001 -> 655369020
+	--655369002 -> 655369040
+	--655369003 -> 655369060
+	--655369004 -> 655369080
+	--655369005 -> 655369100
+	--655369006 -> 655369120
+	return base+((id-(base))*20)
 end
 
 function Nethersea.QuickTributeProc(c)

@@ -17,6 +17,8 @@ SET_HN_HDD                   = 0x5bc2 -- 5 = 0101
 SET_HN_NATION                = 0x6bc2 -- 6 = 0110
 SET_HN_CPU_CANDIDATE         = 0xbbc2 -- b = 1011
 SET_OTNN                     = 0xbc3
+SET_REC                      = 0xbc4
+SET_RECCM                    = 0x1bc4
 
 --Card Name Variable
 
@@ -50,6 +52,9 @@ CARD_HN_NATION_PLANEPTUNE    = 655368098
 CARD_HN_NATION_LASTATION     = 655368099
 CARD_HN_NATION_LOWEE         = 655368100
 CARD_HN_NATION_LEANBOX       = 655368101
+
+CARD_REC_ALTAIR              = 655368141
+CARD_REC_HOLOPSICON          = 655368146
 
 --Flag Check
 REGISTER_FLAG_WEMANY = 655360100

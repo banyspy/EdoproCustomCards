@@ -2,29 +2,6 @@
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
-	--set
-	--[[
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_MONSTER_SSET)
-	e1:SetValue(TYPE_SPELL)
-	c:RegisterEffect(e1)]]
-	--[[
-	--spsummon
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_DESTROYED)
-	e2:SetCondition(s.revcon)
-	e2:SetTarget(s.revtg)
-	e2:SetOperation(s.revop)
-	c:RegisterEffect(e2)
-    --spsummon
-    local e3=e2:Clone()
-	e3:SetCode(EVENT_REMOVE)
-	c:RegisterEffect(e3)
-	]]
     --special summon
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
@@ -33,18 +10,6 @@ function s.initial_effect(c)
 	e4:SetRange(LOCATION_HAND)
 	e4:SetCondition(s.spcon)
 	c:RegisterEffect(e4)
-	--[[
-    --Your opponent cannot active during battle phase
-    local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e4:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e4:SetTargetRange(0,1)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetCondition(s.actcon)
-	e4:SetValue(1)
-	c:RegisterEffect(e4)
-	]]
     --boost
 	local e5=Effect.CreateEffect(c)
 	e5:SetType(EFFECT_TYPE_FIELD)

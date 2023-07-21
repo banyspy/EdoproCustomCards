@@ -1,4 +1,4 @@
---Ancient Deep Megalo
+--Ancient Deep Fishing
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)

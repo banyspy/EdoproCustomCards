@@ -3,11 +3,11 @@
 --Archetype code
 
 SET_MAGIKULAR                = 0x1f4
+SET_ANCIENTDEEP              = 0xb02
 SET_ZODRAGON                 = 0xb03
 SET_REOYIN                   = 0xb04
 SET_SETSUGEBISHIN            = 0xb05
 SET_NETHERSEA                = 0xb11
-SET_ANCIENTDEEP              = 0xb51
 --Cstudio Archetype
 SET_NGNL                     = 0xbc0
 SET_YUYUYU                   = 0xbc1

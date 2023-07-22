@@ -5,6 +5,7 @@ function s.initial_effect(c)
     Gemini.AddProcedure(c)
 	-- Special Summon this card
 	local e1=Effect.CreateEffect(c)
+    e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
@@ -14,7 +15,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
     --Special Summon 2 Gemini monster
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetCountLimit(1,{id,1})
@@ -57,9 +58,11 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_DECK,0,nil,e,tp)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_SPSUMMON)
-	if #sg>0 and Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)~=0 then
+	if #sg>0 then
         for tc in sg:Iter() do
+            Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
             tc:EnableGeminiStatus()
         end
+        Duel.SpecialSummonComplete()
 	end
 end

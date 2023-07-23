@@ -181,6 +181,32 @@ function(c,id,category,property,target,operation)
 end,"handler","handlerid","category","property","functg","funcop")
 
 --------------------------------------------------------------------
+-----------------------------  Amalgam  ----------------------------
+--------------------------------------------------------------------
+
+Amalgam = {}
+
+function Amalgam.AllTypeFromGroup(sg)
+	local AllType = 0
+	for tc in sg:Iter() do
+		AllType = AllType|tc:GetRace() -- bit OR with all card in group
+		--Debug.Message("AllType "..AllType)
+	end
+	return AllType
+end
+
+function Amalgam.TypeAmountFromGroup(sg)
+	local Amount = 0
+	local AllType =  Amalgam.AllTypeFromGroup(sg)
+	while AllType > 0 do -- Check each least significant bit, then keep right shift to check other bit, until their are no more to check
+		Amount = Amount + (AllType%2) -- Amount value increase by the least significant bit
+		AllType = AllType >> 1 --Right shift by 1, basically divide by 2
+		--Debug.Message("Amount "..Amount)
+	end
+	return Amount
+end
+
+--------------------------------------------------------------------
 ----------------------------  Nethersea  ---------------------------
 --------------------------------------------------------------------
 

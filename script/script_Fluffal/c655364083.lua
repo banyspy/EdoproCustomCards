@@ -16,7 +16,7 @@ function s.initial_effect(c)
     -- Extra normal summon for "Fluffal"
     local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetDescription(aux.Stringid(id,2))
+	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCode(EFFECT_EXTRA_SUMMON_COUNT)
     e2:SetCountLimit(1,{id,1})
     e2:SetRange(LOCATION_MZONE)

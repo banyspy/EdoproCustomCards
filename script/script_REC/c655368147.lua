@@ -2,6 +2,7 @@
 --Scripted by Raivost
 --Fix for compatibility with edopro by banyspy
 local s,id=GetID()
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
   --(1) Negate attack
   local e1=Effect.CreateEffect(c)

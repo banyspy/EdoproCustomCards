@@ -9,6 +9,7 @@ SET_REOYIN                   = 0xb04
 SET_SETSUGEBISHIN            = 0xb05
 SET_STELLARON                = 0xb06
 SET_AMALGAM                  = 0xb07
+SET_STRATOSSEA               = 0xb08
 SET_NETHERSEA                = 0xbe1
 --Cstudio Archetype
 SET_NGNL                     = 0xbc0

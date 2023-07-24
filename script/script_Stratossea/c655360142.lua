@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.rmop)
 	c:RegisterEffect(e2)
 end
-function spfilter(c,tp)
+function s.spfilter(c,tp)
     return c:IsMonster() and c:IsRace(RACE_AQUA|RACE_SEASERPENT|RACE_FISH) and c:IsPreviousLocation(LOCATION_MZONE)
     and c:IsPreviousControler(tp)
 end

@@ -68,7 +68,7 @@ function s.sstarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.ssoperation(e,tp,eg,ep,ev,re,r,rp,chk)
 	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or Duel.GetMZoneCount(tp)<2 then return end
-	local g=Duel.GetMatchingGroup(s.ssfilter,tp,LOCATION_GRAVE,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.ssfilter),tp,LOCATION_GRAVE,0,nil,e,tp)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_SPSUMMON)
 	if #sg>0 then

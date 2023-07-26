@@ -1,4 +1,5 @@
---Malefic Fossil warrior skull bone
+-- Malefic Fossil warrior skull bone
+-- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()

@@ -1,4 +1,5 @@
---Traptrix Dracofly
+--Traptrix Chryso
+-- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
 	--Unaffected by "Hole" normal trap cards
@@ -51,13 +52,13 @@ function s.initial_effect(c)
 	e7:SetCondition(s.quickcon)
 	c:RegisterEffect(e7)
 end
-s.listed_series={0x4c,0x89,0x108a}
+s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
 function s.efilter(e,te)
 	local c=te:GetHandler()
-	return c:GetType()==TYPE_TRAP and (c:IsSetCard(0x4c) or c:IsSetCard(0x89))
+	return c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE))
 end
 function s.summonfilter(c)
-	return c:IsSetCard(0x108a) and c:IsType(TYPE_MONSTER) and c:IsSummonable(true,nil)
+	return c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER) and c:IsSummonable(true,nil)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -79,7 +80,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	c:CompleteProcedure()
 end
 function s.checkfilter(c)
-	return c:IsSetCard(0x108a) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)
 end
 function s.igncon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetMatchingGroupCount(s.checkfilter,tp,LOCATION_MZONE,0,e:GetHandler())==0
@@ -87,26 +88,30 @@ end
 function s.quickcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetMatchingGroupCount(s.checkfilter,tp,LOCATION_MZONE,0,e:GetHandler())>0
 end
-function s.tgfilter(c)
-	--local sc = c:AssumeProperty(TYPE_TRAP,nil)
-	return c:IsFaceup() and c:IsMonster() and (c:IsCanTurnSet() or c:IsType(TYPE_LINK))
-end
-function s.tgfilter2(c,effect)
-	return c:IsFaceup() and c:IsMonster() and (c:IsCanTurnSet() or c:IsType(TYPE_LINK)) and not c:IsImmuneToEffect(effect)
+function s.tgfilter(c,effect)
+	local e1=Effect.CreateEffect(effect:GetOwner())
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_MONSTER_SSET)
+	e1:SetValue(TYPE_TRAP)
+	c:RegisterEffect(e1)
+	local bool = c:IsFaceup() and c:IsMonster() and c:IsSSetable(true)
+	e1:Reset()
+	return bool and not c:IsImmuneToEffect(effect)
 end
 function s.trtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then 
-		--if not Duel.CanPlayerSetSpellTrap(tp) then return end
-		return (Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_MZONE,0,1,e:GetHandler()) and 
+		return s.tgfilter(c,e) and
+		((Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_MZONE,0,1,c,e) and 
 		Duel.GetLocationCount(tp,LOCATION_SZONE) > 1 ) or
-		(Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,e:GetHandler()) and 
-		Duel.GetLocationCount(tp,LOCATION_SZONE) > 0 and Duel.GetLocationCount(1-tp,LOCATION_SZONE) > 0) end
+		(Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,c,e) and 
+		Duel.GetLocationCount(tp,LOCATION_SZONE) > 0 and Duel.GetLocationCount(1-tp,LOCATION_SZONE) > 0)) end
 end
 function s.trop(e,tp,eg,ep,ev,re,r,rp)
-	--if not Duel.CanPlayerSetSpellTrap(tp) then return end
 	local c = e:GetHandler()
-	local g1=Duel.GetMatchingGroup(s.tgfilter2,tp,LOCATION_MZONE,0,e:GetHandler(),e)
-	local g2=Duel.GetMatchingGroup(s.tgfilter2,tp,0,LOCATION_MZONE,e:GetHandler(),e)
+	if not (c:IsRelateToEffect(e) and s.tgfilter(c,e)) then return end
+	local g1=Duel.GetMatchingGroup(s.tgfilter,tp,LOCATION_MZONE,0,e:GetHandler(),e)
+	local g2=Duel.GetMatchingGroup(s.tgfilter,tp,0,LOCATION_MZONE,e:GetHandler(),e)
 	local sg=Group.CreateGroup()
 	if((#g1)>0 and Duel.GetLocationCount(tp,LOCATION_SZONE) > 1 ) 
 	then sg:Merge(g1) end
@@ -116,16 +121,25 @@ function s.trop(e,tp,eg,ep,ev,re,r,rp)
 	local g=sg:Select(tp,1,1,nil)
 	if #g>0 then
 		local g1 = g:GetFirst()
-        Duel.MoveToField(g1,tp,g1:GetOwner(),LOCATION_SZONE,POS_FACEDOWN,true)
-		local e1=Effect.CreateEffect(c)
-		e1:SetCode(EFFECT_CHANGE_TYPE)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
-		e1:SetValue(TYPE_TRAP)
-		g1:RegisterEffect(e1)
-		Duel.MoveToField(c,tp,c:GetOwner(),LOCATION_SZONE,POS_FACEDOWN,true)
-		local e2=e1:Clone()
-		c:RegisterEffect(e2)
+		if not g1:IsImmuneToEffect(e) then
+        	Duel.MoveToField(g1,tp,g1:GetOwner(),LOCATION_SZONE,POS_FACEDOWN,true)
+			local e1=Effect.CreateEffect(c)
+			e1:SetCode(EFFECT_CHANGE_TYPE)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
+			e1:SetValue(TYPE_TRAP)
+			g1:RegisterEffect(e1)
+		end
+		if not c:IsImmuneToEffect(e) then
+        	Duel.MoveToField(c,tp,c:GetOwner(),LOCATION_SZONE,POS_FACEDOWN,true)
+			local e1=Effect.CreateEffect(c)
+			e1:SetCode(EFFECT_CHANGE_TYPE)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
+			e1:SetValue(TYPE_TRAP)
+			c:RegisterEffect(e1)
+		end
 	end
 end

@@ -1,4 +1,5 @@
---Traptrix Stylidium
+--Traptrix Campsis
+-- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
     --Unaffected by "Hole" normal trap cards
@@ -33,14 +34,14 @@ function s.initial_effect(c)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
 end
-s.listed_series={0x4c,0x89,0x108a}
+s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
 function s.efilter(e,te)
 	local c=te:GetHandler()
-	return c:GetType()==TYPE_TRAP and (c:IsSetCard(0x4c) or c:IsSetCard(0x89))
+	return c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE))
 end
 function s.targetfilter(c)
-	return ((c:IsSetCard(0x108a) and c:IsType(TYPE_MONSTER)) 
-	or c:IsType(TYPE_TRAP)) and c:IsFaceup()
+	return ((c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)) 
+	or c:GetType()==TYPE_TRAP) and c:IsFaceup()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
@@ -73,8 +74,8 @@ function s.immfilter(e,re)
 	return e:GetHandler()~=re:GetOwner()
 end
 function s.shffilter(c)
-	return ((c:IsSetCard(0x108a) and c:IsType(TYPE_MONSTER)) 
-	or ( c:GetType()==TYPE_TRAP and (c:IsSetCard(0x4c) or c:IsSetCard(0x89)))) and c:IsAbleToDeck()
+	return ((c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)) 
+	or ( c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE)))) and c:IsAbleToDeck()
 end
 function s.spfilter(c,e,tp,ct,g)
 	return c:IsRace(RACE_INSECT|RACE_PLANT) and c:IsType(TYPE_LINK) and c:IsLink(ct)

@@ -1,3 +1,5 @@
+-- Traptrix Forestial LoopHole
+-- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
 	-- Negate then destroy, possibly summon monster
@@ -32,13 +34,7 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and c:IsFaceup() and not tc:IsDisabled() then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e1)
-		Duel.AdjustInstantly()
-		Duel.NegateRelatedChain(tc,RESET_TURN_SET)
+		tc:NegateEffects(c)
 	end
     if Duel.Destroy(tc,REASON_EFFECT)==0 then
         local g=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_DECK,0,nil,e,tp)

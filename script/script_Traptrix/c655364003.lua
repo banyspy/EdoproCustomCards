@@ -1,4 +1,5 @@
---Traptrix Stylidium
+--Traptrix Photouris
+-- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
     --Unaffected by "Hole" normal trap cards
@@ -22,10 +23,10 @@ function s.initial_effect(c)
 	e2:SetOperation(s.disop)
 	c:RegisterEffect(e2)
 end
-s.listed_series={0x4c,0x89,0x108a}
+s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
 function s.efilter(e,te)
 	local c=te:GetHandler()
-	return c:GetType()==TYPE_TRAP and (c:IsSetCard(0x4c) or c:IsSetCard(0x89))
+	return c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE))
 end
 function s.cfilter(c)
 	return c:IsFacedown() or not c:IsRace(RACE_INSECT|RACE_PLANT)
@@ -39,7 +40,7 @@ function s.discost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(c,REASON_COST)
 end
 function s.setfilter(c)
-	return c:GetType()==TYPE_TRAP and (c:IsSetCard(0x4c) or c:IsSetCard(0x89)) and c:IsSSetable()
+	return c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE)) and c:IsSSetable()
 end
 function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then 

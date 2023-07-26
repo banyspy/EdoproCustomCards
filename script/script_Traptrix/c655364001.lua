@@ -1,4 +1,4 @@
---Traptrix Chryso
+-- Traptrix Myrmeleo - Predating Mode
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
@@ -18,6 +18,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCode(EVENT_SUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCost(s.spreveal)
 	e2:SetTarget(s.sptg)
 	e2:SetOperation(s.spop)
 	e2:SetCountLimit(1,id)
@@ -30,6 +31,7 @@ function s.initial_effect(c)
 	e4:SetDescription(aux.Stringid(id,1))
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e4:SetRange(LOCATION_MZONE)
+	e4:SetCost(function(_,_,_,_,_,_,_,_,chk) if chk==0 then return true end end)
     e4:SetCountLimit(1,{id,1})
 	c:RegisterEffect(e4)
 	local e5=e4:Clone()
@@ -56,6 +58,11 @@ s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
 function s.efilter(e,te)
 	local c=te:GetHandler()
 	return c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE))
+end
+function s.spreveal(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return not c:IsPublic() end
+	Duel.ConfirmCards(1-tp,c)
 end
 function s.summonfilter(c)
 	return c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER) and c:IsSummonable(true,nil)
@@ -119,6 +126,7 @@ function s.trop(e,tp,eg,ep,ev,re,r,rp)
 	then sg:Merge(g2) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local g=sg:Select(tp,1,1,nil)
+	Duel.HintSelection(g,true)
 	if #g>0 then
 		local g1 = g:GetFirst()
 		if not g1:IsImmuneToEffect(e) then

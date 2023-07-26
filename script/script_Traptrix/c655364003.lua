@@ -1,4 +1,4 @@
---Traptrix Photouris
+-- Traptrix Lowii
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)

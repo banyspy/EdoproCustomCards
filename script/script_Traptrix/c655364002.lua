@@ -1,4 +1,4 @@
---Traptrix Campsis
+-- Traptrix Stylidium
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
@@ -18,6 +18,7 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_HAND)
+	e2:SetCost(s.reveal)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.activate)
 	e2:SetCountLimit(1,id)
@@ -38,6 +39,11 @@ s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
 function s.efilter(e,te)
 	local c=te:GetHandler()
 	return c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE))
+end
+function s.reveal(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return not c:IsPublic() end
+	Duel.ConfirmCards(1-tp,c)
 end
 function s.targetfilter(c)
 	return ((c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)) 
@@ -74,8 +80,8 @@ function s.immfilter(e,re)
 	return e:GetHandler()~=re:GetOwner()
 end
 function s.shffilter(c)
-	return ((c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)) 
-	or ( c:GetType()==TYPE_TRAP and (c:IsSetCard(SET_HOLE) or c:IsSetCard(SET_TRAP_HOLE)))) and c:IsAbleToDeck()
+	return c:IsAbleToDeck() and (c:IsSetCard(SET_TRAPTRIX) 
+	or ( c:GetType()==TYPE_TRAP and (c:IsSetCard({SET_HOLE,SET_TRAP_HOLE})))) 
 end
 function s.spfilter(c,e,tp,ct,g)
 	return c:IsRace(RACE_INSECT|RACE_PLANT) and c:IsType(TYPE_LINK) and c:IsLink(ct)
@@ -107,6 +113,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.AnnounceNumber(tp,table.unpack(nums))
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local rg=g:Select(tp,ct,ct,nil)
+	Duel.HintSelection(rg,true)
 	Duel.SendtoDeck(rg,nil,2,REASON_EFFECT)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local sg=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,ct)

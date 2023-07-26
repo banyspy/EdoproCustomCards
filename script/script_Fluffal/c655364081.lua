@@ -55,7 +55,7 @@ function s.negcon(c)
     return c:IsFaceup() and c:IsSetCard(SET_FRIGHTFUR) and c:IsType(TYPE_FUSION)
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(s.negcon,tp,LOCATION_MZONE,0,nil)
+	return Duel.IsExistingMatchingCard(s.negcon,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsFaceup() end

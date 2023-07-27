@@ -1,152 +1,102 @@
--- Traptrix Ecosystem
+-- Traptrix Bewilder
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
-    --Change its name to "Gunkan Suship Shari"
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetCode(EFFECT_CHANGE_CODE)
-	e0:SetRange(LOCATION_ONFIELD+LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE)
-	e0:SetValue(12801833)
-	c:RegisterEffect(e0)
-    --[[Treated as "Traptrip Garden"
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e0:SetCode(EFFECT_ADD_CODE)
-	e0:SetValue(12801833)
-	c:RegisterEffect(e0)]]
-	--Activate
+	-- change facedown, possibly summon monster
 	local e1=Effect.CreateEffect(c)
-    e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_POSITION)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetOperation(s.activate)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E+TIMING_MAIN_END)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.desop)
 	c:RegisterEffect(e1)
-	--Prevent effect target
+	--Negate the effects of a face-up Spell/Trap
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetTargetRange(LOCATION_SZONE,0)
-	e2:SetTarget(s.tgtg)
-	e2:SetValue(aux.tgoval)
+	e2:SetDescription(aux.Stringid(id,2))
+	e2:SetCategory(CATEGORY_DISABLE)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
+	e2:SetCost(s.negcost)
+	e2:SetTarget(s.negtg)
+	e2:SetOperation(s.negop)
 	c:RegisterEffect(e2)
-    --Prevent effect target
-	local e3=Effect.CreateEffect(c)
-    e3:SetDescription(aux.Stringid(id,3))
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-    e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetRange(LOCATION_FZONE)
-    e3:SetCountLimit(1,id)
-	e3:SetTarget(s.target)
-	e3:SetOperation(s.operation)
-	c:RegisterEffect(e3)
 end
-s.listed_names={12801833}--Traptrip Garden
-s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
-function s.copyfilter(c)
-	return c:IsOriginalCodeRule(12801833) and c:IsAbleToRemove()
+function s.filter(c)
+	return c:IsFaceup() and c:IsCanTurnSet()
 end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) then return end
-	local g=Duel.GetMatchingGroup(s.copyfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,nil)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg=g:Select(tp,1,1,nil)
-		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
-        local code=sg:GetFirst():GetOriginalCode()
-		c:CopyEffect(code,RESET_EVENT+RESETS_STANDARD)
-        local e1=Effect.CreateEffect(c)
-        e1:SetDescription(aux.Stringid(id,2))
-        e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CLIENT_HINT)
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e1)
-	end
-end
-function s.tgfilter(c,tp)
-	return c:IsSetCard(SET_TRAPTRIX) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp)
-end
-function s.tgtg(e,c)
-	return c:GetSequence()<5 and c:IsFacedown() and c:GetColumnGroup():FilterCount(s.tgfilter,nil,c:GetControler())>0
+function s.setfilter(c,e,tp)
+    return c:IsSetCard({SET_HOLE,SET_TRAP_HOLE}) and c:IsNormalTrap() and c:IsSSetable() and not c:IsCode(id)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local b1=s.thtg(e,tp,eg,ep,ev,re,r,rp,0)
-	local b2=s.xyztg(e,tp,eg,ep,ev,re,r,rp,0)
-    local b3=s.linktg(e,tp,eg,ep,ev,re,r,rp,0)
-	if chk==0 then return b1 or b2 end
-	local op=Duel.SelectEffect(tp,
-		{b1,aux.Stringid(id,4)},
-        {b2,aux.Stringid(id,5)},
-		{b3,aux.Stringid(id,6)})
-	if op==1 then
-		e:SetCategory(CATEGORY_TOHAND)
-		s.thtg(e,tp,eg,ep,ev,re,r,rp,1)
-	elseif op==2 then
-		s.xyztg(e,tp,eg,ep,ev,re,r,rp,1)
-    elseif op==3 then
-		s.linktg(e,tp,eg,ep,ev,re,r,rp,1)
-	end
-	Duel.SetTargetParam(op)
+	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
 end
--- Check for searcg effect
-function s.thfilter(c)
-	return (c:IsSetCard(SET_TRAPTRIX) or (c:IsSetCard({SET_HOLE,SET_TRAP_HOLE}) and c:GetType()==TYPE_TRAP))
-    and c:IsAbleToHand()
-end
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
-end
--- Check for xyz effect
-function s.xyzfilter(c)
-	return c:IsXyzSummonable() and c:IsSetCard(SET_TRAPTRIX)
-end
-function s.xyztg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
-end
--- Check for link effect
-function s.linkfilter(c)
-	return c:IsLinkSummonable() and c:IsSetCard(SET_TRAPTRIX)
-end
-function s.linktg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.linkfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
-end
--- Operation part
-function s.operation(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
-	local op=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
-	if op==1 then s.thop(e,tp,eg,ep,ev,re,r,rp)
-	elseif op==2 then s.xyzop(e,tp,eg,ep,ev,re,r,rp)
-    elseif op==3 then s.linkop(e,tp,eg,ep,ev,re,r,rp) end
-end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
-    local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)
-    if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+function s.desop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if tc and tc:IsRelateToEffect(e) and tc:IsLocation(LOCATION_MZONE) and tc:IsFaceup() then
+		if Duel.ChangePosition(tc,POS_FACEDOWN_DEFENSE)==0 then
+			local g=Duel.GetMatchingGroup(s.setfilter,tp,LOCATION_DECK,0,nil)
+			if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+				local sg=g:Select(tp,1,1,nil)
+				Duel.SSet(tp,sg)
+        		local e1=Effect.CreateEffect(c)
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+				sg:GetFirst():RegisterEffect(e1)
+    		end
+		end
 	end
 end
-function s.xyzop(e,tp,eg,ep,ev,re,r,rp)
-    local g=Duel.GetMatchingGroup(s.xyzfilter,tp,LOCATION_EXTRA,0,nil)
-	if #g>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local tg=g:Select(tp,1,1,nil)
-		Duel.XyzSummon(tp,tg:GetFirst())
-	end
+function s.costchk(sg,e,tp,mg)
+	return sg:IsExists(Card.IsSetCard,1,nil,SET_TRAPTRIX) 
+	and sg:IsExists(Card.IsSetCard,1,nil,{SET_HOLE,SET_TRAP_HOLE})
+	and not sg:Filter(aux.NOT(Card.IsNormalTrap),nil):IsExists(Card.IsSetCard,1,nil,{SET_HOLE,SET_TRAP_HOLE})
 end
-function s.linkop(e,tp,eg,ep,ev,re,r,rp)
-    local g=Duel.GetMatchingGroup(s.linkfilter,tp,LOCATION_EXTRA,0,nil)
-	if #g>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local tg=g:Select(tp,1,1,nil)
-		Duel.LinkSummon(tp,tg:GetFirst())
+function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	local sg=Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_GRAVE,0,e:GetHandler())
+	sg=sg:Filter(Card.IsSetCard,nil,{SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE})
+	if chk==0 then return aux.SelectUnselectGroup(sg,e,tp,2,2,s.costchk,0) and e:GetHandler():IsAbleToRemoveAsCost() end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=aux.SelectUnselectGroup(sg,e,tp,2,2,s.costchk,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(g+e:GetHandler(),POS_FACEUP,REASON_COST)
+end
+function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) and chkc:IsNegatableSpellTrap() end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsNegatableSpellTrap,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_NEGATE)
+	local g=Duel.SelectTarget(tp,Card.IsNegatableSpellTrap,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,#g,0,0)
+end
+function s.negop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if tc and tc:IsRelateToEffect(e) and ((tc:IsFaceup() and not tc:IsDisabled()) or tc:IsType(TYPE_TRAPMONSTER)) then
+		Duel.NegateRelatedChain(tc,RESET_TURN_SET)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_DISABLE)
+		tc:RegisterEffect(e1)
+		local e2=e1:Clone()
+		e2:SetCode(EFFECT_DISABLE_EFFECT)
+		e2:SetValue(RESET_TURN_SET)
+		tc:RegisterEffect(e2)
+		if tc:IsType(TYPE_TRAPMONSTER) then
+			local e3=e1:Clone()
+			e3:SetCode(EFFECT_DISABLE_TRAPMONSTER)
+			tc:RegisterEffect(e3)
+		end
 	end
 end

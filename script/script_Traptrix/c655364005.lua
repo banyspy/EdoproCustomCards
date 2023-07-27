@@ -52,7 +52,8 @@ function s.thfilter(c)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND+CATEGORY_SEARCH,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,0)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
@@ -62,16 +63,14 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
             Duel.ConfirmCards(1-tp,g)
 			local b1=g:GetFirst():IsSummonable(true,nil)
 			local b2=g:GetFirst():IsCanBeXyzMaterial(e:GetHandler(),tp,REASON_EFFECT)
-			if b1 or b2 then
-				local op=Duel.SelectEffect(tp,
-				{b1,aux.Stringid(id,2)},
-				{b2,aux.Stringid(id,3)},
-				{true,aux.Stringid(id,4)})
-		    	if op==1 then
-            	    Duel.Summon(tp,g:GetFirst(),true,nil)
-				elseif op==2 then
-					Duel.Overlay(e:GetHandler(),g:GetFirst(),true)
-				end
+			local op=Duel.SelectEffect(tp,
+			{b1,aux.Stringid(id,2)},
+			{b2,aux.Stringid(id,3)},
+			{true,aux.Stringid(id,4)})
+		    if op==1 then
+                Duel.Summon(tp,g:GetFirst(),true,nil)
+			elseif op==2 then
+				Duel.Overlay(e:GetHandler(),g:GetFirst(),true)
 			end
         end
 	end

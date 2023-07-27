@@ -1,4 +1,4 @@
--- Epitome of Trap Hole
+-- Entrance of the Traptrix Forest
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
@@ -19,6 +19,11 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e2:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
 	c:RegisterEffect(e2)
+	--Can be activated from the hand, no condition
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	c:RegisterEffect(e3)
 end
 s.listed_series={SET_TRAPTRIX,SET_HOLE,SET_TRAP_HOLE}
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -46,7 +51,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 -- Check for set effect
 function s.setfilter(c)
-	return c:IsSetCard({SET_HOLE,SET_TRAP_HOLE}) and c:IsSSetable() and not c:IsCode(id)
+	return c:IsSetCard({SET_HOLE,SET_TRAP_HOLE}) and c:IsNormalTrap() and c:IsSSetable() and not c:IsCode(id)
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end

@@ -78,6 +78,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tg=aux.SelectUnselectGroup(g,e,tp,1,2,s.rescon,1,tp,HINTMSG_ATOHAND)
 	if #tg>0 then
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,tg)
 	end
 end
 function s.adval(e,c)

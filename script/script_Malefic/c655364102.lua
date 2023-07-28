@@ -3,7 +3,8 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddMaleficSummonProcedure(c,9464441,LOCATION_EXTRA,s.spcon)
+	c:SetUniqueOnField(1,0,id)
+	aux.AddMaleficSummonProcedure(c,9464441,LOCATION_EXTRA)
 	--Special Summon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -42,25 +43,24 @@ function s.initial_effect(c)
 	e4:SetTarget(s.negtg)
 	e4:SetOperation(s.negop)
 	c:RegisterEffect(e4)
+	--For Double snare check
+	aux.DoubleSnareValidity(c,LOCATION_MZONE)
 end
-function s.spcon(e,c)
-	return not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,id),e:GetHandlerPlayer(),LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
-end
+s.listed_series={SET_MALEFIC}
+s.listed_names={9464441}
 function s.descon(e)
-	local f1=Duel.GetFieldCard(0,LOCATION_SZONE,5)
-	local f2=Duel.GetFieldCard(1,LOCATION_SZONE,5)
-	return (f1==nil or f1:IsFacedown()) and (f2==nil or f2:IsFacedown())
+	return not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsFieldSpell),0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>4 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,0,1-tp,LOCATION_ONFIELD)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,0,1-tp,LOCATION_ONFIELD)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)==0 then return end
 	Duel.ConfirmDecktop(tp,5)
 	local hg=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD,nil)
 	local g=Duel.GetDecktopGroup(tp,5)
-	local ct=math.min(#hg,g:FilterCount(Card.IsSetCard,nil,0x23))
+	local ct=math.min(#hg,g:FilterCount(Card.IsSetCard,nil,SET_MALEFIC))
 	if ct>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 		local sg=hg:Select(tp,1,ct,nil)

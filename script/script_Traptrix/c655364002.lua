@@ -46,16 +46,15 @@ function s.reveal(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.ConfirmCards(1-tp,c)
 end
 function s.targetfilter(c)
-	return ((c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)) 
-	or c:GetType()==TYPE_TRAP) and c:IsFaceup()
+	return ((c:IsSetCard(SET_TRAPTRIX) and c:IsType(TYPE_MONSTER)) or c:IsTrap()) and c:IsFaceup()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end
-	if chk==0 then return Duel.IsExistingTarget(s.targetfilter,tp,LOCATION_MZONE,0,1,nil) 
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsFaceup() end
+	if chk==0 then return Duel.IsExistingTarget(s.targetfilter,tp,LOCATION_ONFIELD,0,1,nil) 
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetMZoneCount(tp)>0 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,s.targetfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	Duel.SelectTarget(tp,s.targetfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
@@ -72,7 +71,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
 	end
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+	if c:IsRelateToEffect(e) and Duel.GetMZoneCount(tp)>0 then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
@@ -81,7 +80,7 @@ function s.immfilter(e,re)
 end
 function s.shffilter(c)
 	return c:IsAbleToDeck() and (c:IsSetCard(SET_TRAPTRIX) 
-	or ( c:GetType()==TYPE_TRAP and (c:IsSetCard({SET_HOLE,SET_TRAP_HOLE})))) 
+	or ( c:IsNormalTrap() and (c:IsSetCard({SET_HOLE,SET_TRAP_HOLE})))) 
 end
 function s.spfilter(c,e,tp,ct,g)
 	return c:IsRace(RACE_INSECT|RACE_PLANT) and c:IsType(TYPE_LINK) and c:IsLink(ct)

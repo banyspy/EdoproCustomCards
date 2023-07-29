@@ -38,9 +38,10 @@ function s.initial_effect(c)
     c:RegisterEffect(e4)
 end
 s.listed_series={SET_MALEFIC}
-s.listed_names={12015000}
+s.listed_names={12015000,27564031}
 function s.descon(e)
-	return not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsFieldSpell),0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+	return not (Duel.IsEnvironment(27564031) or
+		Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsFieldSpell),0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil))
 end
 function s.thfilter(c)
 	return c:IsSetCard(SET_MALEFIC) and c:IsType(TYPE_MONSTER) and not c:IsCode(id) and c:IsAbleToHand()

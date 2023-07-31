@@ -201,6 +201,7 @@ Here is who I found:
 
 * [**Satellaa**](https://github.com/Satellaa/Custom-Cards)<br />
 * [**Secuter**](https://github.com/Secuter/SecuterYGOCustomCards)<br />
+* [**Lakevin**](https://github.com/lakevin/EdoProCustom)<br />
 * [**Henrique-Izidio**](https://github.com/Henrique-Izidio/EDOPro-RMS)<br />
 * [**KServantes**](https://github.com/KServantes/Customs)<br />
 * [**Neoyuno**](https://github.com/NeoYuno/leafbladie-cards)<br />

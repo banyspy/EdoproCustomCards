@@ -161,21 +161,32 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 
 **Always take In-game text higher priority than card picture file while still in development phase, as editing text in database is alot more convenient than edit card text in card maker and render card picture and place it in folder**
 
+### New Archetype
+
 **Magikular** - 15/15 - Finished.<br />
 **Nethersea** - 12/12 - Finished.<br />
 **Ancient Deep** - 6/6 - Finished. *(Actually there might be more)* <br />
 **Zodragon** - 13/13 - Finished. <br />
 **Reoyin** - 12/12 - Finished. *(Might be bug fixed abit in case there is but that's it)* <br />
 **Setsugebishin** - 14/14 - Finished. <br />
+**Stratossea** - 4/7 - On hold. <br />
+**Amalgam** - 8/8 - Finished. <br />
 **Mei Misaki** - 5/12 - On Going. <br />
-**Melodious** - 4/4 - Finished. <br />
 **NGNL (No Game No Life) (From Cstudio)** - 13/13 - Finished. <br />
 **YuYuYu (From Cstudio)** - 13/13 - Finished. <br />
 **HN (Hyper Neptunia) (From Cstudio)** - 64/64 - Finished. <br />
 **OTNN (Ore, Twintail ni narimasu) (From Cstudio)** - 13/13 - Finished. <br />
-**Traptrix** - 5-6/(10?) - On hold.<br />
+**RE:C (RE:Creator) (From Cstudio)** - 11/11 - Finished <br/>
+
+### Support
+
+**Melodious** - 4/4 - Finished. <br />
+**Fluffal** - 6/6 - Finished. <br />
+**Generic Gemini Support** - 3/3 - Finished. <br />
+**Traptrix** - 10/10 - Finished.<br />
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
-**Malefic** - 4 - No real plan, side project from long time ago that decided to uploaded one that at least usable first, other will followed if polished enough.<br />
+**Malefic** - 8 - Finished, for now.<br />
+
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 
 ### Planned Archetype

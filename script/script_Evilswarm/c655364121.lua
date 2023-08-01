@@ -1,4 +1,4 @@
--- Evilswarm Amphibion
+-- Evilswarm Salamander
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e2)
-    -- Apply "Infestation" Spell/Trap effect
+    -- Copy effect of "lswarm" monster
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
 	e3:SetType(EFFECT_TYPE_QUICK_O)
@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.eftg)
 	e3:SetOperation(s.efop)
 	c:RegisterEffect(e3)
-    --Set 1 activated "Infestation" instead of sending it to GY
+    --Add back to hand and can normal summon it
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,3))
 	e4:SetType(EFFECT_TYPE_IGNITION)
@@ -60,8 +60,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
             Duel.SpecialSummonStep(tg,0,tp,tp,false,false,POS_FACEUP)
 			--Cannot Special Summon non-"lswarm" monsters from Extra Deck
 			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetDescription(aux.Stringid(id,2))
 			e1:SetType(EFFECT_TYPE_FIELD)
-			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
 			e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 			e1:SetRange(LOCATION_MZONE)
 			e1:SetAbsoluteRange(tp,1,0)
@@ -74,7 +75,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 			tg:RegisterEffect(e2,true)
 			Duel.SpecialSummonComplete()
         end,
-        aux.Stringid(id,2))
+        aux.Stringid(id,1))
 	end
 end
 function s.effilter(c)
@@ -87,6 +88,7 @@ function s.eftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.effilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,e:GetHandler())
+	Duel.HintSelection(g,true)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 	e:SetLabel(g:GetFirst():GetOriginalCode())
 end
@@ -114,7 +116,10 @@ end
 function s.retop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local tg=Duel.SelectMatchingCard(tp,s.retfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil):GetFirst()
-	if tg and Duel.SendtoHand(tg,tp,REASON_EFFECT)>0 and tg:IsSummonable(true,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,4)) then
-		Duel.Summon(tp,tg,true,nil)
+	if tg and Duel.SendtoHand(tg,tp,REASON_EFFECT)>0 then
+		Duel.ConfirmCards(1-tp,tg)
+		if tg:IsSummonable(true,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,4)) then
+			Duel.Summon(tp,tg,true,nil)
+		end
 	end
 end

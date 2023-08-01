@@ -1,4 +1,4 @@
--- Evilswarm Winda
+-- Evilswarm Xavior
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)
@@ -94,6 +94,7 @@ function s.eftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,s.effilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	Duel.HintSelection(g,true)
 	if Duel.Remove(g,POS_FACEUP,REASON_COST)==0 then return end
 	local te=g:GetFirst():CheckActivateEffect(false,true,false)
 	e:SetLabel(te:GetLabel())

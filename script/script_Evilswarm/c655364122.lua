@@ -78,7 +78,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.effilter(c)
-	return c:IsAbleToRemoveAsCost() and c:IsSetCard(SET_INFESTATION) and c:CheckActivateEffect(false,true,false)~=nil 
+	return c:IsAbleToRemoveAsCost() and c:IsSetCard(SET_INFESTATION) and c:CheckActivateEffect(false,true,true)~=nil 
 		and (c:IsNormalSpell() or c:IsQuickPlaySpell() or c:IsNormalTrap() or c:IsCounterTrap())
 end
 function s.efcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -96,11 +96,12 @@ function s.eftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectMatchingCard(tp,s.effilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.HintSelection(g,true)
 	if Duel.Remove(g,POS_FACEUP,REASON_COST)==0 then return end
-	local te=g:GetFirst():CheckActivateEffect(false,true,false)
+	local te,ceg,cep,cev,cre,cr,crp=g:GetFirst():CheckActivateEffect(false,true,true)
 	e:SetLabel(te:GetLabel())
 	e:SetLabelObject(te:GetLabelObject())
+	e:SetProperty(te:GetProperty())
 	local tg=te:GetTarget()
-	if tg then tg(e,tp,eg,ep,ev,re,r,rp,1) end
+	if tg then tg(e,tp,ceg,cep,cev,cre,cr,crp,1) end
 	te:SetLabel(e:GetLabel())
 	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)

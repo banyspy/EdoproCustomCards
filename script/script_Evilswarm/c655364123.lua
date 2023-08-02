@@ -107,8 +107,5 @@ function s.xyzop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetValue(1)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e2)
-		local e3=e2:Clone()
-		e3:SetValue(2)
-		tc:RegisterEffect(e3)
 	end
 end

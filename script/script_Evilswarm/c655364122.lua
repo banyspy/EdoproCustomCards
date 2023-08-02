@@ -1,4 +1,4 @@
--- Evilswarm Xavior
+-- Evilswarm Aria
 -- scripted by bankkyza
 local s,id=GetID()
 function s.initial_effect(c)

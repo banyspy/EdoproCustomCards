@@ -244,18 +244,16 @@ function Nethersea.GenerateTokenConditionToNotRepeatAsk(e)
     return not e:GetHandler():IsLocation(LOCATION_GRAVE)
 end
 function Nethersea.GenerateTokenTarget(e,tp,eg,ep,ev,re,r,rp,chk)
-    local id=e:GetHandler():GetOriginalCode()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,Nethersea.TokenID(id),SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,CARD_NETHERSEA_TOKEN,SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
 end
 function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
-    local id=e:GetHandler():GetOriginalCode()
 	local c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,Nethersea.TokenID(id),SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
-		local token=Duel.CreateToken(tp,Nethersea.TokenID(id))
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,CARD_NETHERSEA_TOKEN,SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
+		local token=Duel.CreateToken(tp,CARD_NETHERSEA_TOKEN+c:GetOriginalCode()-655369001)
 		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
 		--Debug.Message(Nethersea.TokenID(id))
 		--Cannot Special Summon monsters except WATER Aqua/Thunder/Fish/Sea serpent
@@ -272,20 +270,12 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 		local e2=aux.createContinuousLizardCheck(c,LOCATION_MZONE,function(_,c) return not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_AQUA|RACE_THUNDER|RACE_FISH|RACE_SEASERPENT)) end)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 		token:RegisterEffect(e2,true)
+		for tem=CARD_NETHERSEA_TOKEN,c:GetOriginalCode()+14,1 do
+			Debug.Message(tem)
+			token:RegisterFlagEffect(REGISTER_FLAG_WEMANY,RESET_EVENT+RESETS_STANDARD,0,1)
+		end
 		Duel.SpecialSummonComplete()
 	end
-end
-
-function Nethersea.TokenID(id)
-	local base = CARD_NETHERSEA_FOUNDER-1
-	--base value is here to help calculate the token id that is correspond to the nethersea monster
-	--655369001 -> 655369020
-	--655369002 -> 655369040
-	--655369003 -> 655369060
-	--655369004 -> 655369080
-	--655369005 -> 655369100
-	--655369006 -> 655369120
-	return base+((id-(base))*20)
 end
 
 function Nethersea.QuickTributeProc(c)

@@ -49,6 +49,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e6)
 end
 s.listed_names={CARD_UMI}
+s.listed_series={SET_NETHERSEA}
 function s.spcon(e,c)
 	if c==nil then return true end
 	return Duel.GetMZoneCount(c:GetControler())>0

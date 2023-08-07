@@ -52,11 +52,14 @@ function s.initial_effect(c)
 	e3:SetOperation(s.thop)
 	c:RegisterEffect(e3)
 end
+s.listed_names={CARD_NETHERSEA_TOKEN}
+s.listed_series={SET_NETHERSEA}
 function s.tokentributecheck(c)
-	return c:IsSetCard(SET_NETHERSEA) and c:IsMonster() and c:IsType(TYPE_TOKEN) and c:IsReleasable()
+	return c:IsOriginalCodeRule(CARD_NETHERSEA_TOKEN) and c:IsMonster() and c:IsReleasable()
 end
 function s.summonfilter(c,tp,e)
-	return c:IsOriginalCode(id)  and Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) 
+	return c:IsOriginalCode(id)--Must be actual WeMany. Cannot use IsOriginalCodeRule() here.
+	and Duel.IsExistingMatchingCard(s.tokentributecheck,tp,LOCATION_MZONE,0,1,nil) 
 	and c:IsCanBeSpecialSummoned(e,0,tp,true,true) and not c:IsDisabled()
 end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
@@ -64,9 +67,10 @@ function s.con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp,e) and Duel.GetFlagEffect(tp,id)==0
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return Duel.IsExistingMatchingCard(s.summonfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,tp,e) and Duel.GetFlagEffect(tp,id)==0
-	and Duel.GetCurrentChain(true)==0
+	return s.con(e,tp,eg,ep,ev,re,r,rp) and Duel.GetCurrentChain(true)==0
+end
+function s.tokeneffectchk(c,tem)
+	return c:IsOriginalCodeRule(CARD_NETHERSEA_TOKEN) and (c:GetFlagEffect(REGISTER_FLAG_WEMANY)==tem)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -95,26 +99,33 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 
 		until(#g>0)	
 
+		local biteffect=0
 		Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
+
+		for tem=1,6,1 do
+			if g:IsExists(s.tokeneffectchk,1,nil,tem) then
+				biteffect=biteffect+(2^(tem-1))
+			end
+		end
+		Debug.Message(biteffect)
 		Nethersea.ResetWeManyFlag(tp)
 		Duel.Release(g,REASON_RELEASE)
 		
 		if Duel.SpecialSummonStep(tg,0,tp,tp,true,true,POS_FACEUP) then
 
-			local tem = 655369020
-			while tem <= 655369120 do
-				if g:IsExists(Card.IsOriginalCode,1,nil,tem) then
-					local temcard = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_ALL,0,nil,655369000+((tem-655369000)//20))
-					local code = temcard:GetOriginalCode()
+			for tem=1,6,1 do
+				if biteffect % 2 == 1 then
+					Debug.Message("here" .. tem)
 					local e1=Effect.CreateEffect(tg)
-					e1:SetDescription(aux.Stringid(id,9 + ((tem-655369000)//20)))
+					e1:SetDescription(aux.Stringid(id,9 + (tem)))
 					e1:SetType(EFFECT_TYPE_SINGLE)
 					e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
 					e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 					tg:RegisterEffect(e1)
-					tg:CopyEffect(code,RESET_EVENT+RESETS_STANDARD)
+					tg:CopyEffect(tem+655369000,RESET_EVENT+RESETS_STANDARD)
 				end
-				tem = tem + 20
+				biteffect = biteffect//2
+				Debug.Message(biteffect)
 			end
 
 			if(Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,1))) then

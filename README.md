@@ -171,7 +171,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Setsugebishin** - 14/14 - Finished. <br />
 **Stratossea** - 4/7 - On hold. <br />
 **Amalgam** - 8/8 - Finished. <br />
-**Mei Misaki** - 5/12 - On Going. <br />
+**Mei Misaki** - 5/12 - On hold. <br />
 **NGNL (No Game No Life) (From Cstudio)** - 13/13 - Finished. <br />
 **YuYuYu (From Cstudio)** - 13/13 - Finished. <br />
 **HN (Hyper Neptunia) (From Cstudio)** - 64/64 - Finished. <br />
@@ -186,6 +186,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Traptrix** - 10/10 - Finished.<br />
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 8 - Finished, for now.<br />
+**Evilswarm** - 6/8 - On going.<br />
 
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 

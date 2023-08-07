@@ -107,7 +107,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 				biteffect=biteffect+(2^(tem-1))
 			end
 		end
-		Debug.Message(biteffect)
 		Nethersea.ResetWeManyFlag(tp)
 		Duel.Release(g,REASON_RELEASE)
 		
@@ -115,7 +114,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 
 			for tem=1,6,1 do
 				if biteffect % 2 == 1 then
-					Debug.Message("here" .. tem)
 					local e1=Effect.CreateEffect(tg)
 					e1:SetDescription(aux.Stringid(id,9 + (tem)))
 					e1:SetType(EFFECT_TYPE_SINGLE)
@@ -125,7 +123,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 					tg:CopyEffect(tem+655369000,RESET_EVENT+RESETS_STANDARD)
 				end
 				biteffect = biteffect//2
-				Debug.Message(biteffect)
 			end
 
 			if(Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,1))) then

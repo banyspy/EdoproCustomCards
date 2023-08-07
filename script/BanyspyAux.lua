@@ -271,7 +271,6 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 		token:RegisterEffect(e2,true)
 		for tem=CARD_NETHERSEA_TOKEN,c:GetOriginalCode()+14,1 do
-			Debug.Message(tem)
 			token:RegisterFlagEffect(REGISTER_FLAG_WEMANY,RESET_EVENT+RESETS_STANDARD,0,1)
 		end
 		Duel.SpecialSummonComplete()

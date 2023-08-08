@@ -7,6 +7,20 @@ function s.initial_effect(c)
 	Nethersea.CannotChangeAttributeRace(c)
 	--spsummon limit
 	Nethersea.SpecialSummonLimit(c)
+	--Cannot be used as Fusion material, except for an WATER Aqua/Thuder/Sea serpent/Fish
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetValue(s.fuslimit)
+	c:RegisterEffect(e0)
+	--Can be treated as any fusion material
+	local e0b=Effect.CreateEffect(c)
+	e0b:SetType(EFFECT_TYPE_SINGLE)
+	e0b:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e0b:SetCode(511002961)
+	e0b:SetRange(LOCATION_ALL)
+	c:RegisterEffect(e0b)
 	--special summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -50,6 +64,11 @@ function s.initial_effect(c)
 end
 s.listed_names={CARD_UMI}
 s.listed_series={SET_NETHERSEA}
+--Cannot be used as Fusion material, except for an WATER Aqua/Thuder/Sea serpent/Fish
+function s.fuslimit(e,c)
+	if not c then return false end
+	return not (c:IsRace(RACE_AQUA|RACE_THUNDER|RACE_SEASERPENT|RACE_FISH) and c:IsAttribute(ATTRIBUTE_WATER))
+end
 function s.spcon(e,c)
 	if c==nil then return true end
 	return Duel.GetMZoneCount(c:GetControler())>0

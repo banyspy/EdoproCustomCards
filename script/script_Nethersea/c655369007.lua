@@ -51,8 +51,8 @@ function s.initial_effect(c)
 	e4:SetProperty(EFFECT_FLAG_DELAY)
 	e4:SetCode(EVENT_TO_GRAVE)
 	e4:SetCountLimit(1,{id,2})
-	e4:SetTarget(s.sptg)
-	e4:SetOperation(s.spop)
+	e4:SetTarget(s.thtg)
+	e4:SetOperation(s.thop)
 	c:RegisterEffect(e4)
     local e5=e4:Clone()
     e5:SetCode(EVENT_DESTROYED)
@@ -62,7 +62,7 @@ function s.initial_effect(c)
     e6:SetCode(EVENT_RELEASE)
     c:RegisterEffect(e6)
 end
-s.listed_names={CARD_UMI}
+s.listed_names={CARD_UMI,id,CARD_ENDSPEAKER_WILLOFWEMANY}
 s.listed_series={SET_NETHERSEA}
 --Cannot be used as Fusion material, except for an WATER Aqua/Thuder/Sea serpent/Fish
 function s.fuslimit(e,c)
@@ -128,15 +128,20 @@ function s.con(e)
     return not e:GetHandler():IsLocation(LOCATION_GRAVE)
 end
 function s.thfilter(c)
-    return Nethersea.NetherseaMonsterOrWQ(c) and not c:IsCode(id) and c:IsAbleToHand()
+    return (Nethersea.NetherseaMonsterOrWQ(c) or c:IsCode(CARD_UMI)) and not c:IsCode(id) and c:IsAbleToHand()
 end
-function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.thchk(sg,e,tp,mg)
+	return sg:IsExists(Nethersea.NetherseaMonsterOrWQ,1,nil) 
+	and sg:IsExists(Card.IsCode,1,nil,CARD_UMI)
+	and not sg:Filter(aux.NOT(Nethersea.NetherseaMonsterOrWQ),nil):IsExists(aux.NOT(Card.IsCode),1,nil,CARD_UMI)
+end
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK)
 end
-function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	local ag=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK,0,nil)
+	local g=aux.SelectUnselectGroup(ag,e,tp,1,2,s.thchk,1,tp,HINTMSG_ATOHAND)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)

@@ -4,7 +4,7 @@ local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Plus sign banish and zone ban
-	local e1,e2=MeiMisaki.CreateActivateDiscardEff({
+	local e1,e2=ProjektStarBlast.CreateActivateDiscardEff({
 		handler=c,
 		handlerid=id,
 		--category=CATEGORY_REMOVE,
@@ -14,9 +14,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	c:RegisterEffect(e2)
 
-	MeiMisaki.CreateShuffleAddEff(c,id)
+	ProjektStarBlast.CreateShuffleAddEff(c,id)
 end
-s.listed_names={CARD_MEI_MISAKI}
+s.listed_names={CARD_PROJEKTSTARBLAST_KIANA}
+s.listed_series={SET_PROJEKTSTARBLAST}
 --Get the bits of place denoted by loc and seq as well as its vertically and
 --horizontally adjancent zones.
 local function adjzone(zone)
@@ -68,15 +69,15 @@ local function groupfrombit(bit,p)
 	end
 	return g
 end
-function s.placeMeiMisaki(c)
-	return c:IsCode(CARD_MEI_MISAKI) and not c:IsForbidden()
+function s.placeKiana(c)
+	return c:IsCode(CARD_PROJEKTSTARBLAST_KIANA) and not c:IsForbidden()
 end
 function s.bantg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local place = Duel.IsExistingMatchingCard(s.placeMeiMisaki,tp,LOCATION_DECK,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+	local place = Duel.IsExistingMatchingCard(s.placeKiana,tp,LOCATION_DECK,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
 	local active = true
 	if chk==0 then return place or active end
 	local op=Duel.SelectEffect(tp,
-		{place,aux.Stringid(CARD_MEI_MISAKI,12)},
+		{place,aux.Stringid(CARD_PROJEKTSTARBLAST_KIANA,12)},
 		{active,aux.Stringid(id,0)})
 	if op==2 then
 		Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,0))
@@ -96,7 +97,7 @@ function s.banop(e,tp,eg,ep,ev,re,r,rp)
 	local op=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	if op==1 then
 		if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
-		local tc=Duel.SelectMatchingCard(tp,s.placeMeiMisaki,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
+		local tc=Duel.SelectMatchingCard(tp,s.placeKiana,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 		if tc then 
 			if Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true) then
 				local e1=Effect.CreateEffect(c)
@@ -126,7 +127,7 @@ function s.banop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_DISABLE_FIELD)
 		e1:SetLabel(zone)
     	e1:SetOperation(function() return zone end)
-		e1:SetReset(MeiMisaki.ResetPhaseValue(tp))
+		e1:SetReset(ProjektStarBlast.ResetPhaseValue(tp))
 		Duel.RegisterEffect(e1,tp)
 	end
 end

@@ -4,7 +4,7 @@ local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Set up to spell/trap effect that activated this turn
-	local e1,e2=MeiMisaki.CreateActivateDiscardEff({
+	local e1,e2=ProjektStarBlast.CreateActivateDiscardEff({
 		handler=c,
 		handlerid=id,
 		--category=CATEGORY_TOHAND,
@@ -14,15 +14,16 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	c:RegisterEffect(e2)
 
-	MeiMisaki.CreateShuffleAddEff(c,id)
+	ProjektStarBlast.CreateShuffleAddEff(c,id)
 end
-s.listed_names={CARD_MEI_MISAKI}
+s.listed_names={CARD_PROJEKTSTARBLAST_KIANA}
+s.listed_series={SET_PROJEKTSTARBLAST}
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local place = Duel.IsExistingMatchingCard(s.placeMeiMisaki,tp,LOCATION_DECK,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
-	local active = Duel.IsExistingMatchingCard(s.setMentionMeiMisaki,tp,LOCATION_DECK,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+	local place = Duel.IsExistingMatchingCard(s.placeKiana,tp,LOCATION_DECK,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+	local active = Duel.IsExistingMatchingCard(s.sfilter,tp,LOCATION_DECK,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
 	if chk==0 then return place or active end
 	local op=Duel.SelectEffect(tp,
-		{place,aux.Stringid(CARD_MEI_MISAKI,12)},
+		{place,aux.Stringid(CARD_PROJEKTSTARBLAST_KIANA,12)},
 		{active,aux.Stringid(id,0)})
 	if op==2 then
 		--
@@ -30,18 +31,15 @@ function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.SetTargetParam(op)
 end
-function s.setMentionMeiMisaki(c)
-	return ((c:ListsCode(CARD_MEI_MISAKI) and c:IsSpellTrap())) and c:IsSSetable()
-end
-function s.placeMeiMisaki(c)
-	return c:IsCode(CARD_MEI_MISAKI) and not c:IsForbidden()
+function s.placeKiana(c)
+	return c:IsCode(CARD_PROJEKTSTARBLAST_KIANA) and not c:IsForbidden()
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local op=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	if op==1 then
 		if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
-		local tc=Duel.SelectMatchingCard(tp,s.placeMeiMisaki,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
+		local tc=Duel.SelectMatchingCard(tp,s.placeKiana,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 		if tc then 
 			if Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true) then
 				local e1=Effect.CreateEffect(c)
@@ -97,14 +95,13 @@ function s.effcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetLabel()>0
 end
 function s.sfilter(c)
-	return c:ListsCode(CARD_MEI_MISAKI) and c:GetCode()~=id and c:IsSpellTrap() and c:IsSSetable()
+	return c:IsSetCard(SET_PROJEKTSTARBLAST) and c:GetCode()~=id and c:IsSpellTrap() and c:IsSSetable()
 end
 function s.setcheck(sg,e,tp,mg)
 	return sg:GetClassCount(Card.GetCode)==#sg
 end
 function s.effop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,id)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local rg=Duel.GetMatchingGroup(s.sfilter,tp,LOCATION_DECK,0,nil)
 	if #rg<=0 or Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local sg=aux.SelectUnselectGroup(rg,e,tp,1,e:GetLabel(),s.setcheck,1,tp,HINTMSG_TOFIELD)

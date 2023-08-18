@@ -452,16 +452,16 @@ function Nethersea.CannotChangeAttributeRace(c)
 end
 
 --------------------------------------------------------------------
----------------------------  Mei Misaki  ---------------------------
+------------------------  ProjektStarBlast  ------------------------
 --------------------------------------------------------------------
 
-MeiMisaki = {}
+ProjektStarBlast = {}
 
-MeiMisaki.CreateActivateDiscardEff = aux.FunctionWithNamedArgs(
+ProjektStarBlast.CreateActivateDiscardEff = aux.FunctionWithNamedArgs(
 function(c,id,category,property,target,operation)
 	--Activate card normally
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(CARD_MEI_MISAKI,10))--"Activate"
+	e1:SetDescription(aux.Stringid(CARD_PROJEKTSTARBLAST_KIANA,10))--"Activate"
 	if category then
 	    e1:SetCategory(category)
     end
@@ -476,7 +476,7 @@ function(c,id,category,property,target,operation)
 	e1:SetOperation(operation)
 	--Discard from hand to apply activate effect
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(CARD_MEI_MISAKI,11))--"Discard from hand to apply activate effect"
+	e2:SetDescription(aux.Stringid(CARD_PROJEKTSTARBLAST_KIANA,11))--"Discard from hand to apply activate effect"
 	if category then
 	    e2:SetCategory(category)
     end
@@ -498,13 +498,13 @@ function(c,id,category,property,target,operation)
 	return e1,e2
 end,"handler","handlerid","category","property","functg","funcop")
 
-function MeiMisaki.ResetPhaseValue(tp) --tp can be pass just fine
+function ProjektStarBlast.ResetPhaseValue(tp) --tp can be pass just fine
     local phase = Duel.GetCurrentPhase()
     if phase >= PHASE_BATTLE_START and phase <= PHASE_BATTLE then phase = PHASE_BATTLE end
     return RESET_PHASE+phase
 end
 
-function MeiMisaki.NormalSummonCondition(e,c,minc)
+function ProjektStarBlast.NormalSummonCondition(e,c,minc)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	local mg1=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
@@ -512,7 +512,7 @@ function MeiMisaki.NormalSummonCondition(e,c,minc)
 	return ((Duel.GetMZoneCount(tp)<=0 and #mg1>0) or #mg2>0)
 end
 
-function MeiMisaki.NormalSummonTarget(e,tp,eg,ep,ev,re,r,rp,c)
+function ProjektStarBlast.NormalSummonTarget(e,tp,eg,ep,ev,re,r,rp,c)
 	local mg1=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
 	local mg2=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 	local tc
@@ -532,16 +532,16 @@ function MeiMisaki.NormalSummonTarget(e,tp,eg,ep,ev,re,r,rp,c)
 	else return false end
 end
 
-function MeiMisaki.NormalSummonOperation(e,tp,eg,ep,ev,re,r,rp,c)
+function ProjektStarBlast.NormalSummonOperation(e,tp,eg,ep,ev,re,r,rp,c)
 	local sg=e:GetLabelObject()
 	if not sg then return end
 	Duel.Release(sg,REASON_COST)
 	sg:DeleteGroup()
 end
 
-function MeiMisaki.NotActivatedYet(c,tp)
+function ProjektStarBlast.NotActivatedYet(c,tp)
 	
-	if not (c:ListsCode(CARD_MEI_MISAKI) and c:IsSpellTrap()) then return end
+	if not (c:IsSetCard(SET_PROJEKTSTARBLAST) and c:IsSpellTrap()) then return end
 	local ACT1=c:GetCardEffect()
 	--local Count1,Count2,Count3,Count4,Count5,Count6 = ACT1:GetCountLimit()
 	--local Count4,Count5,Count6 = ACT2:GetCountLimit()
@@ -557,7 +557,7 @@ function MeiMisaki.NotActivatedYet(c,tp)
 	return ACTbool
 end
 
-function MeiMisaki.CreateShuffleAddEff(c,id)
+function ProjektStarBlast.CreateShuffleAddEff(c,id)
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND|CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_FIELD|EFFECT_TYPE_TRIGGER_O)
@@ -569,12 +569,12 @@ function MeiMisaki.CreateShuffleAddEff(c,id)
 		Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKSHUFFLE,REASON_COST) 
 	end)
 	e1:SetTarget(function (e,tp,eg,ep,ev,re,r,rp,chk)
-		if chk==0 then return Duel.IsExistingMatchingCard(MeiMisaki.NotActivatedYet,tp,LOCATION_DECK,0,1,nil,tp) end
+		if chk==0 then return Duel.IsExistingMatchingCard(ProjektStarBlast.NotActivatedYet,tp,LOCATION_DECK,0,1,nil,tp) end
 		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK) 
 	end)
 	e1:SetOperation(function (e,tp,eg,ep,ev,re,r,rp)
-		if not Duel.IsExistingMatchingCard(MeiMisaki.NotActivatedYet,tp,LOCATION_DECK,0,1,nil,tp) then return end
-		local tc=Duel.SelectMatchingCard(tp,MeiMisaki.NotActivatedYet,tp,LOCATION_DECK,0,1,1,nil,tp)
+		if not Duel.IsExistingMatchingCard(ProjektStarBlast.NotActivatedYet,tp,LOCATION_DECK,0,1,nil,tp) then return end
+		local tc=Duel.SelectMatchingCard(tp,ProjektStarBlast.NotActivatedYet,tp,LOCATION_DECK,0,1,1,nil,tp)
 		if tc then 
 			Duel.SendtoHand(tc,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,tc)

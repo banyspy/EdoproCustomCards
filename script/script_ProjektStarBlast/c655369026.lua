@@ -1,5 +1,5 @@
---Doll Eye
---Scripted by bankkyza
+-- ProjektStarBlast Supply Regain
+-- Scripted by bankkyza
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)

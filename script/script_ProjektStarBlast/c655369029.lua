@@ -1,5 +1,5 @@
---Unknown Destination
---Scripted by bankkyza
+-- ProjektStarBlast Dimension Disorder
+-- Scripted by bankkyza
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)

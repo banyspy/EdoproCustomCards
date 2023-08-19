@@ -149,6 +149,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		 and Duel.SelectYesNo(tp,aux.Stringid(id,7)) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 			local g=Duel.SelectMatchingCard(tp,s.sendfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,c,cg)
+			Duel.HintSelection(g,true)
 			Duel.SendtoGrave(g,REASON_EFFECT)
 		end
 		Duel.SpecialSummonComplete()

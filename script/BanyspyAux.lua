@@ -207,6 +207,45 @@ function Amalgam.TypeAmountFromGroup(sg)
 end
 
 --------------------------------------------------------------------
+----------------------------  Pyrostar  ----------------------------
+--------------------------------------------------------------------
+
+Pyrostar = {}
+
+function Pyrostar.AddDestroyBothEffect(c)
+	-- destroy
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),0))
+	e1:SetCategory(CATEGORY_DESTROY)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+	e1:SetCode(EVENT_BATTLED)
+	e1:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsPosition(POS_FACEUP_ATTACK) end)
+	e1:SetTarget(Pyrostar.DestroyBothTarget)
+	e1:SetOperation(Pyrostar.DestroyBothOperation)
+	c:RegisterEffect(e1)
+end
+function Pyrostar.DestroyBothTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local a=Duel.GetAttacker()
+	local t=Duel.GetAttackTarget()
+	if chk==0 then
+		return (t==c and a:IsDestructable())
+			or (a==c and t~=nil and t:IsDestructable())
+	end
+	local g=Group.CreateGroup()
+	if a:IsRelateToBattle() then g:AddCard(a) end
+	if t~=nil and t:IsRelateToBattle() then g:AddCard(t) end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,#g,0,0)
+end
+function Pyrostar.DestroyBothOperation(e,tp,eg,ep,ev,re,r,rp)
+	local a=Duel.GetAttacker()
+	local d=Duel.GetAttackTarget()
+	local g=Group.FromCards(a,d)
+	local rg=g:Filter(Card.IsRelateToBattle,nil)
+	Duel.Destroy(rg,REASON_EFFECT)
+end
+
+--------------------------------------------------------------------
 ----------------------------  Nethersea  ---------------------------
 --------------------------------------------------------------------
 
@@ -472,6 +511,7 @@ function(c,id,category,property,target,operation)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetHintTiming(TIMING_END_PHASE,TIMING_END_PHASE)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e1:SetCost(ProjektStarBlast.EffectLimitCost)
 	e1:SetTarget(target)
 	e1:SetOperation(operation)
 	--Discard from hand to apply activate effect
@@ -491,6 +531,7 @@ function(c,id,category,property,target,operation)
 	e2:SetCost(function (e,tp,eg,ep,ev,re,r,rp,chk)
         if chk==0 then return e:GetHandler():IsDiscardable() end
         Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
+		ProjektStarBlast.EffectLimitCost(e,tp,eg,ep,ev,re,r,rp,chk)
     end)
 	e2:SetTarget(target)
 	e2:SetOperation(operation)
@@ -498,45 +539,24 @@ function(c,id,category,property,target,operation)
 	return e1,e2
 end,"handler","handlerid","category","property","functg","funcop")
 
-function ProjektStarBlast.ResetPhaseValue(tp) --tp can be pass just fine
+function ProjektStarBlast.EffectLimitCost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetDescription(aux.Stringid(CARD_PROJEKTSTARBLAST_KIANA,14))
+	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
+	e1:SetTargetRange(1,0)
+	e1:SetValue(function(e,re,tp)return not re:GetHandler():IsSetCard(SET_PROJEKTSTARBLAST) end)
+	e1:SetReset(ProjektStarBlast.ResetPhaseValue(tp,false))
+	Duel.RegisterEffect(e1,tp)
+end
+
+function ProjektStarBlast.ResetPhaseValue(tp,extendchk) --tp can be pass just fine
     local phase = Duel.GetCurrentPhase()
+	if extendchk==nil then extendchk=true end
     if phase >= PHASE_BATTLE_START and phase <= PHASE_BATTLE then phase = PHASE_BATTLE end
     return RESET_PHASE+phase
-end
-
-function ProjektStarBlast.NormalSummonCondition(e,c,minc)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	local mg1=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
-	local mg2=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	return ((Duel.GetMZoneCount(tp)<=0 and #mg1>0) or #mg2>0)
-end
-
-function ProjektStarBlast.NormalSummonTarget(e,tp,eg,ep,ev,re,r,rp,c)
-	local mg1=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
-	local mg2=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	local tc
-	local cancel=(Duel.IsSummonCancelable() or Duel.GetMZoneCount(tp)>0)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	if(Duel.GetMZoneCount(tp)<=0) then
-		tc=mg1:SelectUnselect(nil,tp,false,cancel,1,1)
-	else
-		tc=mg2:SelectUnselect(nil,tp,false,cancel,1,1)
-	end
-	if tc then
-		g1=Group.CreateGroup()
-		g1:AddCard(tc)
-		g1:KeepAlive()
-		e:SetLabelObject(g1)
-		return true
-	else return false end
-end
-
-function ProjektStarBlast.NormalSummonOperation(e,tp,eg,ep,ev,re,r,rp,c)
-	local sg=e:GetLabelObject()
-	if not sg then return end
-	Duel.Release(sg,REASON_COST)
-	sg:DeleteGroup()
 end
 
 function ProjektStarBlast.NotActivatedYet(c,tp)
@@ -997,3 +1017,40 @@ function HN.revop(card)
 	end
 end
   
+--Legacy Code
+--[[
+function ProjektStarBlast.NormalSummonCondition(e,c,minc)
+	if c==nil then return true end
+	local tp=c:GetControler()
+	local mg1=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
+	local mg2=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+	return ((Duel.GetMZoneCount(tp)<=0 and #mg1>0) or #mg2>0)
+end
+
+function ProjektStarBlast.NormalSummonTarget(e,tp,eg,ep,ev,re,r,rp,c)
+	local mg1=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
+	local mg2=Duel.GetMatchingGroup(Card.IsReleasable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+	local tc
+	local cancel=(Duel.IsSummonCancelable() or Duel.GetMZoneCount(tp)>0)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	if(Duel.GetMZoneCount(tp)<=0) then
+		tc=mg1:SelectUnselect(nil,tp,false,cancel,1,1)
+	else
+		tc=mg2:SelectUnselect(nil,tp,false,cancel,1,1)
+	end
+	if tc then
+		g1=Group.CreateGroup()
+		g1:AddCard(tc)
+		g1:KeepAlive()
+		e:SetLabelObject(g1)
+		return true
+	else return false end
+end
+
+function ProjektStarBlast.NormalSummonOperation(e,tp,eg,ep,ev,re,r,rp,c)
+	local sg=e:GetLabelObject()
+	if not sg then return end
+	Duel.Release(sg,REASON_COST)
+	sg:DeleteGroup()
+end
+]]

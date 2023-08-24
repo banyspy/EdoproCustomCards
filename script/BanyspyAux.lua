@@ -245,6 +245,34 @@ function Pyrostar.DestroyBothOperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(rg,REASON_EFFECT)
 end
 
+function Pyrostar.SynchroQuickDestroy(c)
+	-- destroy
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),0))
+	e1:SetCategory(CATEGORY_DESTROY)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,c:GetOriginalCode())
+	e1:SetTarget(Pyrostar.SynchroQuickDestroyTarget)
+	e1:SetOperation(Pyrostar.SynchroQuickDestroyOperation)
+	c:RegisterEffect(e1)
+end
+function Pyrostar.SynchroQuickDestroyFilter(c)
+	return c:IsSetCard(SET_PYROSTAR) and c:IsMonster()
+end
+function Pyrostar.SynchroQuickDestroyTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(Pyrostar.SynchroQuickDestroyFilter,tp,LOCATION_MZONE+LOCATION_HAND,0,nil)
+	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+end
+function Pyrostar.SynchroQuickDestroyOperation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectMatchingCard(tp,Pyrostar.SynchroQuickDestroyFilter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,1,nil)
+	if #g>0 then
+        Duel.Destroy(g,REASON_EFFECT)
+    end
+end
 --------------------------------------------------------------------
 ----------------------------  Nethersea  ---------------------------
 --------------------------------------------------------------------

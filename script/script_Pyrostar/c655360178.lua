@@ -10,20 +10,17 @@ function s.initial_effect(c)
 	Pyrostar.AddDestroyBothEffect(c)
     -- (Quick Effect): You can destroy 1 "Pyrostar" monster you control or in your hand
     Pyrostar.SynchroQuickDestroy(c)
-    -- draw then can summon self back
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_DESTROY)
-    e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetCode(EVENT_DESTROYED)
-    e1:SetCountLimit(1,{id,1})
-	e1:SetTarget(s.destg)
-	e1:SetOperation(s.desop)
+    -- destroy
+	local e1=Pyrostar.CreateDestroyTriggerEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_DESTROY+CATEGORY_DAMAGE,
+		functg=s.destg,
+		funcop=s.desop})
 	c:RegisterEffect(e1)
 end
 s.listed_series={SET_PYROSTAR}
-s.synchro_nt_required=2
+s.synchro_nt_required=4
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 	if chk==0 then return #g>0 end

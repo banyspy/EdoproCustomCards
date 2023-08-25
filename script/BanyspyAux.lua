@@ -212,6 +212,38 @@ end
 
 Pyrostar = {}
 
+function Pyrostar.HandQuickDestroySummon(c)
+	-- destroy and special summon self
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(655360161,0))--Anyone would use the same string
+	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_HAND)
+	e1:SetCountLimit(1,c:GetOriginalCode())
+	e1:SetTarget(Pyrostar.HandQuickDestroySummonTarget)
+	e1:SetOperation(Pyrostar.HandQuickDestroySummonOperation)
+	c:RegisterEffect(e1)
+end
+function Pyrostar.HandDestroyFilter(c,e,tp)
+	return c:IsSetCard(SET_PYROSTAR) and c:IsDestructable(e) and Duel.GetMZoneCount(tp,c)>0
+end
+function Pyrostar.HandQuickDestroySummonTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(Pyrostar.HandDestroyFilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,c,e,tp)
+	if chk==0 then return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+end
+function Pyrostar.HandQuickDestroySummonOperation(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectMatchingCard(tp,Pyrostar.HandDestroyFilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,c,e,tp)
+	if #g>0 and Duel.Destroy(g,REASON_EFFECT)>0 and c:IsRelateToEffect(e) then
+        Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+    end
+end
+
 function Pyrostar.AddDestroyBothEffect(c)
 	-- destroy
 	local e1=Effect.CreateEffect(c)
@@ -244,6 +276,27 @@ function Pyrostar.DestroyBothOperation(e,tp,eg,ep,ev,re,r,rp)
 	local rg=g:Filter(Card.IsRelateToBattle,nil)
 	Duel.Destroy(rg,REASON_EFFECT)
 end
+
+Pyrostar.CreateDestroyTriggerEff = aux.FunctionWithNamedArgs(
+function(c,id,category,property,target,operation)
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,2))
+    if category then
+	    e1:SetCategory(category)
+    end
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetCode(EVENT_DESTROYED)
+    if property then
+        e1:SetProperty(property|EFFECT_FLAG_DELAY)
+	else
+		e1:SetProperty(EFFECT_FLAG_DELAY)
+    end
+	e1:SetCountLimit(1,{id,1})
+	e1:SetTarget(target)
+	e1:SetOperation(operation)
+
+	return e1,e2
+end,"handler","handlerid","category","property","functg","funcop")
 
 function Pyrostar.SynchroQuickDestroy(c)
 	-- destroy

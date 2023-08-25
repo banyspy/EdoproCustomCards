@@ -3,22 +3,22 @@
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
+    -- While this card is in your hand (Quick Effect): You can destroy 1 other "Pyrostar" card
+	-- from your hand or your field, and if you do, Special Summon this card.
+	Pyrostar.HandQuickDestroySummon(c)
     -- If this Attack position card is involve in battle, destroy both monsters after damage calculation.
 	Pyrostar.AddDestroyBothEffect(c)
-    --negate
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_DISABLE)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_DESTROYED)
-    e1:SetCountLimit(1,id)
-	e1:SetTarget(s.negtg)
-	e1:SetOperation(s.negop)
+    -- Negate
+	local e1=Pyrostar.CreateDestroyTriggerEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_DISABLE,
+		functg=s.negtg,
+		funcop=s.negop})
 	c:RegisterEffect(e1)
 end
 s.listed_series={SET_PYROSTAR}
-function negfilter(c)
+function s.negfilter(c)
     return c:IsNegatable() and not c:IsSetCard(SET_PYROSTAR)
 end
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)

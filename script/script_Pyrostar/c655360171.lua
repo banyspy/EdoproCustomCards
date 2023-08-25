@@ -1,100 +1,80 @@
--- Pyrostar Launcher
+-- Pyrostar Sparkler
 -- Scripted by bankkyza
 local s,id=GetID()
-Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
-    --xyz summon
-	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_PYRO),1,2,nil,nil,99)
+	--Link Summon
 	c:EnableReviveLimit()
-    -- If this Attack position card is involve in battle, destroy both monsters after damage calculation.
-	Pyrostar.AddDestroyBothEffect(c)
-    --spsummon
+	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_PYRO),1)
+	--Cannot be Link Material
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1,id)
-	e1:SetCost(aux.dxmcostgen(1,1,nil))
-	e1:SetTarget(s.sptarget)
-	e1:SetOperation(s.spoperation)
-	c:RegisterEffect(e1,false,REGISTER_FLAG_DETACH_XMAT)
-    --Destroy and attach
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+	e1:SetCondition(s.lkcon)
+	e1:SetValue(1)
+	c:RegisterEffect(e1)
+	--tohand
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,2))
-	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_LEAVE_GRAVE)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-    e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetTarget(s.attachtarget)
-	e2:SetOperation(s.attachoperation)
+    e2:SetCountLimit(1,id)
+	e2:SetTarget(s.thtg)
+	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
-    --destroy 1 from deck
+    --SS from Deck
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,3))
-	e3:SetCategory(CATEGORY_DESTROY)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_DESTROYED)
-	e3:SetCountLimit(1,{id,2})
-	e3:SetTarget(s.gravetarget)
-	e3:SetOperation(s.graveoperation)
+    e3:SetCountLimit(1,{id,1})
+	e3:SetTarget(s.sstg)
+	e3:SetOperation(s.ssop)
 	c:RegisterEffect(e3)
 end
 s.listed_series={SET_PYROSTAR}
-function s.spfilter(c,e,tp)
-	return c:IsSetCard(SET_PYROSTAR) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
+function s.lkcon(e)
+	local c=e:GetHandler()
+	return c:IsStatus(STATUS_SPSUMMON_TURN) and c:IsSummonType(SUMMON_TYPE_LINK)
 end
-function s.sptarget(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
-    Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+function s.thfilter(c)
+	return c:IsSetCard(SET_PYROSTAR) and c:IsSpellTrap() and c:IsAbleToHand()
+end
+function s.desfilter(c)
+    return c:IsSetCard(SET_PYROSTAR) and c:IsMonster() and c:IsDestructable()
+end
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_MZONE,0,nil)
+	if chk==0 then return #g>0 and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	if #g>0 and Duel.Destroy(g,REASON_EFFECT)>0 then
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	    local tg=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+	    if #tg>0 then
+		    Duel.SendtoHand(tg,nil,REASON_EFFECT)
+		    Duel.ConfirmCards(1-tp,tg)
+	    end
+    end
+end
+function s.ssfilter(c,e,tp)
+    return c:IsSetCard(SET_PYROSTAR) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE,tp)
+end
+function s.sstg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return Duel.GetMZoneCount(tp)>0 and Duel.IsExistingMatchingCard(s.ssfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
-function s.spoperation(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+function s.ssop(e,tp,eg,ep,ev,re,r,rp)
+    if Duel.GetMZoneCount(tp)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,s.ssfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	if #g>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
-	end
-end
-function s.desfilter(c,e)
-    return c:IsSetCard(SET_PYROSTAR) and c:IsMonster() and c:IsDestructable(e)
-end
-function s.attachfilter(c,ac,tp)
-    return c:IsSetCard(SET_PYROSTAR) and c:IsMonster() and c:IsCanBeXyzMaterial(ac,tp,REASON_EFFECT)
-end
-function s.attachtarget(e,tp,eg,ep,ev,re,r,rp,chk)
-    local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_MZONE,0,e:GetHandler(),e)
-	if chk==0 then return #g>0 and Duel.IsExistingMatchingCard(s.attachfilter,tp,LOCATION_GRAVE,0,1,nil,e:GetHandler(),tp) end
-    Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
-    Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,nil,1,tp,LOCATION_GRAVE)
-end
-function s.attachoperation(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_MZONE,0,1,1,e:GetHandler(),e)
-	if #g>0 and Duel.Destroy(g,REASON_EFFECT)>0 then
-        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-        local ag=Duel.SelectMatchingCard(tp,s.attachfilter,tp,LOCATION_GRAVE,0,1,1,nil,e:GetHandler(),tp)
-        if #ag>0 then
-            Duel.Overlay(e:GetHandler(),ag,true)
-        end
-	end
-end
-function s.gravefilter(c)
-	return c:IsSetCard(SET_PYROSTAR) and c:IsMonster()
-end
-function s.gravetarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.gravefilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_DECK)
-end
-function s.graveoperation(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectMatchingCard(tp,s.gravefilter,tp,LOCATION_DECK,0,1,1,nil)
-	if #g>0 then 
-		Duel.Destroy(g,REASON_EFFECT)
-	end
+        Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
+    end
 end

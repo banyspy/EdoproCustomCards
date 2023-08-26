@@ -52,7 +52,7 @@ function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return eg:IsExists(s.repfilter,1,nil,tp)
 		and Duel.IsExistingMatchingCard(s.desfilter,tp,LOCATION_HAND,0,1,nil,e,tp)
 		and Duel.GetFlagEffect(tp,id)==0 end
-	if Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESREPLACE)
 		local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
 		Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)

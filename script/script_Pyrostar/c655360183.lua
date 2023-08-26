@@ -29,7 +29,7 @@ function s.spfilter(c,e,tp)
 	return c:IsSetCard(SET_PYROSTAR) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcheck(sg,e,tp,mg)
-	return sg:GetClassCount(Card.GetLocation)==#sg
+	return sg:GetClassCount(Card.GetCode)==#sg
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     local dg=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_MZONE,0,nil,e,tp)

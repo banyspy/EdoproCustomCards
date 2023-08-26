@@ -287,15 +287,33 @@ function(c,id,category,property,target,operation)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_DESTROYED)
     if property then
-        e1:SetProperty(property|EFFECT_FLAG_DELAY)
+        e1:SetProperty(property|EFFECT_FLAG_DELAY|EFFECT_FLAG_DAMAGE_STEP)
 	else
 		e1:SetProperty(EFFECT_FLAG_DELAY)
     end
 	e1:SetCountLimit(1,{id,1})
 	e1:SetTarget(target)
 	e1:SetOperation(operation)
+	-- 655360172 = Pyrostar Short Fuse
+	--Also, trigger when used as Fusion, Synchro or Link material when condition is met
+	local e2=e1:Clone()
+	e2:SetCode(EVENT_BE_MATERIAL)
+	e2:SetCondition(function (e,tp,eg,ep,ev,re,r,rp)
+		return Duel.IsPlayerAffectedByEffect(tp,655360172) and r&(REASON_FUSION|REASON_SYNCHRO|REASON_LINK)~=0
+	end)
+	c:RegisterEffect(e2)
+	--Also, trigger if detach from Xyz material when condition is met
+	local e3=e1:Clone()
+	e3:SetCode(EVENT_TO_GRAVE)
+	e3:SetCondition(function (e,tp,eg,ep,ev,re,r,rp)
+		return Duel.IsPlayerAffectedByEffect(tp,655360172) and c:IsPreviousLocation(LOCATION_OVERLAY)
+	end)
+	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EVENT_REMOVE)
+	c:RegisterEffect(e4)
 
-	return e1,e2
+	return e1
 end,"handler","handlerid","category","property","functg","funcop")
 
 function Pyrostar.SynchroQuickDestroy(c)

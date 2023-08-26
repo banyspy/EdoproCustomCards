@@ -30,16 +30,13 @@ function s.initial_effect(c)
 	e2:SetTarget(s.attachtarget)
 	e2:SetOperation(s.attachoperation)
 	c:RegisterEffect(e2)
-    --destroy 1 from deck
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,3))
-	e3:SetCategory(CATEGORY_DESTROY)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
-	e3:SetCode(EVENT_DESTROYED)
-	e3:SetCountLimit(1,{id,2})
-	e3:SetTarget(s.gravetarget)
-	e3:SetOperation(s.graveoperation)
+    -- Destroy 1 "Pyrostar" monster from Deck
+	local e3=Pyrostar.CreateDestroyTriggerEff({
+		handler=c,
+		handlerid=id,
+		category=CATEGORY_DESTROY,
+		functg=s.gravetarget,
+		funcop=s.graveoperation})
 	c:RegisterEffect(e3)
 end
 s.listed_series={SET_PYROSTAR}

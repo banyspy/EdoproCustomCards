@@ -1,6 +1,7 @@
 -- Pyrostar Sparkler
 -- Scripted by bankkyza
 local s,id=GetID()
+Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Link Summon
 	c:EnableReviveLimit()
@@ -13,6 +14,8 @@ function s.initial_effect(c)
 	e1:SetCondition(s.lkcon)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
+	-- If this Attack position card is involve in battle, destroy both monsters after damage calculation.
+	Pyrostar.AddDestroyBothEffect(c)
 	--tohand
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_TOHAND+CATEGORY_SEARCH)

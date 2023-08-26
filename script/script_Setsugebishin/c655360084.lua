@@ -25,7 +25,7 @@ function s.initial_effect(c)
 end
 --s.listed_series={SET_SETSUGEBISHIN}
 function s.filter(c)
-	return c:IsFaceup() and c:IsRace(RACE_PLANT) and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
+	return c:IsFaceup() and c:IsRace(RACE_PLANT) and c:IsType(TYPE_XYZ)
 end
 function s.mattarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.filter(chkc) end

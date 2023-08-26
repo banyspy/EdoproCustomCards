@@ -13,10 +13,16 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCost(aux.dxmcostgen(1,1,nil))
+	e1:SetCondition(aux.NOT(s.effcon))
 	e1:SetCountLimit(1,{id,0})
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1,false,REGISTER_FLAG_DETACH_XMAT)
+	local e1b=e1:Clone()
+	e1b:SetType(EFFECT_TYPE_QUICK_O)
+	e1b:SetCode(EVENT_FREE_CHAIN)
+	e1b:SetCondition(s.effcon)
+	c:RegisterEffect(e1b,false,REGISTER_FLAG_DETACH_XMAT)
 	--Summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
@@ -31,7 +37,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={CARD_NO_87_QUEEN_OF_THE_NIGHT}--Queen of the night
---s.listed_series={0xb05}
+s.listed_series={SET_SETSUGEBISHIN}
+function s.effcon(e)
+	return e:GetHandler():GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,SET_SETSUGEBISHIN)
+end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD|LOCATION_GRAVE,1,nil) end
 	local g = Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD|LOCATION_GRAVE,nil)

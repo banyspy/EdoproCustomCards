@@ -172,6 +172,7 @@ You may find detail of custom cards in [**wiki**](https://github.com/banyspy/Edo
 **Stratossea** - 4/7 - On hold. <br />
 **Amalgam** - 8/8 - Finished. <br />
 **ProjektStarBlast** - 7/12 - On going. (Change name from "Mei Misaki") <br />
+**Pyrostar** - 24/24 - Finished. <br />
 **NGNL (No Game No Life) (From Cstudio)** - 13/13 - Finished. <br />
 **YuYuYu (From Cstudio)** - 13/13 - Finished. <br />
 **HN (Hyper Neptunia) (From Cstudio)** - 64/64 - Finished. <br />

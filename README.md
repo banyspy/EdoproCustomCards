@@ -4,6 +4,16 @@ These cards are already test in Edopro.<br />
 
 I do not own art that is use in this project. Most what I do is edited some of them to look like how I want.
 
+<p align="center">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/CustomArchetypeBanner.png?raw=true">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/CustomSupportBanner.png?raw=true">
+</p>
+
+<p align="center">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/BossBattleBanner.png?raw=true">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/AlternativeGamemodeBanner.png?raw=true">
+</p>
+
 ## How to install custom card
 First, you need to get the necessary files to the game folder.
 You have 2 options to choose from.

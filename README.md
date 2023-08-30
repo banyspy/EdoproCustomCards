@@ -7,12 +7,14 @@ I do not own art that is use in this project. Most what I do is edited some of t
 <p align="center">
   <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/CustomArchetypeBanner.png?raw=true">
   <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/CustomSupportBanner.png?raw=true">
-</p>
-
-<p align="center">
   <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/BossBattleBanner.png?raw=true">
   <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/AlternativeGamemodeBanner.png?raw=true">
 </p>
+
+### Custom cards detail
+
+You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
+
 
 ## How to install custom card
 First, you need to get the necessary files to the game folder.
@@ -161,11 +163,6 @@ Here is method specified from official ProjectIgnis page.
 >1) Port forward the LAN ports used by EDOPro and give your friend your IP to join in LAN mode.
 >
 >2) You and your friends can set up a VPN, such as [**Zerotier**](https://www.zerotier.com/), so everybody is on the same virtual LAN. Then you should be able to refresh the LAN room list or connect to the IP provided by the VPN. Both players must have the custom card databases to see what the cards are, and the hosting player must have the card scripts.
-
-
-## Custom cards detail
-
-You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
 
 ## Progress
 

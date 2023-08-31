@@ -213,6 +213,7 @@ Here is who I found:
 * [**Secuter**](https://github.com/Secuter/SecuterYGOCustomCards)<br />
 * [**Lakevin**](https://github.com/lakevin/EdoProCustom)<br />
 * [**Henrique-Izidio**](https://github.com/Henrique-Izidio/EDOPro-RMS)<br />
+* [**IanxWaifu**](https://github.com/IanxWaifu/AimersCustoms)<br />
 * [**KServantes**](https://github.com/KServantes/Customs)<br />
 * [**Neoyuno**](https://github.com/NeoYuno/leafbladie-cards)<br />
 * [**scarletkc**](https://github.com/scarletkc/FogMoeYGO-Card-Database)<br />

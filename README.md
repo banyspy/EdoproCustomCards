@@ -4,6 +4,18 @@ These cards are already test in Edopro.<br />
 
 I do not own art that is use in this project. Most what I do is edited some of them to look like how I want.
 
+<p align="center">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/CustomArchetypeBanner.png?raw=true">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/CustomSupportBanner.png?raw=true">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/BossBattleBanner.png?raw=true">
+  <img width="500px" height="100%" src="https://github.com/banyspy/EdoproCustomCards/blob/assets/AlternativeGamemodeBanner.png?raw=true">
+</p>
+
+### Custom cards detail
+
+You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
+
+
 ## How to install custom card
 First, you need to get the necessary files to the game folder.
 You have 2 options to choose from.
@@ -152,11 +164,6 @@ Here is method specified from official ProjectIgnis page.
 >
 >2) You and your friends can set up a VPN, such as [**Zerotier**](https://www.zerotier.com/), so everybody is on the same virtual LAN. Then you should be able to refresh the LAN room list or connect to the IP provided by the VPN. Both players must have the custom card databases to see what the cards are, and the hosting player must have the card scripts.
 
-
-## Custom cards detail
-
-You may find detail of custom cards in [**wiki**](https://github.com/banyspy/EdoproCustomCards/wiki).
-
 ## Progress
 
 **Always take In-game text higher priority than card picture file while still in development phase, as editing text in database is alot more convenient than edit card text in card maker and render card picture and place it in folder**
@@ -206,6 +213,7 @@ Here is who I found:
 * [**Secuter**](https://github.com/Secuter/SecuterYGOCustomCards)<br />
 * [**Lakevin**](https://github.com/lakevin/EdoProCustom)<br />
 * [**Henrique-Izidio**](https://github.com/Henrique-Izidio/EDOPro-RMS)<br />
+* [**IanxWaifu**](https://github.com/IanxWaifu/AimersCustoms)<br />
 * [**KServantes**](https://github.com/KServantes/Customs)<br />
 * [**Neoyuno**](https://github.com/NeoYuno/leafbladie-cards)<br />
 * [**scarletkc**](https://github.com/scarletkc/FogMoeYGO-Card-Database)<br />

@@ -195,7 +195,14 @@ Here is method specified from official ProjectIgnis page.
 **Sky striker** - 4/4 - Finished. *(Maybe there's more??)* <br />
 **Malefic** - 8 - Finished, for now.<br />
 **Evilswarm** - 6/8 - On going.<br />
-**Graydle** - 2 (also another 1 that's not really Graydle)
+**Graydle** - 2 (also another 1 that's not really Graydle)<br />
+
+### Boss
+
+**Manic Eraser** - Playable<br />
+**Pirate of the Deadwave** - Playable<br />
+
+**Note**: How to use/access boss will be explained later and boss it can be change later.<br />
 
 **Duel Altering** has no real progression goal, they are "cheat" kind of card for various intend not necessarily play normally, although would try to finish what created.<br />
 

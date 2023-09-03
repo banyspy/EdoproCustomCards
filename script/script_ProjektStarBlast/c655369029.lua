@@ -86,8 +86,8 @@ function s.bantg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		Duel.Hint(HINT_ZONE,1-tp,zone>>16)
 		e:SetLabel(zone)
 		local sg=groupfrombit(zone>>16,1-tp)
-		e:SetCategory(CATEGORY_REMOVE)
-		Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,1,0,0)
+		e:SetCategory(CATEGORY_TOGRAVE)
+		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,0)
 	end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.SetTargetParam(op)
@@ -113,8 +113,10 @@ function s.banop(e,tp,eg,ep,ev,re,r,rp)
 		local zone=e:GetLabel()
 		local g=groupfrombit(zone>>16,1-tp)
 	
-		--Banish group of cards face down
-		Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
+		--Send group of cards to GY
+		Duel.SendtoGrave(g,REASON_EFFECT)
+
+		if not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,CARD_PROJEKTSTARBLAST_KIANA),tp,LOCATION_ONFIELD,0,1,nil) then return end
 
 		--Opponent main monster zone = 0x1F0000
 		--Opponent spell/trap zone = 0x1F000000

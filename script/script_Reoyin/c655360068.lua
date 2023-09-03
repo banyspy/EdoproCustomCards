@@ -4,7 +4,7 @@ local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
 	--Xyz Summon
-	Xyz.AddProcedure(c,nil,8,2,s.xyzfilter,aux.Stringid(id,0))
+	Xyz.AddProcedure(c,nil,8,2,s.xyzfilter,aux.Stringid(id,0),2,s.xyzop)
 	c:EnableReviveLimit()
 	--Negate attack/destroy/inflict damage
 	local e1=Effect.CreateEffect(c)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e1:SetCost(aux.dxmcostgen(1,1,nil))
 	e1:SetTarget(s.destg)
 	e1:SetOperation(s.desop)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1,false,REGISTER_FLAG_DETACH_XMAT)
 	--attach the activating card
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,2))
@@ -30,9 +30,30 @@ function s.initial_effect(c)
 	e2:SetTarget(s.attachtg)
 	e2:SetOperation(s.attachop)
 	c:RegisterEffect(e2,false,REGISTER_FLAG_DETACH_XMAT)
+	--Register Special Summons of "Reoyin" monster
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
+		ge1:SetOperation(s.checkop)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+s.listed_series={SET_REOYIN}
+function s.checkop(e,tp,eg,ep,ev,re,r,rp)
+	for tc in eg:Iter() do
+		if tc:IsSetCard(SET_REOYIN) then
+			local sp=tc:GetSummonPlayer()
+			Duel.RegisterFlagEffect(sp,id,RESET_PHASE|PHASE_END,0,1)
+		end
+	end
 end
 function s.xyzfilter(c)
 	return c:IsMonster() and c:IsType(TYPE_XYZ) and (c:GetRank()==4)
+end
+function s.xyzop(e,tp,chk)
+	if chk==0 then return Duel.GetFlagEffect(tp,id)>0 end
+	return true
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

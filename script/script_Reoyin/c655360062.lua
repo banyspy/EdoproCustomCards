@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	--Must be properly summoned before reviving
 	c:EnableReviveLimit()
 	--Link summon procedure
-	Link.AddProcedure(c,function (c,lc,st,tp) return not c:IsType(TYPE_LINK,lc,st,tp) end,2,2)
+	Link.AddProcedure(c,function (c,lc,st,tp) return not c:IsType(TYPE_LINK,lc,st,tp) end,2,2,s.lcheck)
 	--Link summon 1 link monster during opponent's main phase
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -28,6 +28,10 @@ function s.initial_effect(c)
 	e2:SetCondition(s.cantnegcon)
 	e2:SetOperation(s.cantnegop)
 	c:RegisterEffect(e2)
+end
+s.listed_series={SET_REOYIN}
+function s.lcheck(g,lc,sumtype,tp)
+	return g:IsExists(Card.IsSetCard,1,nil,SET_REOYIN,lc,sumtype,tp)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==1-tp and Duel.IsMainPhase()

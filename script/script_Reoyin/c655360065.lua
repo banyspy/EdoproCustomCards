@@ -43,7 +43,7 @@ function s.matfilter1(c,fc,sumtype,tp)
 	return c:IsSetCard(SET_REOYIN) and c:IsMonster()
 end
 function s.matfilter2(c,fc,sumtype,tp)
-	return c:IsType(TYPE_NORMAL,fc,sumtype,tp) and c:IsMonster()
+	return (c:IsRace(RACE_WARRIOR,fc,sumtype,tp) or c:IsType(TYPE_NORMAL,fc,sumtype,tp)) and c:IsMonster()
 end
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)

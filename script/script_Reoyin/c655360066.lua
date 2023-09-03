@@ -37,7 +37,7 @@ function s.matfilter1(c,fc,sumtype,tp)
 	return c:IsSetCard(SET_REOYIN) and c:IsMonster()
 end
 function s.matfilter2(c,fc,sumtype,tp)
-	return c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp) and c:IsMonster()
+	return (c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp) or c:IsType(TYPE_NORMAL,fc,sumtype,tp)) and c:IsMonster()
 end
 function s.drawcon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))

@@ -19,6 +19,14 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_BE_MATERIAL)
 	e2:SetCondition(s.spcon)
 	c:RegisterEffect(e2)
+	--Also, trigger if detach from Xyz material
+	local e2a=e1:Clone()
+	e2a:SetCode(EVENT_TO_GRAVE)
+	e2a:SetCondition(function (e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsPreviousLocation(LOCATION_OVERLAY) end)
+	c:RegisterEffect(e2a)
+	local e2b=e2a:Clone()
+	e2b:SetCode(EVENT_REMOVE)
+	c:RegisterEffect(e2b)
 	--Destroy
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
@@ -34,7 +42,7 @@ function s.initial_effect(c)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return (r&(REASON_FUSION|REASON_SYNCHRO|REASON_XYZ|REASON_LINK))>0
+	return (r&(REASON_FUSION|REASON_SYNCHRO|REASON_LINK))>0
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

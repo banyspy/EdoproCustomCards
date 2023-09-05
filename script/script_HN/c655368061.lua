@@ -78,7 +78,7 @@ function s.rthfilter(c,e,tp)
   return c:IsSetCard(SET_HN) and c:IsLevelBelow(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.rthtg(e,tp,eg,ep,ev,re,r,rp,chk)
-  if chk==0 then return e:GetHandler():IsAbleToHand() and Duel.IsExistingTarget(s.rthfilter,tp,LOCATION_HAND,0,1,e:GetHandler(),e,tp) end
+  if chk==0 then return e:GetHandler():IsAbleToHand() and Duel.IsExistingMatchingCard(s.rthfilter,tp,LOCATION_HAND,0,1,e:GetHandler(),e,tp) end
   Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
   Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
   Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)

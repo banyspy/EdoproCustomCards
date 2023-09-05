@@ -51,7 +51,7 @@ function s.xyzcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.xyzfilter(c,e,tp)
   return c:IsType(TYPE_MONSTER) and c:IsSetCard(SET_HN_HDD) and c:GetRank()==4 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
-  Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
+  and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function s.xyztg(e,tp,eg,ep,ev,re,r,rp,chk)
   if chk==0 then return Duel.IsExistingMatchingCard(s.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end

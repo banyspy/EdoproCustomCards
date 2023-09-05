@@ -77,10 +77,10 @@ function s.negcon1(e,tp,eg,ep,ev,re,r,rp)
   return eg:IsExists(s.negconfilter1,1,nil,tp)
 end
 function s.negtg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-  if chk==0 then return Duel.IsExistingTarget(aux.disfilter1,tp,0,LOCATION_ONFIELD,1,nil) end
+  if chk==0 then return Duel.IsExistingTarget(Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,nil) end
   Duel.Hint(HINT_OPSELECTED,1-tp,aux.Stringid(id,0))
   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-  local g=Duel.SelectTarget(tp,aux.disfilter1,tp,0,LOCATION_ONFIELD,1,1,nil)
+  local g=Duel.SelectTarget(tp,Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,1,nil)
   Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
 end
 function s.negop1(e,tp,eg,ep,ev,re,r,rp)

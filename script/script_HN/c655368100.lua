@@ -50,10 +50,10 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
   return bc:IsFaceup() and tc:IsFaceup() and tc:IsSetCard(SET_HN) and tc:IsType(TYPE_XYZ)
 end
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-  if chk==0 then return Duel.IsExistingTarget(aux.disfilter1,tp,0,LOCATION_ONFIELD,1,nil) end
+  if chk==0 then return Duel.IsExistingTarget(Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,nil) end
   Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-  local g=Duel.SelectTarget(tp,aux.disfilter1,tp,0,LOCATION_ONFIELD,1,1,nil)
+  local g=Duel.SelectTarget(tp,Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,1,nil)
   Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
 end
 function s.negop(e,tp,eg,ep,ev,re,r,rp)

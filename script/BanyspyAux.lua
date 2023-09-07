@@ -220,7 +220,7 @@ function Pyrostar.HandQuickDestroySummon(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
-	e1:SetCountLimit(1,c:GetOriginalCode())
+	e1:SetCountLimit(1,c:GetOriginalCodeRule())
 	e1:SetTarget(Pyrostar.HandQuickDestroySummonTarget)
 	e1:SetOperation(Pyrostar.HandQuickDestroySummonOperation)
 	c:RegisterEffect(e1)
@@ -247,7 +247,7 @@ end
 function Pyrostar.AddDestroyBothEffect(c)
 	-- destroy
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),0))
+	e1:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),0))
 	e1:SetCategory(CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e1:SetCode(EVENT_BATTLED)
@@ -319,12 +319,12 @@ end,"handler","handlerid","category","property","functg","funcop")
 function Pyrostar.SynchroQuickDestroy(c)
 	-- destroy
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),0))
+	e1:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),0))
 	e1:SetCategory(CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1,c:GetOriginalCode())
+	e1:SetCountLimit(1,c:GetOriginalCodeRule())
 	e1:SetTarget(Pyrostar.SynchroQuickDestroyTarget)
 	e1:SetOperation(Pyrostar.SynchroQuickDestroyOperation)
 	c:RegisterEffect(e1)
@@ -361,12 +361,12 @@ end
 function Nethersea.GenerateToken(c)
     --token
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),4))
+	e1:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),4))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_TO_GRAVE)
-	e1:SetCountLimit(1,{c:GetOriginalCode(),4})
+	e1:SetCountLimit(1,{c:GetOriginalCodeRule(),4})
 	e1:SetTarget(Nethersea.GenerateTokenTarget)
 	e1:SetOperation(Nethersea.GenerateTokenOperation)
 	c:RegisterEffect(e1)
@@ -391,7 +391,7 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,CARD_NETHERSEA_TOKEN,SET_NETHERSEA,TYPES_TOKEN,0,0,1,RACE_AQUA,ATTRIBUTE_WATER) then
-		local token=Duel.CreateToken(tp,CARD_NETHERSEA_TOKEN+c:GetOriginalCode()-655369001)
+		local token=Duel.CreateToken(tp,CARD_NETHERSEA_TOKEN+c:GetOriginalCodeRule()-655369001)
 		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
 		--Debug.Message(Nethersea.TokenID(id))
 		--Cannot Special Summon monsters except WATER Aqua/Thunder/Fish/Sea serpent
@@ -408,7 +408,7 @@ function Nethersea.GenerateTokenOperation(e,tp,eg,ep,ev,re,r,rp)
 		local e2=aux.createContinuousLizardCheck(c,LOCATION_MZONE,function(_,c) return not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_AQUA|RACE_THUNDER|RACE_FISH|RACE_SEASERPENT)) end)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 		token:RegisterEffect(e2,true)
-		for tem=CARD_NETHERSEA_TOKEN,c:GetOriginalCode()+14,1 do
+		for tem=CARD_NETHERSEA_TOKEN,c:GetOriginalCodeRule()+14,1 do
 			token:RegisterFlagEffect(REGISTER_FLAG_WEMANY,RESET_EVENT+RESETS_STANDARD,0,1)
 		end
 		Duel.SpecialSummonComplete()
@@ -422,18 +422,18 @@ function Nethersea.QuickTributeProc(c)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
 	e0:SetTargetRange(LOCATION_HAND+LOCATION_ONFIELD,0)
-	e0:SetTarget(aux.AND(aux.OR(aux.TargetBoolFunction(Card.IsCode,CARD_UMI),aux.AND(aux.TargetBoolFunction(Card.IsRace,RACE_AQUA),aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER))),aux.NOT(aux.TargetBoolFunction(Card.IsCode,c:GetOriginalCode()))))
+	e0:SetTarget(aux.AND(aux.OR(aux.TargetBoolFunction(Card.IsCode,CARD_UMI),aux.AND(aux.TargetBoolFunction(Card.IsRace,RACE_AQUA),aux.TargetBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER))),aux.NOT(aux.TargetBoolFunction(Card.IsCode,c:GetOriginalCodeRule()))))
 	e0:SetValue(POS_FACEUP)
 	c:RegisterEffect(e0)
 	--summon
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),0))
+	e1:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),0))
 	e1:SetCategory(CATEGORY_SUMMON)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END+TIMING_END_PHASE)
-	e1:SetCountLimit(1,{c:GetOriginalCode(),0})
+	e1:SetCountLimit(1,{c:GetOriginalCodeRule(),0})
 	e1:SetTarget(Nethersea.QuickTributeProcTarget)
 	e1:SetOperation(Nethersea.QuickTributeProcOperation)
 	c:RegisterEffect(e1)
@@ -723,7 +723,7 @@ function NGNL.ForceChangeScaleEffect(c)
 end
 function NGNL.ForceChangeScaleEffectTarget(e,tp,eg,ep,ev,re,r,rp,chk)
   if chk==0 then return true end
-  op=Duel.SelectOption(tp,aux.Stringid(e:GetHandler():GetOriginalCode(),0),aux.Stringid(e:GetHandler():GetOriginalCode(),1))
+  op=Duel.SelectOption(tp,aux.Stringid(e:GetHandler():GetOriginalCodeRule(),0),aux.Stringid(e:GetHandler():GetOriginalCodeRule(),1))
   e:SetLabel(op)
   if op==0 then
     Duel.SetOperationInfo(0,CATEGORY_DICE,nil,0,tp,1)
@@ -1115,7 +1115,258 @@ function HN.revop(card)
 		end
 	end
 end
-  
+
+--------------------------------------------------------------------
+------------------------------  DAL  -------------------------------
+--------------------------------------------------------------------
+
+DAL = {}
+
+function DAL.CreateAddSpaceQuakeOnSummonEffect(c,normal)
+	if normal==nil then normal=true end
+	--(1) Search
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),0))
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetCountLimit(1,c:GetOriginalCodeRule())
+	e1:SetTarget(DAL.CreateAddSpaceQuakeOnSummonTarget)
+	e1:SetOperation(DAL.CreateAddSpaceQuakeOnSummonOperation)
+	c:RegisterEffect(e1)
+	if normal then
+		local e2=e1:Clone()
+		e2:SetCode(EVENT_SUMMON_SUCCESS)
+		c:RegisterEffect(e2)
+	end
+end
+function DAL.CreateAddSpaceQuakeOnSummonFilter(c)
+  	return c:IsCode(CARD_DAL_SPACEQUAKE) and c:IsAbleToHand()
+end
+function DAL.CreateAddSpaceQuakeOnSummonTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+  	if chk==0 then return Duel.IsExistingMatchingCard(DAL.CreateAddSpaceQuakeOnSummonFilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
+  	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+end
+function DAL.CreateAddSpaceQuakeOnSummonOperation(e,tp,eg,ep,ev,re,r,rp)
+  	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+  	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(DAL.CreateAddSpaceQuakeOnSummonFilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+  	if #g>0 then
+    	Duel.SendtoHand(g,nil,REASON_EFFECT)
+    	Duel.ConfirmCards(1-tp,g)
+  	end
+end
+
+function DAL.CreateTributeSummonListedMonsterEffect(c,name,loc)
+	if loc==nil then loc = LOCATION_HAND+LOCATION_DECK end
+	local e4=Effect.CreateEffect(c)
+  	e4:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),1))
+  	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
+  	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+  	e4:SetCode(EVENT_CHAINING)
+  	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+  	e4:SetRange(LOCATION_MZONE)
+  	e4:SetCondition(function (e,tp,eg,ep,ev,re,r,rp) return rp~=tp end)
+  	e4:SetCost(function (e,tp,eg,ep,ev,re,r,rp,chk)
+		if chk==0 then return e:GetHandler():IsReleasable() end
+		Duel.Release(e:GetHandler(),REASON_COST)
+	  end)
+  	e4:SetTarget(DAL.CreateTributeSummonListedMonsterTarget(name,loc))
+  	e4:SetOperation(DAL.CreateTributeSummonListedMonsterOperation(name,loc))
+  	c:RegisterEffect(e4)
+end
+function DAL.CreateTributeSummonListedMonsterFilter(c,e,tp,name,loc,chk)
+	if not (c:IsCode(name) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)) then return end
+	local tribute=e:GetHandler()
+	if chk then tribute=nil end
+	if loc==LOCATIO_EXTRA then
+		return Duel.GetLocationCountFromEx(tp,tp,tribute,c)>0
+	else
+  		return Duel.GetMZoneCount(tp,tribute)>0
+	end
+end
+function DAL.CreateTributeSummonListedMonsterTarget(name,loc)
+	return function(e,tp,eg,ep,ev,re,r,rp,chk)
+  		if chk==0 then return Duel.IsExistingMatchingCard(DAL.CreateTributeSummonListedMonsterFilter,tp,loc,0,1,nil,e,tp,name,loc,false) end
+  		Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+  		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,loc)
+	end
+end
+function DAL.CreateTributeSummonListedMonsterOperation(name,loc)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+  		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+  		local g=Duel.SelectMatchingCard(tp,DAL.CreateTributeSummonListedMonsterFilter,tp,loc,0,1,1,nil,e,tp,name,loc,true)
+  		if #g>0 then
+    		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+  		end
+	end
+end
+
+DAL.CreateOnSummonByDALEff = aux.FunctionWithNamedArgs(
+function(c,id,category,property,target,operation,notriggerself)
+	if category==nil then category=0 end
+	if property==nil then property=0 end
+	if notriggerself==nil then notriggerself=false end
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(category)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetProperty(EFFECT_FLAG_DELAY|property)
+	e1:SetCondition(function (e,tp,eg,ep,ev,re,r,rp) 
+		return re and re:GetHandler():IsSetCard(SET_DAL) and re:IsHasType(EFFECT_TYPE_ACTIONS)
+		and not (notriggerself and re:GetHandler():IsCode(id)) end)
+	e1:SetTarget(target)
+	e1:SetOperation(operation)
+	c:RegisterEffect(e1)
+end,"handler","handlerid","category","property","functg","funcop","notriggerself")
+
+function DAL.CreateSummonLv3OnDestroyByEffectEff(c)
+	--(3) Special Summon
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(c:GetOriginalCodeRule(),3))
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetCode(EVENT_DESTROYED)
+	e3:SetCondition(function (e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsReason(REASON_EFFECT) end)
+	e3:SetTarget(DAL.CreateSummonLv3OnDestroyByEffectTarget)
+	e3:SetOperation(DAL.CreateSummonLv3OnDestroyByEffectOperation)
+	c:RegisterEffect(e3)
+end
+function DAL.CreateSummonLv3OnDestroyByEffectFilter(c,e,tp)
+	return c:IsSetCard(SET_DAL) and c:GetLevel()==3 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+function DAL.CreateSummonLv3OnDestroyByEffectTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	and Duel.IsExistingMatchingCard(DAL.CreateSummonLv3OnDestroyByEffectFilter,tp,LOCATION_HAND,0,1,nil,e,tp) end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
+end
+function DAL.CreateSummonLv3OnDestroyByEffectOperation(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,DAL.CreateSummonLv3OnDestroyByEffectFilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
+	if #g>0 then
+	  Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	end
+end
+
+--------------------------------------------------------------------
+--------------------------  Boss Battle  ---------------------------
+--------------------------------------------------------------------
+
+Boss = {}
+
+function Boss.TotalImmunity(c)
+	--Unnafected by any cards' effects
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_IMMUNE_EFFECT)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetRange(LOCATION_ALL)
+	e1:SetValue(function (e,te) return te:GetOwner()~=e:GetOwner() end)
+	c:RegisterEffect(e1)
+    --cannot remove
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e2:SetCode(EFFECT_CANNOT_REMOVE)
+	e2:SetRange(LOCATION_ALL)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e3:SetTargetRange(1,1)
+	e3:SetTarget(function (e,c,p)return e:GetHandler()==c end)
+	c:RegisterEffect(e3)
+    --indes
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_SINGLE)
+	e4:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e4:SetRange(LOCATION_ALL)
+	e4:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+	e4:SetValue(1)
+	c:RegisterEffect(e3)
+	local e5=e4:Clone()
+	e5:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	c:RegisterEffect(e5)
+    --cannot release
+	local e6=Effect.CreateEffect(c)
+	e6:SetType(EFFECT_TYPE_SINGLE)
+	e6:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e6:SetRange(LOCATION_ALL)
+	e6:SetCode(EFFECT_UNRELEASABLE_SUM)
+	e6:SetValue(1)
+	c:RegisterEffect(e6)
+	local e7=e6:Clone()
+	e7:SetCode(EFFECT_UNRELEASABLE_NONSUM)
+	c:RegisterEffect(e7)
+    --Cannot used as material
+    local e8=Effect.CreateEffect(c)
+	e8:SetType(EFFECT_TYPE_SINGLE)
+	e8:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e8:SetCode(EFFECT_CANNOT_BE_MATERIAL)
+	e8:SetValue(aux.cannotmatfilter(SUMMON_TYPE_FUSION,SUMMON_TYPE_SYNCHRO,SUMMON_TYPE_XYZ,SUMMON_TYPE_LINK,SUMMON_TYPE_RITUAL))
+	c:RegisterEffect(e8)
+    --Cannot be send to GY
+    local e9=Effect.CreateEffect(c)
+	e9:SetType(EFFECT_TYPE_SINGLE)
+	e9:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e9:SetRange(LOCATION_ALL)
+	e9:SetCode(EFFECT_CANNOT_TO_GRAVE)
+	e9:SetValue(1)
+	c:RegisterEffect(e9)
+    local e9b=e9:Clone()
+	e9b:SetType(EFFECT_TYPE_FIELD)
+	e9b:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e9b:SetTargetRange(1,1)
+	e9b:SetTarget(function (e,c,p)return e:GetHandler()==c end)
+	c:RegisterEffect(e9b)
+    --Cannot be send to GY as cost
+    local e10=Effect.CreateEffect(c)
+	e10:SetType(EFFECT_TYPE_SINGLE)
+	e10:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e10:SetRange(LOCATION_ALL)
+	e10:SetCode(EFFECT_CANNOT_TO_GRAVE_AS_COST)
+	e10:SetValue(1)
+	c:RegisterEffect(e10)
+    local e10b=e10:Clone()
+	e10b:SetType(EFFECT_TYPE_FIELD)
+	e10b:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e10b:SetTargetRange(1,1)
+	e10b:SetTarget(function (e,c,p)return e:GetHandler()==c end)
+	c:RegisterEffect(e10b)
+	--Cannot be send to hand
+    local e11=Effect.CreateEffect(c)
+	e11:SetType(EFFECT_TYPE_SINGLE)
+	e11:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e11:SetRange(LOCATION_ALL)
+	e11:SetCode(EFFECT_CANNOT_TO_HAND)
+	e11:SetValue(1)
+	c:RegisterEffect(e11)
+    local e11b=e11:Clone()
+	e11b:SetType(EFFECT_TYPE_FIELD)
+	e11b:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e11b:SetTargetRange(1,1)
+	e11b:SetTarget(function (e,c,p)return e:GetHandler()==c end)
+	c:RegisterEffect(e11b)
+	--Cannot be send to Deck
+    local e12=Effect.CreateEffect(c)
+	e12:SetType(EFFECT_TYPE_SINGLE)
+	e12:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e12:SetRange(LOCATION_ALL)
+	e12:SetCode(EFFECT_CANNOT_TO_DECK)
+	e12:SetValue(1)
+	c:RegisterEffect(e12)
+    local e12b=e12:Clone()
+	e12b:SetType(EFFECT_TYPE_FIELD)
+	e12b:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e12b:SetTargetRange(1,1)
+	e12b:SetTarget(function (e,c,p)return e:GetHandler()==c end)
+	c:RegisterEffect(e12b)
+end
+
 --Legacy Code
 --[[
 function ProjektStarBlast.NormalSummonCondition(e,c,minc)

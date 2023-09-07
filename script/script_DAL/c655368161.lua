@@ -22,9 +22,13 @@ function s.spfilter(c,e,tp)
   return c:IsSetCard(SET_DALSPIRIT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
-  local g1=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,0,e:GetHandler())
-  local g2=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-  if chk==0 then return (g1:GetCount()>0 or (g2:GetCount()>0 and Duel.GetMZoneCount(tp,g2)>0))
+  local g1=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,0,e:GetHandler()) -- Card on your field
+  local g2=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil) -- Card on Opponent field
+  if chk==0 then return 
+    -- In case there is card on one zone but not another (No destruction will happen) chk if there is empty zone
+    ((((#g1==0 and #g2>0) or (#g1>0 and #g2==0)) and Duel.GetMZoneCount(tp)>0)
+    -- In case there is card on both yours and opponent field, chk if you have empty zone after destroy 1 card
+    or (#g1>0 and #g2>0 and Duel.GetMZoneCount(tp,g1)>0)) 
   and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,nil,e,tp) end
   if g1:GetCount()>0 and g2:GetCount()>0 then
     Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
@@ -34,17 +38,18 @@ function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
   end
   Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,LOCATION_DECK+LOCATION_HAND)
 end
+function s.desfilter(c,tp)
+  return Duel.GetMZoneCount(tp,c)>0
+end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
   local c=e:GetHandler()
-  local g1=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,0,c)
-  local g2=Duel.GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil) 
   if #g1>0 and #g2>0  then
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-    local dg1=g1:Select(tp,1,1,nil)
-    Duel.HintSelection(dg1)
+    local dg1=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
+    Duel.HintSelection(dg1,true)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-    local dg2=g2:Select(tp,1,1,nil)
-    Duel.HintSelection(dg2)
+    local dg2=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_ONFIELD,1,1,nil)
+    Duel.HintSelection(dg2,true)
     dg1:Merge(dg2)
     Duel.Destroy(dg1,REASON_EFFECT) 
   end

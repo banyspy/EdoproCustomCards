@@ -26,7 +26,7 @@ function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
   local g2=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil) -- Card on Opponent field
   if chk==0 then return 
     -- In case there is card on one zone but not another (No destruction will happen) chk if there is empty zone
-    ((((#g1==0 and #g2>0) or (#g1>0 and #g2==0)) and Duel.GetMZoneCount(tp)>0)
+    ((((g1==nil and #g2>0) or (#g1>0 and g2==nil)) and Duel.GetMZoneCount(tp)>0)
     -- In case there is card on both yours and opponent field, chk if you have empty zone after destroy 1 card
     or (#g1>0 and #g2>0 and Duel.GetMZoneCount(tp,g1)>0)) 
   and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,nil,e,tp) end

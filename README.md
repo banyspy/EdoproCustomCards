@@ -185,6 +185,7 @@ Here is method specified from official ProjectIgnis page.
 **HN (Hyper Neptunia) (From Cstudio)** - 64/64 - Finished. <br />
 **OTNN (Ore, Twintail ni narimasu) (From Cstudio)** - 13/13 - Finished. <br />
 **RE:C (RE:Creator) (From Cstudio)** - 11/11 - Finished <br/>
+**DAL (Date A Live) (From Cstudio)** - 60/60 - Finished <br/>
 
 ### Support
 

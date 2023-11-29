@@ -1,4 +1,5 @@
 --Bujin Iwasaku
+--Scripted by bankkyza
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
@@ -82,7 +83,7 @@ end
 	--Check for an Xyz monster to use as material
 function s.filter1(c,e,tp)
 	local pg=aux.GetMustBeMaterialGroup(tp,Group.FromCards(c),tp,nil,nil,REASON_XYZ)
-    Debug.Message("pg: "..#pg) 
+    --Debug.Message("pg: "..#pg) 
 	return (#pg<=0 or (#pg==1 and pg:IsContains(c))) and c:IsFaceup() and not c:IsImmuneToEffect(e)
 		and Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c)
 end

@@ -344,6 +344,114 @@ function Pyrostar.SynchroQuickDestroyOperation(e,tp,eg,ep,ev,re,r,rp)
         Duel.Destroy(g,REASON_EFFECT)
     end
 end
+
+--------------------------------------------------------------------
+----------------------------  HaunTale  ----------------------------
+--------------------------------------------------------------------
+
+HaunTale = {}
+
+function HaunTale.ShuffleFromExtraToReviveSelf(c,id)
+	-- Shuffle "HaunTale" pendulum from extra deck to special summon self
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_TODECK+CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_GRAVE)
+	e1:SetCountLimit(1,{id,0})
+	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E|TIMING_MAIN_END)
+	e1:SetTarget(HaunTale.ShuffleFromExtraToReviveSelfTarget)
+	e1:SetOperation(HaunTale.ShuffleFromExtraToReviveSelfOperation)
+	c:RegisterEffect(e1)
+end
+function HaunTale.ShuffleFromExtraToReviveSelfFilter(c)
+	return c:IsSetCard(SET_HAUNTALE) and c:IsType(TYPE_PENDULUM) and c:IsFaceup()
+end
+function HaunTale.ShuffleFromExtraToReviveSelfTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
+	if chk==0 then return Duel.IsExistingMatchingCard(HaunTale.ShuffleFromExtraToReviveSelfFilter,tp,LOCATION_EXTRA,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+end
+function HaunTale.ShuffleFromExtraToReviveSelfOperation(e,tp,eg,ep,ev,re,r,rp,chk)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,HaunTale.ShuffleFromExtraToReviveSelfFilter,tp,LOCATION_EXTRA,0,1,1,nil)
+	if #g>0 and Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 and e:GetHandler():IsRelateToEffect(e) then
+		Duel.SpecialSummon(e:GetHandler(),0,tp,tp,false,false,POS_FACEUP)
+	end
+end
+
+function HaunTale.DestroyToSendZombie(c,id)
+	--Destroy this card to send zombie from Deck to GY
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_TOGRAVE)
+	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetRange(LOCATION_PZONE)
+	e1:SetCountLimit(1,id)
+	e1:SetTarget(HaunTale.DestroyToSendZombieTarget)
+	e1:SetOperation(HaunTale.DestroyToSendZombieOperation)
+	c:RegisterEffect(e1)
+end
+function HaunTale.DestroyToSendZombieFilter(c)
+	return c:IsMonster() and c:IsRace(RACE_ZOMBIE) and c:IsAbleToGrave()
+end
+function HaunTale.DestroyToSendZombieTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(HaunTale.DestroyToSendZombieFilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,e:GetHandler(),1,0,0)
+    Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+end
+function HaunTale.DestroyToSendZombieOperation(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if not c:IsRelateToEffect(e) or Duel.Destroy(c,REASON_EFFECT)==0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,HaunTale.DestroyToSendZombieFilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoGrave(g,REASON_EFFECT)
+	end
+end
+
+function HaunTale.AddTrapIfDestroyed(c,id)
+	--If destroyed add "HaunTale" Trap
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,2))
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_DESTROYED)
+    e2:SetCountLimit(1,{id,2})
+	e2:SetTarget(HaunTale.AddTrapIfDestroyedTarget)
+	e2:SetOperation(HaunTale.AddTrapIfDestroyedOperation)
+	c:RegisterEffect(e2)
+end
+function HaunTale.AddTrapIfDestroyedFilter(c)
+	return c:IsSetCard(SET_HAUNTALE) and c:IsTrap() and c:IsAbleToHand()
+end
+function HaunTale.AddTrapIfDestroyedTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(HaunTale.AddTrapIfDestroyedFilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+function HaunTale.AddTrapIfDestroyedOperation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,HaunTale.AddTrapIfDestroyedFilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
+	end
+end
+
+function HaunTale.SendZombieCostFilter(c,tp)
+	return c:IsMonster() and c:IsRace(RACE_ZOMBIE) and c:IsAbleToGraveAsCost()
+end
+function HaunTale.SendZombieCost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(HaunTale.SendZombieCostFilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local tc=Duel.SelectMatchingCard(tp,HaunTale.SendZombieCostFilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,tp):GetFirst()
+	Duel.SendtoGrave(tc,REASON_COST)
+end
+
 --------------------------------------------------------------------
 ----------------------------  Nethersea  ---------------------------
 --------------------------------------------------------------------

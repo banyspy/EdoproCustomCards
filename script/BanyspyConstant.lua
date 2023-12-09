@@ -11,6 +11,7 @@ SET_STELLARON                = 0xb06
 SET_AMALGAM                  = 0xb07
 SET_STRATOSSEA               = 0xb08
 SET_PYROSTAR                 = 0xb09
+SET_HAUNTALE                 = 0xb0a
 SET_NETHERSEA                = 0xbe2
 SET_PROJEKTSTARBLAST         = 0xbe5
 --Cstudio Archetype

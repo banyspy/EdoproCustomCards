@@ -26,9 +26,9 @@ function s.zfilter(c)
 	return c:IsFaceup() and c:IsRace(RACE_ZOMBIE)
 end
 function s.pstg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,0,LOCATION_MZONE,1,nil) end
     local zgroup=Duel.GetMatchingGroup(s.zfilter,tp,LOCATION_MZONE,0,nil)
     local opgroup=Duel.GetMatchingGroup(s.filter,tp,0,LOCATION_MZONE,nil)
+	if chk==0 then return #zgroup>0 and #opgroup>0 end
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,opgroup,math.max(#zgroup,#opgroup),0,0)
 end
 function s.psop(e,tp,eg,ep,ev,re,r,rp)

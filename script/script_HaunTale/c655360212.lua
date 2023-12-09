@@ -24,7 +24,7 @@ end
 s.listed_series={SET_HAUNTALE}
 
 function s.pfilter(c,pc)
-	return c:IsSetCard(SET_HAUNTALE) and and c:IsType(TYPE_PENDULUM) c:IsMonster() and not c:IsForbidden()
+	return c:IsSetCard(SET_HAUNTALE) and c:IsType(TYPE_PENDULUM) and c:IsMonster() and not c:IsForbidden()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     local g=Duel.GetMatchingGroup(s.pfilter,tp,LOCATION_DECK,0,nil)

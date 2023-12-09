@@ -19,9 +19,6 @@ function s.initial_effect(c)
 end
 --s.listed_names={id}
 s.listed_series={SET_HAUNTALE}
-function s.rmcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonLocation(LOCATION_GRAVE)
-end
 function s.filter(c)
 	return c:IsFaceup() and c:IsRace(RACE_ZOMBIE)
 end

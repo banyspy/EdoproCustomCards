@@ -371,9 +371,10 @@ function HaunTale.ShuffleFromExtraToReviveSelfFilter(c)
 end
 function HaunTale.ShuffleFromExtraToReviveSelfTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.IsExistingMatchingCard(HaunTale.ShuffleFromExtraToReviveSelfFilter,tp,LOCATION_EXTRA,0,1,nil) end
+	if chk==0 then return Duel.GetMZoneCount(tp)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) and
+		Duel.IsExistingMatchingCard(HaunTale.ShuffleFromExtraToReviveSelfFilter,tp,LOCATION_EXTRA,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 function HaunTale.ShuffleFromExtraToReviveSelfOperation(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)

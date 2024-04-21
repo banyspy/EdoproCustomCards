@@ -28,7 +28,7 @@ function s.initial_effect(c)
 end
 s.listed_names={655364181}
 function s.cfilter(c)
-	return c:IsMonster() and c:IsRace(RACE_WARRIOR) and c:IsLevel(4) and (c:IsAbleToHand() or c:IsAbleToGrave())
+	return c:IsMonster() and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_WARRIOR) and (c:IsAbleToHand() or c:IsAbleToGrave())
 end
 function s.extgfilter(c,mention)
 	return c:IsAbleToGrave() and c:ListsCode(mention:GetCode())

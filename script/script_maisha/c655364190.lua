@@ -28,7 +28,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,nil)
 		or Duel.IsExistingMatchingCard(Card.IsFacedown,tp,0,LOCATION_ONFIELD,1,e:GetHandler()) end
 	if e:IsHasType(EFFECT_TYPE_ACTIVATE) then
-		Duel.SetChainLimit(function(te,rp,tp) return tp~=ep end)
+		Duel.SetChainLimit(function(e,rp,tp) return rp==tp end)
 	end
 	if not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,655364181),tp,LOCATION_ONFIELD,0,1,nil) then 
 		e:SetLabel(1) 

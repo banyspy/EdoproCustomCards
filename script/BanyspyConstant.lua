@@ -12,6 +12,10 @@ SET_AMALGAM                  = 0xb07
 SET_STRATOSSEA               = 0xb08
 SET_PYROSTAR                 = 0xb09
 SET_HAUNTALE                 = 0xb0a
+SET_LILYBLIGHT               = 0xb0b
+SET_SANGUINROOTS             = 0xb0c
+SET_LIONEL                   = 0xb0d
+SET_XROS                     = 0xb0e
 SET_NETHERSEA                = 0xbe2
 SET_PROJEKTSTARBLAST         = 0xbe5
 --Cstudio Archetype
@@ -32,6 +36,7 @@ SET_DALSPIRIT                = 0x1bc5
 
 CARD_SILENCER_REOYIN         = 655360061
 CARD_NO_87_QUEEN_OF_THE_NIGHT= 89516305
+CARD_LILY_BLIGHT_SEED        = 655360221
 
 -- Cstudio cards
 

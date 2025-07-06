@@ -454,6 +454,67 @@ function HaunTale.SendZombieCost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 --------------------------------------------------------------------
+----------------------------  Grimoire  ----------------------------
+--------------------------------------------------------------------
+
+Grimoire = {}
+
+function Grimoire.GetLevelRank(c)
+	if c:IsType(TYPE_LINK) then return end
+	if c:IsType(TYPE_XYZ) then
+		return c:GetRank()
+	else
+		return c:GetLevel()
+	end
+end
+
+function Grimoire.DeductLevelRank(itself,c,lv)
+	if c:IsType(TYPE_XYZ) then
+		local e1=Effect.CreateEffect(itself)
+	    e1:SetType(EFFECT_TYPE_SINGLE)
+	    e1:SetCode(EFFECT_UPDATE_RANK)
+	    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+	    e1:SetValue(lv*-1)
+	    c:RegisterEffect(e1)
+	else
+		local e1=Effect.CreateEffect(itself)
+	    e1:SetType(EFFECT_TYPE_SINGLE)
+	    e1:SetCode(EFFECT_UPDATE_LEVEL)
+	    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+	    e1:SetValue(lv*-1)
+	    c:RegisterEffect(e1)
+	end
+end
+
+--------------------------------------------------------------------
+--------------------------  Tori-No-Kami  --------------------------
+--------------------------------------------------------------------
+
+ToriNoKami = {}
+
+function ToriNoKami.KurohimeDontAskMoreThanOnce(tp,e,f)
+	if(Duel.GetFlagEffect(tp,REGISTER_FLAG_KUROHIME)>0) then 
+		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_KUROHIME) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) - 1)then
+			Duel.ResetFlagEffect(tp,REGISTER_FLAG_KUROHIME)
+		else
+			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_KUROHIME,RESET_PHASE+PHASE_END,0,1) 
+		end
+		return false
+	end
+	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_KUROHIME,RESET_PHASE+PHASE_END,0,1) 
+	
+	if(Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) == 1) then
+		Duel.ResetFlagEffect(tp,REGISTER_FLAG_KUROHIME)
+	end
+
+	return true
+end
+
+function ToriNoKami.ResetKurohimeFlag(tp)
+	Duel.ResetFlagEffect(tp,REGISTER_FLAG_KUROHIME)
+end
+
+--------------------------------------------------------------------
 ----------------------------  Nethersea  ---------------------------
 --------------------------------------------------------------------
 

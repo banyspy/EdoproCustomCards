@@ -16,8 +16,13 @@ SET_LILYBLIGHT               = 0xb0b
 SET_SANGUINROOTS             = 0xb0c
 SET_LIONEL                   = 0xb0d
 SET_XROS                     = 0xb0e
+SET_GRIMOIRE                 = 0xb0f
+SET_DANDYLION                = 0xb10
+SET_WORLDSBEYOND             = 0xb11
+SET_TORINOKAMI               = 0xb12
 SET_NETHERSEA                = 0xbe2
 SET_PROJEKTSTARBLAST         = 0xbe5
+
 --Cstudio Archetype
 SET_NGNL                     = 0xbc0
 SET_YUYUYU                   = 0xbc1
@@ -93,6 +98,8 @@ CARD_PROJEKTSTARBLAST_KIANA  = 655369021
 
 --Flag Check
 REGISTER_FLAG_WEMANY = 655369000
+
+REGISTER_FLAG_KUROHIME = 655360389
 
 --Variable for Summon Limit Rule
 LIMIT_COUNTER = 655360041 -- For Zodragon

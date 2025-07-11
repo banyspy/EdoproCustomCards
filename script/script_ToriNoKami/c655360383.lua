@@ -1,160 +1,118 @@
---Worlds Beyond - Dreizehn
+--Tori-No-Kami Kurabe
 --scripted by banyspy
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
 function s.initial_effect(c)
-	--Special Summon this card (from your hand)
+	Spirit.AddProcedure(c,EVENT_SUMMON_SUCCESS,EVENT_FLIP)
+	--Cannot be Special Summoned
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetRange(LOCATION_HAND)
-	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e1:SetOperation(s.spop)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	c:RegisterEffect(e1)
-	--You take no battle damage from battles involving this cards
+	-- Apply Effect
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
-	e2:SetValue(1)
-	c:RegisterEffect(e2)
-    --If this card would be destroyed by battle, reduce DEF instead
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3:SetCode(EFFECT_DESTROY_REPLACE)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetTarget(s.reptg)
-	e3:SetOperation(s.defreduce)
-	e3:SetValue(s.reptg)
-	c:RegisterEffect(e3)
-    --self destroy
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetCode(EFFECT_SELF_DESTROY)
-	e4:SetCondition(function(e) return e:GetHandler():GetDefense()==0 end)
-	c:RegisterEffect(e4)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,{id,1})
-	e1:SetTarget(s.target)
-	e1:SetOperation(s.activate)
-	c:RegisterEffect(e1)
-	--Activate Token
-	local e6=Effect.CreateEffect(c)
-	e6:SetDescription(aux.Stringid(id,2))
-	e6:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
-	e6:SetType(EFFECT_TYPE_QUICK_O)
-	e6:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e6:SetRange(LOCATION_MZONE)
-	e6:SetCode(EVENT_FREE_CHAIN)
-	e6:SetCountLimit(1,{id,2})
-	e6:SetTarget(s.target2)
-	e6:SetOperation(s.activate2)
-	c:RegisterEffect(e6)
+	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DIS_NEG_INA)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetRange(LOCATION_HAND)
+	e2:SetCountLimit(1,{id,0})
+	e2:SetCondition(function() return Duel.IsMainPhase() end)
+	e2:SetCost(s.cost)
+	e2:SetTarget(s.thtg)
+	e2:SetOperation(s.thop)
+	c:RegisterEffect(e2,false,EFFECT_MARKER_TORINOKAMI)
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,s.counterfilter)
 end
-s.listed_series={SET_WORLDSBEYOND}
-function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	--You cannot Special Summon from the Extra Deck for the rest of this turn, except Worlds Beyond Monsters
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,2))
+s.listed_series={SET_TORINOKAMI}
+function s.counterfilter(c) --Counter will count the summon that does not fit this condition
+	return c:IsSummonLocation(LOCATION_EXTRA)
+end
+function s.rmvfilter(c,tp)
+	if not (c:IsSetCard({SET_TORINOKAMI}) and not c:IsPublic() and not c:IsCode(id)
+		and c:IsHasEffect(EFFECT_MARKER_TORINOKAMI)) then
+		return false
+	end
+	local eff=c:GetCardEffect(EFFECT_MARKER_TORINOKAMI)
+	local te=eff:GetLabelObject()
+	local con=te:GetCondition()
+	local tg=te:GetTarget()
+	if (not con or con(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0))
+		and (not tg or tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0)) then
+		return true
+	end
+	return false
+end
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 --Duel.GetActivityCount(tp,ACTIVITY_SPSUMMON)==0
+		 and not e:GetHandler():IsPublic()
+		 and Duel.IsExistingMatchingCard(s.rmvfilter,tp,LOCATION_HAND,0,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,1))
+	local sc=Duel.SelectMatchingCard(tp,s.rmvfilter,tp,LOCATION_HAND,0,1,1,nil,tp):GetFirst()
+	Duel.ConfirmCards(1-tp,sc)
+	Duel.ShuffleHand(tp)
+	sc:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD|RESET_CHAIN,0,1)
+	e:SetLabelObject(sc:GetCardEffect(EFFECT_MARKER_TORINOKAMI):GetLabelObject())
+	--Cannot special summon the turn you activate
+	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
 	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetReset(RESET_PHASE|PHASE_END,2)
+	e1:SetTarget(function(e,c) return not c:IsLocation(LOCATION_EXTRA)end)
 	e1:SetTargetRange(1,0)
-	e1:SetTarget(function(e,c) return c:IsLocation(LOCATION_EXTRA) and not (c:IsSetCard(SET_WORLDSBEYOND)) end)
-	e1:SetReset(RESET_PHASE|PHASE_END)
 	Duel.RegisterEffect(e1,tp)
-	--Clock Lizard Check
-	aux.addTempLizardCheck(c,tp,function(e,c) return not (c:IsSetCard(SET_WORLDSBEYOND)) end)
+	local e2=Effect.CreateEffect(e:GetHandler())
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e2:SetDescription(aux.Stringid(EFFECT_MARKER_TORINOKAMI,10))
+	e2:SetReset(RESET_PHASE|PHASE_END,2)
+	e2:SetTargetRange(1,0)
+	Duel.RegisterEffect(e2,tp)
 end
-function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-    local bc=c:GetBattleTarget()
-	if chk==0 then return bc and c:IsReason(REASON_BATTLE) end
-    return true
-end
-function s.defreduce(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local bc=c:GetBattleTarget()
-	if c:IsRelateToBattle() and c:IsFaceup() then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_DEFENSE)
-		e1:SetValue(-math.abs(bc:GetAttack()-c:GetAttack()))
-		c:RegisterEffect(e1)
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.rmvfilter,tp,LOCATION_HAND,0,1,nil,tp) end
+	local te=e:GetLabelObject()
+	local tg=te and te:GetTarget() or nil
+	if chkc then return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc) end
+	if chk==0 then return true end
+	e:SetLabel(te:GetLabel())
+	e:SetLabelObject(te:GetLabelObject())
+	e:SetProperty(te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
+	if tg then
+		tg(e,tp,eg,ep,ev,re,r,rp,1)
 	end
+	e:SetLabelObject(te)
+	Duel.ClearOperationInfo(0)
 end
-function s.filter(c,e,tp)
-	return c:IsFaceup() and c:IsSetCard(SET_WORLDSBEYOND)
-		and Duel.IsExistingMatchingCard(s.filter2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c:GetCode(),e,tp)
-end
-function s.filter2(c,code,e,tp)
-	return c:IsCode(code) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.filter(chkc,e,tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,0))
-	Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,e,tp)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE)
-end
-function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if ft<=0 then return end
-	if ft>1 then ft=1 end
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg=Duel.SelectMatchingCard(tp,s.filter2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,tc:GetCode(),e,tp)
-		if #sg>0 then
-			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	local opt=0
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD)
+	if not Duel.IsPlayerAffectedByEffect(1-tp,30459350) 
+	and g:IsExists(Card.IsAbleToRemove,1,nil,1-tp,POS_FACEDOWN,REASON_RULE) 
+		then
+			opt=Duel.SelectOption(1-tp,aux.Stringid(EFFECT_MARKER_TORINOKAMI,11),aux.Stringid(EFFECT_MARKER_TORINOKAMI,12))
 		end
+	if opt==0 then
+		local te=e:GetLabelObject()
+		if not te then return end
+		local sc=te:GetHandler()
+		if sc:GetFlagEffect(id)==0 then
+			e:SetLabel(0)
+			e:SetLabelObject(nil)
+			return
+		end
+		e:SetLabel(te:GetLabel())
+		e:SetLabelObject(te:GetLabelObject())
+		local op=te:GetOperation()
+		if op then
+			op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
+		end
+		e:SetLabel(0)
+		e:SetLabelObject(nil)
+	else
+		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
+		local sg=g:FilterSelect(1-tp,Card.IsAbleToRemove,1,1,nil,1-tp,POS_FACEDOWN,REASON_RULE)
+		Duel.Remove(sg,POS_FACEDOWN,REASON_RULE,PLAYER_NONE,1-tp)
 	end
-end
-function s.tokenfilter(c,e,tp)
-	return c:IsFaceup() and c:IsSetCard(SET_WORLDSBEYOND)
-	and Duel.IsPlayerCanSpecialSummonMonster(tp,655360369,0,TYPES_TOKEN,2500,2000,7,c:GetRace(),c:GetAttribute())
-end
-function s.target2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	--if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tokenfilter(chkc,e,tp) end
-	local tg = Duel.GetFirstTarget()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>1
-		and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
-		and Duel.IsExistingTarget(s.tokenfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,0))
-	Duel.SelectTarget(tp,s.tokenfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,e,tp)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
-end
-function s.activate2(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if ft<=1 or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then return end
-	if not Duel.IsPlayerCanSpecialSummonMonster(tp,655360369,0,TYPES_TOKEN,2500,2000,7,tc:GetRace(),tc:GetAttribute()) then return end
-	for i=1,2 do
-		local token=Duel.CreateToken(tp,655360369)
-		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_CHANGE_RACE)
-		e1:SetValue(tc:GetRace())
-		e1:SetReset(RESET_EVENT|RESETS_STANDARD-RESET_TOFIELD)
-		token:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(e:GetHandler())
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_CHANGE_ATTRIBUTE)
-		e2:SetValue(tc:GetAttribute())
-		e2:SetReset(RESET_EVENT|RESETS_STANDARD-RESET_TOFIELD)
-		token:RegisterEffect(e2)
-	end
-	Duel.SpecialSummonComplete()
 end

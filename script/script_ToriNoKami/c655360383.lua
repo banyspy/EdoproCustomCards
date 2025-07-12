@@ -86,14 +86,14 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.ClearOperationInfo(0)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	local opt=0
-	local g=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD)
-	if not Duel.IsPlayerAffectedByEffect(1-tp,30459350) 
-	and g:IsExists(Card.IsAbleToRemove,1,nil,1-tp,POS_FACEDOWN,REASON_RULE) 
-		then
-			opt=Duel.SelectOption(1-tp,aux.Stringid(EFFECT_MARKER_TORINOKAMI,11),aux.Stringid(EFFECT_MARKER_TORINOKAMI,12))
-		end
-	if opt==0 then
+	--local opt=0
+	--local g=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD)
+	--if not Duel.IsPlayerAffectedByEffect(1-tp,30459350) 
+	--and g:IsExists(Card.IsAbleToRemove,1,nil,1-tp,POS_FACEDOWN,REASON_RULE) 
+	--	then
+	--		opt=Duel.SelectOption(1-tp,aux.Stringid(EFFECT_MARKER_TORINOKAMI,11),aux.Stringid(EFFECT_MARKER_TORINOKAMI,12))
+	--	end
+	--if opt==0 then
 		local te=e:GetLabelObject()
 		if not te then return end
 		local sc=te:GetHandler()
@@ -110,9 +110,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		end
 		e:SetLabel(0)
 		e:SetLabelObject(nil)
-	else
-		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
-		local sg=g:FilterSelect(1-tp,Card.IsAbleToRemove,1,1,nil,1-tp,POS_FACEDOWN,REASON_RULE)
-		Duel.Remove(sg,POS_FACEDOWN,REASON_RULE,PLAYER_NONE,1-tp)
-	end
+	--else
+	--	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
+	--	local sg=g:FilterSelect(1-tp,Card.IsAbleToRemove,1,1,nil,1-tp,POS_FACEDOWN,REASON_RULE)
+	--	Duel.Remove(sg,POS_FACEDOWN,REASON_RULE,PLAYER_NONE,1-tp)
+	--end
 end

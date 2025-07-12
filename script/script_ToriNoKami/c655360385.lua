@@ -1,4 +1,4 @@
---Tori-No-Kami Shiraba
+--Tori-No-Kami Kaede
 --scripted by banyspy
 local s,id=GetID()
 Duel.LoadScript("BanyspyAux.lua")
@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	-- Bounce 1 card on the field to hand
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SUMMON)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DIS_NEG_INA)
 	e2:SetCode(EVENT_FREE_CHAIN)
@@ -53,9 +53,9 @@ function s.sumfilter(c)
 	return c:IsSetCard(SET_TORINOKAMI) and c:IsSummonable(true,nil)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
-	local hg=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,0,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,hg,1,0,0)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE|LOCATION_REMOVED,LOCATION_GRAVE|LOCATION_REMOVED,1,nil) end
+	local hg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_GRAVE|LOCATION_REMOVED,LOCATION_GRAVE|LOCATION_REMOVED,0,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,hg,1,0,0)
 	local g=Duel.GetMatchingGroup(s.sumfilter,tp,LOCATION_HAND,0,nil)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SUMMON,g,1,0,0)
 end
@@ -68,11 +68,11 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 			opt=Duel.SelectOption(1-tp,aux.Stringid(EFFECT_MARKER_TORINOKAMI,11),aux.Stringid(EFFECT_MARKER_TORINOKAMI,12))
 		end
 	if opt==0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE|LOCATION_REMOVED,LOCATION_GRAVE|LOCATION_REMOVED,1,1,nil)
 		if #g>0 then
 			Duel.HintSelection(g,true)
-			if Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
+			if Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 then
 				local sg=Duel.GetMatchingGroup(s.sumfilter,tp,LOCATION_HAND,0,nil)
 				if #sg>0 and Duel.GetMZoneCount(tp)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 					Duel.BreakEffect()

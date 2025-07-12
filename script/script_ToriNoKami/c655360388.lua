@@ -49,10 +49,9 @@ end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.AdjustInstantly(c)
-
 	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_MZONE,0,nil)
-	Debug.Message(#g)
-	Debug.Message(c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,true))
+	--Debug.Message(#g)
+	--Debug.Message(c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,true))
 	return #g>1 and s.summonfilter(c,tp,e) --and Duel.GetCurrentChain(true)==0
 		and aux.SelectUnselectGroup(g,e,tp,1,#g,s.rescon,0)
 end

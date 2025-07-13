@@ -492,70 +492,26 @@ end
 
 ToriNoKami = {}
 
-function ToriNoKami.KurohimeDontAskMoreThanOnce(tp,e,f)
-	if(Duel.GetFlagEffect(tp,REGISTER_FLAG_KUROHIME)>0) then 
-		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_KUROHIME) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) - 1)then
-			Duel.ResetFlagEffect(tp,REGISTER_FLAG_KUROHIME)
+function ToriNoKami.ToriNoKamiDontAskMoreThanOnce(tp,e,f)
+	if(Duel.GetFlagEffect(tp,REGISTER_FLAG_TORINOKAMI)>0) then 
+		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_TORINOKAMI) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) - 1)then
+			Duel.ResetFlagEffect(tp,REGISTER_FLAG_TORINOKAMI)
 		else
-			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_KUROHIME,RESET_PHASE+PHASE_END,0,1) 
+			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_TORINOKAMI,RESET_CHAIN,0,1) 
 		end
 		return false
 	end
-	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_KUROHIME,RESET_PHASE+PHASE_END,0,1) 
+	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_TORINOKAMI,RESET_CHAIN,0,1) 
 	
 	if(Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) == 1) then
-		Duel.ResetFlagEffect(tp,REGISTER_FLAG_KUROHIME)
+		Duel.ResetFlagEffect(tp,REGISTER_FLAG_TORINOKAMI)
 	end
 
 	return true
 end
 
-function ToriNoKami.ResetKurohimeFlag(tp)
-	Duel.ResetFlagEffect(tp,REGISTER_FLAG_KUROHIME)
-end
-
-function ToriNoKami.OguisuohDontAskMoreThanOnce(tp,e,f)
-	if(Duel.GetFlagEffect(tp,REGISTER_FLAG_OGUISUOH)>0) then 
-		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_OGUISUOH) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) - 1)then
-			Duel.ResetFlagEffect(tp,REGISTER_FLAG_OGUISUOH)
-		else
-			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_OGUISUOH,RESET_PHASE+PHASE_END,0,1) 
-		end
-		return false
-	end
-	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_OGUISUOH,RESET_PHASE+PHASE_END,0,1) 
-	
-	if(Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) == 1) then
-		Duel.ResetFlagEffect(tp,REGISTER_FLAG_OGUISUOH)
-	end
-
-	return true
-end
-
-function ToriNoKami.ResetOguisuohFlag(tp)
-	Duel.ResetFlagEffect(tp,REGISTER_FLAG_OGUISUOH)
-end
-
-function ToriNoKami.AkahimeDontAskMoreThanOnce(tp,e,f)
-	if(Duel.GetFlagEffect(tp,REGISTER_FLAG_AKAHIME)>0) then 
-		if(Duel.GetFlagEffect(tp,REGISTER_FLAG_AKAHIME) ==  Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) - 1)then
-			Duel.ResetFlagEffect(tp,REGISTER_FLAG_AKAHIME)
-		else
-			Duel.RegisterFlagEffect(tp,REGISTER_FLAG_AKAHIME,RESET_PHASE+PHASE_END,0,1) 
-		end
-		return false
-	end
-	Duel.RegisterFlagEffect(tp,REGISTER_FLAG_AKAHIME,RESET_PHASE+PHASE_END,0,1) 
-	
-	if(Duel.GetMatchingGroupCount(f,tp,LOCATION_EXTRA,0,nil,tp,e) == 1) then
-		Duel.ResetFlagEffect(tp,REGISTER_FLAG_AKAHIME)
-	end
-
-	return true
-end
-
-function ToriNoKami.ResetAkahimeFlag(tp)
-	Duel.ResetFlagEffect(tp,REGISTER_FLAG_AKAHIME)
+function ToriNoKami.ResetToriNoKamiFlag(tp)
+	Duel.ResetFlagEffect(tp,REGISTER_FLAG_TORINOKAMI)
 end
 
 --------------------------------------------------------------------

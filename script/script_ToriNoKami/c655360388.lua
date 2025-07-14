@@ -95,7 +95,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.thrmfilter(c)
-	return c:IsSetCard(SET_TORINOKAMI) and c:IsAbleToHand()
+	return c:IsSetCard(SET_TORINOKAMI) and c:IsAbleToHand() and (c:IsLocation(LOCATION_GRAVE|LOCATION_DECK) or c:IsFaceup())
 end
 function s.sumfilter(c)
 	return c:IsType(TYPE_SPIRIT) and c:IsSummonable(true,nil)
